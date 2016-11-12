@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "simplethings",
+    "name": "SimpleThings",
+    "description": "",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Blue_Monster122"],
+    "credits": "",
+    "logoFile": "assets/simplethings/textures/icon.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
