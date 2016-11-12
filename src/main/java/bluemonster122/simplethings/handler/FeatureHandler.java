@@ -23,26 +23,31 @@ public class FeatureHandler
 {
     public static List<Feature> features = new ArrayList<>();
 
-    public static boolean addFeature(Feature feature){
-        if (feature.shouldLoad()){
+    public static boolean addFeature(Feature feature)
+    {
+        if (feature.shouldLoad())
+        {
             features.add(feature);
         }
         return feature.shouldLoad();
     }
 
     @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+    public static void registerBlocks(RegistryEvent.Register<Block> event)
+    {
         forEach(feature -> feature.registerBlocks(event));
     }
 
     @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
+    public static void registerItems(RegistryEvent.Register<Item> event)
+    {
         forEach(feature -> feature.registerItems(event));
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent event){
+    public static void registerModels(ModelRegistryEvent event)
+    {
         forEachParallel(feature -> feature.registerModels(event));
     }
 
@@ -61,15 +66,18 @@ public class FeatureHandler
         forEachParallel(feature -> feature.postInit(event));
     }
 
-    public static void loadConfigs(Configuration config) {
+    public static void loadConfigs(Configuration config)
+    {
         forEach(feature -> feature.loadConfigs(config));
     }
 
-    public static void forEachParallel(Consumer<Feature> consumer) {
+    public static void forEachParallel(Consumer<Feature> consumer)
+    {
         features.parallelStream().forEach(consumer);
     }
 
-    public static void forEach(Consumer<Feature> consumer) {
+    public static void forEach(Consumer<Feature> consumer)
+    {
         features.forEach(consumer);
     }
 }

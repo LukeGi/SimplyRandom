@@ -26,6 +26,7 @@ public class FeatureTreeFarm extends Feature
     public static final String TREE_FARM_FEATURE_NAME = "Tree Farm";
 
     // CONFIGS
+    public static boolean LOAD_TREE_FARM = true;
     public static int ENERGY_CONSUMPTION_PER_BLOCK_PLACE = 20;
     public static int ENERGY_CONSUMPTION_PER_BLOCK_BREAK = 100;
 
@@ -33,7 +34,6 @@ public class FeatureTreeFarm extends Feature
     public static final Block TREE_FARM = new BlockTreeFarm();
     public static final Item TREE_FARM_ITEM = new ItemBlockTreeFarm(TREE_FARM);
     public static final GuiHandler.GuiInfo TREE_FARM_GUI;
-    public static boolean LOAD_TREE_FARM = true;
 
     static
     {
@@ -105,8 +105,8 @@ public class FeatureTreeFarm extends Feature
     public void loadConfigs(Configuration configuration)
     {
         super.loadConfigs(configuration);
-        ENERGY_CONSUMPTION_PER_BLOCK_BREAK = configuration.getInt("TreeFarmBreakBlockEnergyConsumption", Configuration.CATEGORY_GENERAL, 100, 0, 1000, "The amount of energy used by the tree farm to break a block");
-        ENERGY_CONSUMPTION_PER_BLOCK_PLACE = configuration.getInt("TreeFarmPlaceBlockEnergyConsumption", Configuration.CATEGORY_GENERAL, 20, 0, 1000, "The amount of energy used by the tree farm to place a block");
+        ENERGY_CONSUMPTION_PER_BLOCK_BREAK = configuration.getInt("Energy for block break", Configuration.CATEGORY_GENERAL, 100, 0, 1000, "The amount of energy used by the tree farm to break a block");
+        ENERGY_CONSUMPTION_PER_BLOCK_PLACE = configuration.getInt("Energy for block place", Configuration.CATEGORY_GENERAL, 20, 0, 1000, "The amount of energy used by the tree farm to place a block");
     }
 
     public static class TreeHandler

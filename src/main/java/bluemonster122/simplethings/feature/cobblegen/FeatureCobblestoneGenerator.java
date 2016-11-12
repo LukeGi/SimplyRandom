@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -83,5 +84,12 @@ public class FeatureCobblestoneGenerator extends Feature
     public void registerRecipes()
     {
         GameRegistry.addShapedRecipe(new ItemStack(COBBLESTONE_GENERATOR, 1), "PPP", "WCL", "PPP", 'W', new ItemStack(Items.WATER_BUCKET, 1), 'C', new ItemStack(Blocks.COBBLESTONE, 1), 'L', new ItemStack(Items.LAVA_BUCKET, 1), 'P', new ItemStack(Items.IRON_PICKAXE, 1));
+    }
+
+    @Override
+    public void loadConfigs(Configuration configuration)
+    {
+        super.loadConfigs(configuration);
+        COBBLE_GEN_REQ_POWER = configuration.getBoolean("Cobble Generator Requires Power", Configuration.CATEGORY_GENERAL, true, "Set to false to make the Cobble Generator require no power.");
     }
 }

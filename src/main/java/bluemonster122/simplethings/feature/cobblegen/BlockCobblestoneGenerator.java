@@ -11,8 +11,10 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BlockCobblestoneGenerator extends Block implements ITileEntityProvider{
-    public BlockCobblestoneGenerator() {
+public class BlockCobblestoneGenerator extends Block implements ITileEntityProvider
+{
+    public BlockCobblestoneGenerator()
+    {
         super(Material.IRON);
         setRegistryName(SimpleThings.MOD_ID, "cobblestonegenerator");
         setUnlocalizedName(getRegistryName().getResourcePath());
@@ -26,7 +28,8 @@ public class BlockCobblestoneGenerator extends Block implements ITileEntityProvi
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(World worldIn, int meta)
+    {
         return new TileEntityCobblestoneGenerator();
     }
 }
