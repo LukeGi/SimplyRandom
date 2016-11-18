@@ -18,14 +18,16 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
         modid = SimpleThings.MOD_ID,
         name = SimpleThings.MOD_NAME,
         version = SimpleThings.VERSION,
-        guiFactory = SimpleThings.GUI_FACTORY_CLASS
+        guiFactory = SimpleThings.GUI_FACTORY_CLASS,
+        updateJSON = SimpleThings.UPDATE_JSON
 )
 public class SimpleThings implements IInitialize
 {
     public static final String MOD_ID = "simplethings";
     public static final String MOD_NAME = "Simple Things";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.0.0";
     public static final String GUI_FACTORY_CLASS = "bluemonster122.simplethings.client.gui.GuiFactory";
+    public static final String UPDATE_JSON = "https://github.com/bluemonster122/SimpleThings/blob/master/update.json";
 
     @Instance(MOD_ID)
     public static SimpleThings INSTANCE;
