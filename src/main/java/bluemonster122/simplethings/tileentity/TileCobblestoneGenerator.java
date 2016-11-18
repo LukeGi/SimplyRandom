@@ -1,16 +1,17 @@
-package bluemonster122.simplethings.feature.cobblegen;
+package bluemonster122.simplethings.tileentity;
 
-import bluemonster122.simplethings.energy.EnergyContainer;
-import bluemonster122.simplethings.energy.TileEntityEnergy;
+import bluemonster122.simplethings.util.EnergyContainer;
+import bluemonster122.simplethings.handler.ConfigurationHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCobblestoneGenerator extends TileEntityEnergy implements ITickable
+public class TileCobblestoneGenerator extends TileEnergy implements ITickable
 {
     public ItemStackHandler inventory = new ItemStackHandler(1);
 
@@ -26,7 +27,7 @@ public class TileEntityCobblestoneGenerator extends TileEntityEnergy implements 
         if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
         {
             return true;
-        } else if (FeatureCobblestoneGenerator.COBBLE_GEN_REQ_POWER)
+        } else if (ConfigurationHandler.cobblestone_generator_req_power > 0)
         {
             return super.hasCapability(capability, facing);
         } else
@@ -40,8 +41,8 @@ public class TileEntityCobblestoneGenerator extends TileEntityEnergy implements 
     {
         if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
         {
-            return (T) inventory;
-        } else if (FeatureCobblestoneGenerator.COBBLE_GEN_REQ_POWER)
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+        } else if (ConfigurationHandler.cobblestone_generator_req_power > 0)
         {
             return super.getCapability(capability, facing);
         } else
@@ -58,14 +59,15 @@ public class TileEntityCobblestoneGenerator extends TileEntityEnergy implements 
 
     private void generateCobblestone()
     {
-        if (!FeatureCobblestoneGenerator.COBBLE_GEN_REQ_POWER)
-        {
-            ItemStack stack = inventory.getStackInSlot(0);
-            int genAmount = stack == null ? 64 : 64 - stack.stackSize;
-            if (genAmount > 0)
-            {
-                inventory.insertItem(0, new ItemStack(Blocks.COBBLESTONE, genAmount), false);
+        ItemStack stackInSlot = inventory.getStackInSlot(0);
+        int stackSize = stackInSlot.func_190916_E();
+        if (stackSize < 64) {
+            int spaceLeft = 64 - stackSize;
+            while (ConfigurationHandler.cobblestone_generator_req_power * spaceLeft > getEnergyStored()) {
+                spaceLeft--;
             }
+            ItemHandlerHelper.insertItem(inventory, new ItemStack(Blocks.COBBLESTONE, spaceLeft), false);
+            extractEnergy(spaceLeft, false);
         }
     }
 }

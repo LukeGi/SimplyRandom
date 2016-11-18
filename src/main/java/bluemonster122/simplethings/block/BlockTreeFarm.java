@@ -1,6 +1,8 @@
-package bluemonster122.simplethings.feature.treefarm;
+package bluemonster122.simplethings.block;
 
 import bluemonster122.simplethings.SimpleThings;
+import bluemonster122.simplethings.tileentity.TileTreeFarm;
+import bluemonster122.simplethings.handler.GuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -18,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockTreeFarm extends Block implements ITileEntityProvider {
@@ -41,7 +42,7 @@ public class BlockTreeFarm extends Block implements ITileEntityProvider {
         tooltip.add("Can only place saplings on supported blocks" + (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? ", such as:" : ""));
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            TileEntityTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> tooltip.add("   *" + b.getLocalizedName()));
+            TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> tooltip.add("   *" + b.getLocalizedName()));
         } else {
             tooltip.add("Hold SHIFT for more information.");
         }
@@ -50,8 +51,8 @@ public class BlockTreeFarm extends Block implements ITileEntityProvider {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof TileEntityTreeFarm) {
-            TileEntityTreeFarm farmTile = (TileEntityTreeFarm) tileEntity;
+        if (tileEntity instanceof TileTreeFarm) {
+            TileTreeFarm farmTile = (TileTreeFarm) tileEntity;
             farmTile.dropInventory();
             farmTile.breakSaplings();
         }
@@ -59,8 +60,9 @@ public class BlockTreeFarm extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        playerIn.openGui(SimpleThings.INSTANCE, FeatureTreeFarm.TREE_FARM_GUI.getGui_id(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY)
+    {
+        playerIn.openGui(SimpleThings.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 
@@ -85,6 +87,6 @@ public class BlockTreeFarm extends Block implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityTreeFarm();
+        return new TileTreeFarm();
     }
 }

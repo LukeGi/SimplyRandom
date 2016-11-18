@@ -1,6 +1,7 @@
-package bluemonster122.simplethings.feature.firegenerator;
+package bluemonster122.simplethings.block;
 
 import bluemonster122.simplethings.SimpleThings;
+import bluemonster122.simplethings.tileentity.TileFireGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -16,8 +17,9 @@ public class BlockFireGenerator extends Block implements ITileEntityProvider
     public BlockFireGenerator()
     {
         super(Material.ROCK);
-        setRegistryName(SimpleThings.MOD_ID, "firegenerator");
+        setRegistryName(SimpleThings.MOD_ID, "energy_generator_fire");
         setUnlocalizedName(getRegistryName().getResourcePath());
+        setCreativeTab(SimpleThings.theTab);
     }
 
     @Override
@@ -30,6 +32,6 @@ public class BlockFireGenerator extends Block implements ITileEntityProvider
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityFireGenerator();
+        return new TileFireGenerator();
     }
 }

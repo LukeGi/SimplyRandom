@@ -1,15 +1,11 @@
 package bluemonster122.simplethings;
 
-import bluemonster122.simplethings.feature.cobblegen.FeatureCobblestoneGenerator;
-import bluemonster122.simplethings.feature.firegenerator.FeatureFireGenerator;
-import bluemonster122.simplethings.feature.treefarm.FeatureTreeFarm;
 import bluemonster122.simplethings.handler.ConfigurationHandler;
-import bluemonster122.simplethings.handler.FeatureHandler;
 import bluemonster122.simplethings.handler.GuiHandler;
+import bluemonster122.simplethings.handler.RegistryHandler;
 import bluemonster122.simplethings.util.IInitialize;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -37,25 +33,18 @@ public class SimpleThings implements IInitialize
     public static CreativeTabs theTab = new CreativeTabs(MOD_ID)
     {
         @Override
-        public Item getTabIconItem()
+        public ItemStack getTabIconItem()
         {
-            return Item.getItemFromBlock(Blocks.FURNACE);
+            return new ItemStack(RegistryHandler.item_power_generator_fire);
         }
     };
-
-    static
-    {
-        FeatureHandler.addFeature(new FeatureTreeFarm());
-        FeatureHandler.addFeature(new FeatureCobblestoneGenerator());
-        FeatureHandler.addFeature(new FeatureFireGenerator());
-    }
 
     @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-        FeatureHandler.preInit(event);
+        RegistryHandler.registerEvents();
     }
 
     @Override
@@ -63,13 +52,13 @@ public class SimpleThings implements IInitialize
     public void init(FMLInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(SimpleThings.INSTANCE, new GuiHandler());
-        FeatureHandler.init(event);
+        RegistryHandler.registerTileEntities();
+        RegistryHandler.registerRecipes();
     }
 
     @Override
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        FeatureHandler.postInit(event);
     }
 }

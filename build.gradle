@@ -32,13 +32,13 @@ minecraft {
 
 repositories {
     mavenCentral()
-    maven {
-        url = 'http://maven.epoxide.xyz'
-    }
+//    maven {
+//        url = 'http://maven.epoxide.xyz'
+//    }
 }
 
 dependencies {
-    compile "net.darkhax.tesla:Tesla:1.10.2-1.2.0.37"
+//    compile "net.darkhax.tesla:Tesla:1.10.2-1.2.0.37"
 }
 
 processResources {

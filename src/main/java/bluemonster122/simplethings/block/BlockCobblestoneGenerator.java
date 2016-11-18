@@ -1,6 +1,7 @@
-package bluemonster122.simplethings.feature.cobblegen;
+package bluemonster122.simplethings.block;
 
 import bluemonster122.simplethings.SimpleThings;
+import bluemonster122.simplethings.tileentity.TileCobblestoneGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -30,6 +31,6 @@ public class BlockCobblestoneGenerator extends Block implements ITileEntityProvi
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityCobblestoneGenerator();
+        return new TileCobblestoneGenerator();
     }
 }
