@@ -1,6 +1,7 @@
 /*
 !/.gitignore
 !/.gitmodules
+!/update.json
 !/src
 !/gradle
 !/gradlew
