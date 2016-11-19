@@ -1,7 +1,7 @@
 package bluemonster122.simplethings.tileentity;
 
-import bluemonster122.simplethings.util.EnergyContainer;
 import bluemonster122.simplethings.handler.ConfigurationHandler;
+import bluemonster122.simplethings.util.EnergyContainerConsumer;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class TileTreeFarm extends TileEnergy implements ITickable
+public class TileTreeFarm extends TileEnergyConsumer implements ITickable
 {
     public static boolean usePower = true;
     private Map<BlockPos, SaplingGrowthSimulator> saplings = new HashMap<>();
@@ -41,9 +41,9 @@ public class TileTreeFarm extends TileEnergy implements ITickable
     }
 
     @Override
-    public EnergyContainer makeNewBattery()
+    public EnergyContainerConsumer makeNewBattery()
     {
-        return new EnergyContainer(1000000, 10000, 0);
+        return new EnergyContainerConsumer(1000000, 10000);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TileTreeFarm extends TileEnergy implements ITickable
                         ItemHandlerHelper.insertItem(inventory, stack.copy(), false);
                         if (usePower)
                         {
-                            extractEnergy(ConfigurationHandler.tree_farm_break_energy, false);
+                            battery.consume(ConfigurationHandler.tree_farm_break_energy);
                         }
                     });
                     getWorld().setBlockToAir(current);
@@ -201,7 +201,7 @@ public class TileTreeFarm extends TileEnergy implements ITickable
                                 worldObj.setBlockState(pos, block.getDefaultState().withProperty(BlockSapling.TYPE, type), 3);
                                 inventory.extractItem(i, 1, false);
                                 if (usePower) {
-                                    extractEnergy(ConfigurationHandler.tree_farm_place_energy, false);
+                                    battery.consume(ConfigurationHandler.tree_farm_place_energy);
                                 }
                                 break;
                             }
@@ -308,6 +308,10 @@ public class TileTreeFarm extends TileEnergy implements ITickable
         {
             worldObj.destroyBlock(blockPos, true);
         }
+    }
+
+    public static boolean requiresPower(){
+        return ConfigurationHandler.tree_farm_break_energy > 0 || ConfigurationHandler.tree_farm_place_energy > 0;
     }
 
     public static class SaplingGrowthSimulator

@@ -1,7 +1,7 @@
 package bluemonster122.simplethings.tileentity;
 
-import bluemonster122.simplethings.util.EnergyContainer;
 import bluemonster122.simplethings.handler.ConfigurationHandler;
+import bluemonster122.simplethings.util.EnergyContainerConsumer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -11,14 +11,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileCobblestoneGenerator extends TileEnergy implements ITickable
+public class TileCobblestoneGenerator extends TileEnergyConsumer implements ITickable
 {
     public ItemStackHandler inventory = new ItemStackHandler(1);
 
     @Override
-    public EnergyContainer makeNewBattery()
+    public EnergyContainerConsumer makeNewBattery()
     {
-        return new EnergyContainer(1000, 10, 0);
+        return new EnergyContainerConsumer(1000, 10);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TileCobblestoneGenerator extends TileEnergy implements ITickable
                 spaceLeft--;
             }
             ItemHandlerHelper.insertItem(inventory, new ItemStack(Blocks.COBBLESTONE, spaceLeft), false);
-            extractEnergy(spaceLeft, false);
+            battery.consume(spaceLeft);
         }
     }
 }

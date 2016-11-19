@@ -37,7 +37,7 @@ public class SimpleThings implements IInitialize
         @Override
         public ItemStack getTabIconItem()
         {
-            return new ItemStack(RegistryHandler.item_power_generator_fire);
+            return ItemStack.field_190927_a;
         }
     };
 

@@ -1,6 +1,6 @@
 package bluemonster122.simplethings.tileentity;
 
-import bluemonster122.simplethings.util.EnergyContainer;
+import bluemonster122.simplethings.util.EnergyContainerConsumer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -8,16 +8,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public abstract class TileEnergy extends TileEntity implements IEnergyStorage
+public abstract class TileEnergyConsumer extends TileEntity implements IEnergyStorage
 {
-    private EnergyContainer battery;
+    protected EnergyContainerConsumer battery;
 
-    public TileEnergy()
+    public TileEnergyConsumer()
     {
         battery = makeNewBattery();
     }
 
-    public abstract EnergyContainer makeNewBattery();
+    public abstract EnergyContainerConsumer makeNewBattery();
 
     @Override
     public void readFromNBT(NBTTagCompound compound)

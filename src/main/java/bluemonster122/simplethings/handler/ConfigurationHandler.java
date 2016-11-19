@@ -14,16 +14,15 @@ public class ConfigurationHandler
 {
     public static Configuration configuration;
     // TREE FARM
-    public static boolean load_tree_farm = true;
     public static int tree_farm_place_energy = 10;
     public static int tree_farm_break_energy = 50;
 
     // COBBLESTONE GENERATOR
-    public static boolean load_cobblestone_generator = true;
     public static int cobblestone_generator_req_power = 0;
 
     // POWER GENERATORS
-    public static boolean load_power_generator_fire = true;
+    public static int energy_from_sugar = 300;
+    public static int sugar_burn_time = 60;
 
     public static void init(File configFile)
     {
@@ -45,6 +44,8 @@ public class ConfigurationHandler
         cobblestone_generator_req_power = configuration.getInt("Cost Per Cobble", "cobblestone_generator", 0, 0, 1000, "If set to 0, the cobblestone is free.");
 
         // POWER GENERATORS
+        energy_from_sugar = configuration.getInt("Energy per sugar", "power_generators", 300, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+        sugar_burn_time = configuration.getInt("Sugar burn time", "power_generators", 60, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
 
         if (configuration.hasChanged())
         {

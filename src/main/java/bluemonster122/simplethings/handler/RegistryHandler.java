@@ -1,18 +1,13 @@
 package bluemonster122.simplethings.handler;
 
-import bluemonster122.simplethings.block.BlockCobblestoneGenerator;
-import bluemonster122.simplethings.tileentity.TileCobblestoneGenerator;
+import bluemonster122.simplethings.block.*;
+import bluemonster122.simplethings.tileentity.*;
 import bluemonster122.simplethings.util.MiscEvents;
-import bluemonster122.simplethings.block.BlockFireGenerator;
-import bluemonster122.simplethings.tileentity.TileFireGenerator;
-import bluemonster122.simplethings.block.BlockTreeFarm;
-import bluemonster122.simplethings.tileentity.TileTreeFarm;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -28,14 +23,23 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod.EventBusSubscriber
 public class RegistryHandler
 {
-    public static Block tree_farm = new BlockTreeFarm();
-    public static Item item_tree_farm = new ItemBlock(tree_farm).setRegistryName(tree_farm.getRegistryName());
+    public static SimpleBlockBase tree_farm = new BlockTreeFarm();
+    public static Item item_tree_farm = tree_farm.getItemBlock();
 
-    public static Block cobblestone_generator = new BlockCobblestoneGenerator();
-    public static Item item_cobblestone_generator = new ItemBlock(cobblestone_generator).setRegistryName(cobblestone_generator.getRegistryName());
+    public static SimpleBlockBase cobblestone_generator = new BlockCobblestoneGenerator();
+    public static Item item_cobblestone_generator = cobblestone_generator.getItemBlock();
 
-    public static Block power_generator_fire = new BlockFireGenerator();
-    public static Item item_power_generator_fire = new ItemBlock(power_generator_fire).setRegistryName(power_generator_fire.getRegistryName());
+    public static SimpleBlockBase lightning_rod = new BlockLightningRod();
+    public static Item item_lightning_rod = lightning_rod.getItemBlock();
+
+    public static SimpleBlockBase power_generator_fire = new BlockEnergyGeneratorFire();
+    public static Item item_power_generator_fire = power_generator_fire.getItemBlock();
+
+    public static SimpleBlockBase power_cable = new BlockPowerCable();
+    public static Item item_power_cable = power_cable.getItemBlock();
+
+    public static SimpleBlockBase power_generator_sugar = new BlockEnergyGeneratorSugar();
+    public static Item item_power_generator_sugar = power_generator_sugar.getItemBlock();
 
     @SubscribeEvent
     public static void regsiterBlocks(RegistryEvent.Register<Block> event)
@@ -43,7 +47,10 @@ public class RegistryHandler
         event.getRegistry().registerAll(
                 tree_farm,
                 cobblestone_generator,
-                power_generator_fire
+                lightning_rod,
+                power_generator_fire,
+                power_generator_sugar,
+                power_cable
         );
     }
 
@@ -53,7 +60,10 @@ public class RegistryHandler
         event.getRegistry().registerAll(
                 item_tree_farm,
                 item_cobblestone_generator,
-                item_power_generator_fire
+                item_power_generator_fire,
+                item_lightning_rod,
+                item_power_generator_sugar,
+                item_power_cable
         );
     }
 
@@ -63,7 +73,10 @@ public class RegistryHandler
     {
         registerModelBasic(item_tree_farm);
         registerModelBasic(item_cobblestone_generator);
+        registerModelBasic(item_lightning_rod);
         registerModelBasic(item_power_generator_fire);
+        registerModelBasic(item_power_generator_sugar);
+        registerModelBasic(item_power_cable);
     }
 
     @SideOnly(Side.CLIENT)
@@ -76,7 +89,10 @@ public class RegistryHandler
     {
         GameRegistry.registerTileEntity(TileTreeFarm.class, tree_farm.getRegistryName().toString());
         GameRegistry.registerTileEntity(TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString());
-        GameRegistry.registerTileEntity(TileFireGenerator.class, power_generator_fire.getRegistryName().toString());
+        GameRegistry.registerTileEntity(TileLightningRod.class, lightning_rod.getRegistryName().toString());
+        GameRegistry.registerTileEntity(TileEnergyGeneratorFire.class, power_generator_fire.getRegistryName().toString());
+        GameRegistry.registerTileEntity(TileEnergyGeneratorSugar.class, power_generator_sugar.getRegistryName().toString());
+        GameRegistry.registerTileEntity(TilePowerCable.class, power_cable.getRegistryName().toString());
     }
 
     public static void registerRecipes()

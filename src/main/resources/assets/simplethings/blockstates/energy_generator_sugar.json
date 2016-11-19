@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column",
+    "transform": "forge:default-block",
+    "textures": {
+      "end": "simplethings:blocks/energy_generator",
+      "side": "simplethings:blocks/energy_generator_sugar"
+    }
+  },
+  "variants": {
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+      }
+    ]
+  }
+}
