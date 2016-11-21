@@ -1,27 +1,29 @@
 package bluemonster122.simplethings.tileentity;
 
-import bluemonster122.simplethings.util.EnergyContainerGenerator;
+import bluemonster122.simplethings.util.CapabilityHelper;
+import bluemonster122.simplethings.util.EnergyHelpers;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nonnull;
 
 import static bluemonster122.simplethings.handler.ConfigurationHandler.energy_from_sugar;
 import static bluemonster122.simplethings.handler.ConfigurationHandler.sugar_burn_time;
 
-public class TileEnergyGeneratorSugar extends TileEnergyGenerator implements ITickable
+public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, IEnergyStorage, IItemHandler
 {
     private int burntime;
     private ItemStackHandler inventory = new ItemStackHandler(1);
-
-    @Override
-    public EnergyContainerGenerator makeNewBattery()
-    {
-        return new EnergyContainerGenerator(10000, 100);
-    }
+    private EnergyStorage energy = new EnergyStorage(10000);
 
     @Override
     public void update()
@@ -47,7 +49,7 @@ public class TileEnergyGeneratorSugar extends TileEnergyGenerator implements ITi
             // burn some sugar
             burntime--;
             // add the energy created to the battery
-            getBattery().generate(energy_from_sugar / sugar_burn_time);
+            energy.receiveEnergy(energy_from_sugar / sugar_burn_time, false);
         } // or if for some reason the burnime is negative
         else
         {
@@ -55,8 +57,9 @@ public class TileEnergyGeneratorSugar extends TileEnergyGenerator implements ITi
             burntime = 0;
         }
 
-        if (getEnergyStored() > 0) {
-            super.checkForTakers();
+        if (getEnergyStored() > 0)
+        {
+            EnergyHelpers.checkForTakers(this, getWorld(), getPos());
         }
         // TODO: 11/19/2016 make it require an air block on 3 sides, and 15 air blocks in a 2 block radius.
         // TODO: 11/19/2016 make it emit a lot of smoke particles if not enough air
@@ -66,33 +69,22 @@ public class TileEnergyGeneratorSugar extends TileEnergyGenerator implements ITi
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-        {
-            return true;
-        } else
-        {
-            return super.hasCapability(capability, facing);
-        }
+        return CapabilityHelper.hasCapability(this, capability);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-        {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-        } else
-        {
-            return super.getCapability(capability, facing);
-        }
+        return CapabilityHelper.getCapability(this, capability);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         compound.setInteger("[burntime]", burntime);
+        compound.setInteger("[energy]", energy.getEnergyStored());
         compound.setTag("[inventory]", inventory.serializeNBT());
-        return super.writeToNBT(compound);
+        return compound;
     }
 
     @Override
@@ -100,6 +92,79 @@ public class TileEnergyGeneratorSugar extends TileEnergyGenerator implements ITi
     {
         burntime = compound.getInteger("[burntime]");
         inventory.deserializeNBT((NBTTagCompound) compound.getTag("[inventory]"));
-        super.readFromNBT(compound);
+        energy = EnergyHelpers.makeNewAndFill(compound.getInteger("[energy]"), 10000, 10000, 10000);
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        return getEnergy().receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored()
+    {
+        return getEnergy().getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored()
+    {
+        return getEnergy().getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canExtract()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean canReceive()
+    {
+        return false;
+    }
+
+    @Override
+    public int getSlots()
+    {
+        return getInventory().getSlots();
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return getInventory().getStackInSlot(slot);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+    {
+        return getInventory().insertItem(slot, stack, simulate);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate)
+    {
+        return getInventory().extractItem(slot, amount, simulate);
+    }
+
+    public ItemStackHandler getInventory()
+    {
+        return inventory;
+    }
+
+    public EnergyStorage getEnergy()
+    {
+        return energy;
     }
 }
