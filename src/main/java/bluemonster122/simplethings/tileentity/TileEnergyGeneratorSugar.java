@@ -1,7 +1,7 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.util.CapabilityHelper;
-import bluemonster122.simplethings.util.EnergyHelpers;
+import bluemonster122.simplethings.util.EnergyHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,9 +21,9 @@ import static bluemonster122.simplethings.handler.ConfigurationHandler.sugar_bur
 
 public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, IEnergyStorage, IItemHandler
 {
-    private int burntime;
     private ItemStackHandler inventory = new ItemStackHandler(1);
     private EnergyStorage energy = new EnergyStorage(10000);
+    private int burntime;
 
     @Override
     public void update()
@@ -35,10 +35,10 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
             if (getEnergyStored() + energy_from_sugar <= getMaxEnergyStored())
             {
                 // If the inventory contains a stack of sugar.
-                if (inventory.getStackInSlot(0).getItem().equals(Items.SUGAR))
+                if (getStackInSlot(0).getItem().equals(Items.SUGAR))
                 {
                     // We take a single sugar from the stack.
-                    inventory.extractItem(0, 1, false);
+                    extractItem(0, 1, false);
                     // Adds to the burntime
                     burntime = sugar_burn_time;
                 }
@@ -49,7 +49,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
             // burn some sugar
             burntime--;
             // add the energy created to the battery
-            energy.receiveEnergy(energy_from_sugar / sugar_burn_time, false);
+            receiveEnergy(energy_from_sugar / sugar_burn_time, false);
         } // or if for some reason the burnime is negative
         else
         {
@@ -59,7 +59,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
 
         if (getEnergyStored() > 0)
         {
-            EnergyHelpers.checkForTakers(this, getWorld(), getPos());
+            EnergyHelper.checkForTakers(this, getWorld(), getPos());
         }
         // TODO: 11/19/2016 make it require an air block on 3 sides, and 15 air blocks in a 2 block radius.
         // TODO: 11/19/2016 make it emit a lot of smoke particles if not enough air
@@ -92,7 +92,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
     {
         burntime = compound.getInteger("[burntime]");
         inventory.deserializeNBT((NBTTagCompound) compound.getTag("[inventory]"));
-        energy = EnergyHelpers.makeNewAndFill(compound.getInteger("[energy]"), 10000, 10000, 10000);
+        energy = EnergyHelper.makeNewAndFill(compound.getInteger("[energy]"), 10000, 10000, 10000);
     }
 
     @Override

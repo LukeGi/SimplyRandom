@@ -1,25 +1,26 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.handler.ConfigurationHandler;
-import bluemonster122.simplethings.util.EnergyContainerConsumer;
+import bluemonster122.simplethings.util.CapabilityHelper;
+import cofh.api.energy.EnergyStorage;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -27,55 +28,25 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class TileTreeFarm extends TileEnergyConsumer implements ITickable
+public class TileTreeFarm extends TileEntity implements ITickable, IItemHandler, IEnergyStorage
 {
-    public static boolean usePower = true;
-    private Map<BlockPos, SaplingGrowthSimulator> saplings = new HashMap<>();
-    private ItemStackHandler inventory = new ItemStackHandler(72);
     private static Set<BlockPos> farmed = ImmutableSet.of(new BlockPos(-3, 0, -3), new BlockPos(-2, 0, -3), new BlockPos(-1, 0, -3), new BlockPos(0, 0, -3), new BlockPos(1, 0, -3), new BlockPos(2, 0, -3), new BlockPos(3, 0, -3), new BlockPos(-3, 0, -2), new BlockPos(-2, 0, -2), new BlockPos(-1, 0, -2), new BlockPos(0, 0, -2), new BlockPos(1, 0, -2), new BlockPos(2, 0, -2), new BlockPos(3, 0, -2), new BlockPos(-3, 0, -1), new BlockPos(-2, 0, -1), new BlockPos(-1, 0, -1), new BlockPos(0, 0, -1), new BlockPos(1, 0, -1), new BlockPos(2, 0, -1), new BlockPos(3, 0, -1), new BlockPos(-3, 0, 0), new BlockPos(-2, 0, 0), new BlockPos(-1, 0, 0), new BlockPos(1, 0, 0), new BlockPos(2, 0, 0), new BlockPos(3, 0, 0), new BlockPos(-3, 0, 1), new BlockPos(-2, 0, 1), new BlockPos(-1, 0, 1), new BlockPos(0, 0, 1), new BlockPos(1, 0, 1), new BlockPos(2, 0, 1), new BlockPos(3, 0, 1), new BlockPos(-3, 0, 2), new BlockPos(-2, 0, 2), new BlockPos(-1, 0, 2), new BlockPos(0, 0, 2), new BlockPos(1, 0, 2), new BlockPos(2, 0, 2), new BlockPos(3, 0, 2), new BlockPos(-3, 0, 3), new BlockPos(-2, 0, 3), new BlockPos(-1, 0, 3), new BlockPos(0, 0, 3), new BlockPos(1, 0, 3), new BlockPos(2, 0, 3), new BlockPos(3, 0, 3));
     public static Set<Block> ALLOWED_FARMING_BLOCKS = ImmutableSet.of(Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS);
 
-    public TileTreeFarm()
-    {
-
-    }
-
-    @Override
-    public EnergyContainerConsumer makeNewBattery()
-    {
-        return new EnergyContainerConsumer(1000000, 10000);
-    }
+    private Map<BlockPos, SaplingGrowthSimulator> saplings = new HashMap<>();
+    private ItemStackHandler inventory = new ItemStackHandler(72);
+    private EnergyStorage energy = new EnergyStorage(1000000);
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
-        {
-            return true;
-        }
-        if (usePower)
-        {
-            return super.hasCapability(capability, facing);
-        } else
-        {
-            return false;
-        }
+        return CapabilityHelper.hasCapability(this, capability);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
-        {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-        }
-        if (usePower)
-        {
-            return super.getCapability(capability, facing);
-        } else
-        {
-            return null;
-        }
+        return CapabilityHelper.getCapability(this, capability);
     }
 
     private boolean setupInternalFarm()
@@ -83,12 +54,12 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
         boolean flag = false;
         for (BlockPos saplingPos : farmed)
         {
-            IBlockState block = getWorld().getBlockState(pos.add(saplingPos));
-            if (saplings.get(pos.add(saplingPos)) == null && block.getBlock().equals(Blocks.SAPLING))
+            IBlockState block = getWorld().getBlockState(getPos().add(saplingPos));
+            if (saplings.get(getPos().add(saplingPos)) == null && block.getBlock().equals(Blocks.SAPLING))
             {
                 BlockPlanks.EnumType type = block.getValue(BlockSapling.TYPE);
                 boolean isMega = getWorld().rand.nextInt(10) == 2 && (type == BlockPlanks.EnumType.SPRUCE || type == BlockPlanks.EnumType.JUNGLE);
-                saplings.put(pos.add(saplingPos), new SaplingGrowthSimulator(type, isMega, SaplingGrowthSimulator.getMinHeight(type, isMega), SaplingGrowthSimulator.getChanceHeight(type, isMega, getWorld().rand), SaplingGrowthSimulator.getAddChanceHeight(type, isMega, getWorld().rand)));
+                saplings.put(getPos().add(saplingPos), new SaplingGrowthSimulator(type, isMega, SaplingGrowthSimulator.getMinHeight(type, isMega), SaplingGrowthSimulator.getChanceHeight(type, isMega, getWorld().rand), SaplingGrowthSimulator.getAddChanceHeight(type, isMega, getWorld().rand)));
                 block.getBlock().setTickRandomly(false);
                 flag = true;
             }
@@ -107,16 +78,16 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
             {
                 List<ItemStack> drops = sapling.getTreeGrown(getWorld().rand);
                 boolean canHarvest = true;
-                IItemHandler trialInv = new ItemStackHandler(inventory.getSlots());
+                IItemHandler trialInv = new ItemStackHandler(getSlots());
                 int height = sapling.isMega() ? 15 : 7;
                 for (int i = 1; i < height; i++)
                 {
                     canHarvest &= getWorld().isAirBlock(current.up(i));
                 }
-                canHarvest &= !usePower || (getEnergyStored() >= (drops.size() * ConfigurationHandler.tree_farm_break_energy));
-                for (int i = 0; i < inventory.getSlots() && canHarvest; i++)
+                canHarvest &= getEnergyStored() >= (drops.size() * ConfigurationHandler.tree_farm_break_energy);
+                for (int i = 0; i < getSlots() && canHarvest; i++)
                 {
-                    ItemStack stackInSlot = inventory.getStackInSlot(i);
+                    ItemStack stackInSlot = getStackInSlot(i);
                     if (stackInSlot != ItemStack.field_190927_a)
                     {
                         trialInv.insertItem(i, stackInSlot.copy(), false);
@@ -132,11 +103,8 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
                     farm.remove();
                     drops.forEach(stack ->
                     {
-                        ItemHandlerHelper.insertItem(inventory, stack.copy(), false);
-                        if (usePower)
-                        {
-                            battery.consume(ConfigurationHandler.tree_farm_break_energy);
-                        }
+                        ItemHandlerHelper.insertItem(getInventory(), stack.copy(), false);
+                        extractEnergy(ConfigurationHandler.tree_farm_break_energy, false);
                     });
                     getWorld().setBlockToAir(current);
                 }
@@ -150,7 +118,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
         while (farm.hasNext())
         {
             BlockPos pos = farm.next();
-            IBlockState state = worldObj.getBlockState(pos);
+            IBlockState state = getWorld().getBlockState(pos);
             Block block = state.getBlock();
             if (block instanceof BlockSapling)
             {
@@ -161,7 +129,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
                 {
                     saplings.get(pos).setHarvest(true);
                 }
-            } else if (worldObj.isAirBlock(pos))
+            } else if (getWorld().isAirBlock(pos))
             {
                 farm.remove();
             }
@@ -172,7 +140,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
     public void update()
     {
         findGrowers();
-        getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+        getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
         if (getWorld().getTotalWorldTime() % 60 != 0) return;
         plantSaplings();
         setupInternalFarm();
@@ -182,27 +150,25 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
 
     private void plantSaplings()
     {
-        if (!getWorld().isRemote && (getEnergyStored() >= ConfigurationHandler.tree_farm_place_energy || !usePower) && inventory != null)
+        if (!getWorld().isRemote && getEnergyStored() >= ConfigurationHandler.tree_farm_place_energy)
         {
             for (BlockPos p : farmed)
             {
-                BlockPos pos = this.pos.add(p);
-                if (worldObj.isAirBlock(pos) && isValidBlock(pos.down()))
+                BlockPos pos = getPos().add(p);
+                if (getWorld().isAirBlock(pos) && isValidBlock(pos.down()))
                 {
-                    for (int i = 0; i < inventory.getSlots(); i++)
+                    for (int i = 0; i < getInventory().getSlots(); i++)
                     {
-                        ItemStack stack = inventory.getStackInSlot(i);
+                        ItemStack stack = getStackInSlot(i);
                         if (stack != ItemStack.field_190927_a && stack.getItem() instanceof ItemBlock)
                         {
-                            Block block = ((ItemBlock) stack.getItem()).block;
+                            Block block = ((ItemBlock) stack.getItem()).getBlock();
                             if (block == Blocks.SAPLING)
                             {
                                 BlockPlanks.EnumType type = BlockPlanks.EnumType.byMetadata(stack.getItemDamage());
-                                worldObj.setBlockState(pos, block.getDefaultState().withProperty(BlockSapling.TYPE, type), 3);
-                                inventory.extractItem(i, 1, false);
-                                if (usePower) {
-                                    battery.consume(ConfigurationHandler.tree_farm_place_energy);
-                                }
+                                getWorld().setBlockState(pos, block.getDefaultState().withProperty(BlockSapling.TYPE, type), 3);
+                                extractItem(i, 1, false);
+                                extractEnergy(ConfigurationHandler.tree_farm_place_energy, false);
                                 break;
                             }
                         }
@@ -214,7 +180,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
 
     private boolean isValidBlock(BlockPos down)
     {
-        return ALLOWED_FARMING_BLOCKS.contains(worldObj.getBlockState(down).getBlock());
+        return ALLOWED_FARMING_BLOCKS.contains(getWorld().getBlockState(down).getBlock());
     }
 
     @Override
@@ -248,7 +214,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        compound.setTag("inventory", inventory.serializeNBT());
+        compound.setTag("inventory", getInventory().serializeNBT());
         compound.setInteger("saplingsize", saplings.keySet().size());
         int id = 0;
         for (BlockPos pos : saplings.keySet())
@@ -268,7 +234,7 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
         Random random = new Random();
         if (compound.hasKey("inventory"))
         {
-            inventory.deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
+            getInventory().deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
         }
         int saplingsize = compound.getInteger("saplingsize");
         for (int i = 0; i < saplingsize; i++)
@@ -284,209 +250,102 @@ public class TileTreeFarm extends TileEnergyConsumer implements ITickable
 
     public void dropInventory()
     {
-        if (worldObj.isRemote)
+        if (getWorld().isRemote)
         {
             return;
         }
-        for (int i = 0; i < inventory.getSlots(); ++i)
+        for (int i = 0; i < getSlots(); ++i)
         {
-            ItemStack itemstack = inventory.getStackInSlot(i);
+            ItemStack itemstack = getStackInSlot(i);
             if (itemstack != ItemStack.field_190927_a)
             {
-                InventoryHelper.spawnItemStack(worldObj, pos.getX(), pos.getY(), pos.getZ(), itemstack);
+                InventoryHelper.spawnItemStack(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), itemstack);
             }
         }
     }
 
     public void breakSaplings()
     {
-        if (worldObj.isRemote)
+        if (getWorld().isRemote)
         {
             return;
         }
         for (BlockPos blockPos : saplings.keySet())
         {
-            worldObj.destroyBlock(blockPos, true);
+            getWorld().destroyBlock(blockPos, true);
         }
     }
 
-    public static boolean requiresPower(){
-        return ConfigurationHandler.tree_farm_break_energy > 0 || ConfigurationHandler.tree_farm_place_energy > 0;
-    }
-
-    public static class SaplingGrowthSimulator
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
     {
-        BlockPlanks.EnumType TYPE;
-        boolean harvest = false;
-        boolean isMega;
-        int minHeight;
-        int chanceHeight;
-        int additionalChanceHeight;
+        return getEnergy().receiveEnergy(maxReceive, simulate);
+    }
 
-        public SaplingGrowthSimulator(BlockPlanks.EnumType TYPE, boolean isMega, int minHeight, int chanceHeight, int additionalChanceHeight)
-        {
-            this.TYPE = TYPE;
-            this.isMega = isMega && (TYPE == BlockPlanks.EnumType.SPRUCE || TYPE == BlockPlanks.EnumType.JUNGLE);
-            this.minHeight = minHeight;
-            this.chanceHeight = chanceHeight;
-            this.additionalChanceHeight = additionalChanceHeight;
-        }
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate)
+    {
+        return getEnergy().extractEnergy(maxExtract, simulate);
+    }
 
-        public List<ItemStack> getTreeGrown(Random random)
-        {
-            List<ItemStack> ret = new ArrayList<>();
+    @Override
+    public int getEnergyStored()
+    {
+        return getEnergy().getEnergyStored();
+    }
 
-            // ---------------- HANDLES THE LOGS ----------------
-            int logBlocks = minHeight * (TYPE == BlockPlanks.EnumType.DARK_OAK ? 4 : megaModifier()) + (chanceHeight > 0 ? random.nextInt(chanceHeight) : 1) * (TYPE == BlockPlanks.EnumType.DARK_OAK ? 4 : megaModifier()) + (additionalChanceHeight > 0 ? random.nextInt(additionalChanceHeight) : 0);
-            IBlockState logState = getLogState();
+    @Override
+    public int getMaxEnergyStored()
+    {
+        return getEnergy().getMaxEnergyStored();
+    }
 
-            for (; logBlocks >= 0; logBlocks--)
-            {
-                logState.getBlock().getDrops(null, null, logState, 0).forEach(s -> ret.add(s));
-            }
+    @Override
+    public boolean canExtract()
+    {
+        return false;
+    }
 
-            // ---------------- HANDLES THE LEAVES ----------------
-            IBlockState leavesState = getLeavesState();
-            for (int i = 30 + random.nextInt(20) * megaModifier(); i >= 0; i--)
-            {
-                leavesState.getBlock().getDrops(null, null, leavesState, 0).forEach(s -> ret.add(s));
-                if ((TYPE == BlockPlanks.EnumType.DARK_OAK || TYPE == BlockPlanks.EnumType.OAK) && random.nextInt(200) == 0)
-                {
-                    ret.add(new ItemStack(Items.APPLE, 1));
-                }
-            }
+    @Override
+    public boolean canReceive()
+    {
+        return true;
+    }
 
-            return ret;
-        }
+    @Override
+    public int getSlots()
+    {
+        return getInventory().getSlots();
+    }
 
-        private IBlockState getLogState()
-        {
-            switch (TYPE)
-            {
-                case BIRCH:
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, TYPE);
-                case SPRUCE:
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, TYPE);
-                case JUNGLE:
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, TYPE);
-                case DARK_OAK:
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, TYPE);
-                case ACACIA:
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, TYPE);
-                case OAK:
-                default:
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, TYPE);
-            }
-        }
+    @Nonnull
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return getInventory().getStackInSlot(slot);
+    }
 
-        private IBlockState getLeavesState()
-        {
-            switch (TYPE)
-            {
-                case BIRCH:
-                    return Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, TYPE);
-                case SPRUCE:
-                    return Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, TYPE);
-                case JUNGLE:
-                    return Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, TYPE);
-                case DARK_OAK:
-                    return Blocks.LEAVES2.getDefaultState().withProperty(BlockNewLeaf.VARIANT, TYPE);
-                case ACACIA:
-                    return Blocks.LEAVES2.getDefaultState().withProperty(BlockNewLeaf.VARIANT, TYPE);
-                case OAK:
-                default:
-                    return Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, TYPE);
-            }
-        }
+    @Nonnull
+    @Override
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+    {
+        return getInventory().insertItem(slot, stack, simulate);
+    }
 
-        private int megaModifier()
-        {
-            return isMega ? 4 : 1;
-        }
+    @Nonnull
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate)
+    {
+        return getInventory().extractItem(slot, amount, simulate);
+    }
 
-        public static int getMinHeight(BlockPlanks.EnumType type, boolean isMega)
-        {
-            switch (type)
-            {
-                case OAK:
-                default:
-                    return 4;
-                case BIRCH:
-                    return 3;
-                case SPRUCE:
-                    return isMega ? 12 : 6;
-                case JUNGLE:
-                    return isMega ? 15 : 7;
-                case DARK_OAK:
-                    return 6;
-                case ACACIA:
-                    return 5;
-            }
-        }
+    public ItemStackHandler getInventory()
+    {
+        return inventory;
+    }
 
-        public static int getChanceHeight(BlockPlanks.EnumType type, boolean isMega, Random rand)
-        {
-            switch (type)
-            {
-                case OAK:
-                default:
-                    return rand.nextInt(12) == 4 ? rand.nextInt(3) : rand.nextInt(8);
-                case BIRCH:
-                    return rand.nextInt(4);
-                case SPRUCE:
-                    return rand.nextInt(5);
-                case JUNGLE:
-                    return rand.nextInt(7);
-                case DARK_OAK:
-                    return rand.nextInt(3);
-                case ACACIA:
-                    return rand.nextInt(3);
-            }
-        }
-
-        public static int getAddChanceHeight(BlockPlanks.EnumType type, boolean isMega, Random rand)
-        {
-            switch (type)
-            {
-                case OAK:
-                default:
-                    return rand.nextInt(6);
-                case BIRCH:
-                    return rand.nextInt(3);
-                case SPRUCE:
-                    return isMega ? rand.nextInt(2) : 0;
-                case JUNGLE:
-                    return isMega ? rand.nextInt(18) : 2;
-                case DARK_OAK:
-                    return rand.nextInt(3) + rand.nextInt(4);
-                case ACACIA:
-                    return rand.nextInt(4);
-            }
-        }
-
-        public int getType()
-        {
-            return TYPE.ordinal();
-        }
-
-        public BlockPlanks.EnumType getTYPE()
-        {
-            return TYPE;
-        }
-
-        public boolean isMega()
-        {
-            return isMega;
-        }
-
-        public void setHarvest(boolean b)
-        {
-            harvest = b;
-        }
-
-        public boolean shouldHarvest()
-        {
-            return harvest;
-        }
+    public EnergyStorage getEnergy()
+    {
+        return energy;
     }
 }

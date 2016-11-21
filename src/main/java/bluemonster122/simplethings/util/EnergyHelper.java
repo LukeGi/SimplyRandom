@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class EnergyHelpers
+public class EnergyHelper
 {
     public static void checkForTakers(IEnergyStorage energyStorageIn, World worldIn, BlockPos posIn)
     {
