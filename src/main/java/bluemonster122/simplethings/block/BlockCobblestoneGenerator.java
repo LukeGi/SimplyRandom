@@ -29,7 +29,7 @@ public class BlockCobblestoneGenerator extends SimpleBlockBase implements ITileE
     {
         String extension = ".extra";
         if (ConfigurationHandler.cobblestone_generator_req_power > 0)
-            extension += ".energy";
+            extension += ".things";
         else
             extension += ".noenergy";
         SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + extension, ConfigurationHandler.cobblestone_generator_req_power), tooltip);

@@ -66,7 +66,7 @@ public class BlockTreeFarm extends SimpleBlockBase implements ITileEntityProvide
     @SideOnly(Side.CLIENT)
     public boolean addExtraInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
-        SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + (TileTreeFarm.requiresPower() ? ".energy" : ".noenergy"), ConfigurationHandler.tree_farm_break_energy, ConfigurationHandler.tree_farm_place_energy), tooltip);
+        SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".things", ConfigurationHandler.tree_farm_break_energy, ConfigurationHandler.tree_farm_place_energy), tooltip);
         SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".blocks"), tooltip);
         TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> SimpleItemBlockBase.addStringToTooltip("  * " + I18n.format(b.getUnlocalizedName() + ".name"), tooltip));
         return true;

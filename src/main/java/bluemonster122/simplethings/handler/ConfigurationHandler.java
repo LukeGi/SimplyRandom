@@ -38,7 +38,7 @@ public class ConfigurationHandler
         // TREE FARM
         tree_farm_break_energy = configuration.getInt("Energy Consumed On Block Break", "tree_farm", 50, 0, 1000, "Set to 0 to make the farm cost no power.");
         tree_farm_place_energy = configuration.getInt("Energy Consumed On Block Place", "tree_farm", 10, 0, 500, "Set to 0 to make the farm cost no power.");
-        TileTreeFarm.usePower = !(tree_farm_break_energy == 0 && tree_farm_place_energy == 0);
+//        TileTreeFarm.usePower = !(tree_farm_break_energy == 0 && tree_farm_place_energy == 0);
 
         // COBBLESTONE GENERATOR
         cobblestone_generator_req_power = configuration.getInt("Cost Per Cobble", "cobblestone_generator", 0, 0, 1000, "If set to 0, the cobblestone is free.");

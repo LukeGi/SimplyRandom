@@ -48,7 +48,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
         {
             // burn some sugar
             burntime--;
-            // add the energy created to the battery
+            // add the things created to the battery
             receiveEnergy(energy_from_sugar / sugar_burn_time, false);
         } // or if for some reason the burnime is negative
         else
@@ -82,7 +82,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         compound.setInteger("[burntime]", burntime);
-        compound.setInteger("[energy]", energy.getEnergyStored());
+        compound.setInteger("[things]", energy.getEnergyStored());
         compound.setTag("[inventory]", inventory.serializeNBT());
         return compound;
     }
@@ -92,7 +92,7 @@ public class TileEnergyGeneratorSugar extends TileEntity implements ITickable, I
     {
         burntime = compound.getInteger("[burntime]");
         inventory.deserializeNBT((NBTTagCompound) compound.getTag("[inventory]"));
-        energy = EnergyHelper.makeNewAndFill(compound.getInteger("[energy]"), 10000, 10000, 10000);
+        energy = EnergyHelper.makeNewAndFill(compound.getInteger("[things]"), 10000, 10000, 10000);
     }
 
     @Override
