@@ -15,30 +15,29 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-
 public class BlockCobblestoneGenerator extends SimpleBlockBase implements ITileEntityProvider
 {
-    public BlockCobblestoneGenerator()
-    {
-        super(Material.IRON, Names.COBBLESTONE_GENERATOR);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addExtraInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
-    {
-        String extension = ".extra";
-        if (ConfigurationHandler.cobblestone_generator_req_power > 0)
-            extension += ".things";
-        else
-            extension += ".noenergy";
-        SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + extension, ConfigurationHandler.cobblestone_generator_req_power), tooltip);
-        return true;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta)
-    {
-        return new TileCobblestoneGenerator();
-    }
+	public BlockCobblestoneGenerator()
+	{
+		super(Material.IRON, Names.COBBLESTONE_GENERATOR);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean addExtraInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	{
+		String extension = ".extra";
+		if (ConfigurationHandler.cobblestone_generator_req_power > 0)
+			extension += ".things";
+		else
+			extension += ".noenergy";
+		SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + extension, ConfigurationHandler.cobblestone_generator_req_power), tooltip);
+		return true;
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
+		return new TileCobblestoneGenerator();
+	}
 }

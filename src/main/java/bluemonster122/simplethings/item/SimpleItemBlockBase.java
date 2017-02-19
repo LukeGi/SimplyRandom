@@ -11,28 +11,27 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
 import java.util.List;
-
 public class SimpleItemBlockBase extends ItemBlock
 {
-    public SimpleItemBlockBase(SimpleBlockBase block)
-    {
-        super(block);
-        setRegistryName(block.getRegistryName());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
-    {
-        addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName()), tooltip);
-        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            addStringToTooltip(I18n.format("simplethings.tooltip.holdshift"), tooltip);
-        else if (!((SimpleBlockBase) block).addExtraInformation(stack, playerIn, tooltip, advanced))
-            addStringToTooltip(I18n.format("simplethings.tooltip.noextrainfo"), tooltip);
-    }
-
-    public static void addStringToTooltip(String s, List<String> tooltip)
-    {
-        Collections.addAll(tooltip, s.replaceAll("&", "\u00a7").split("<br>"));
-    }
+	public SimpleItemBlockBase(SimpleBlockBase block)
+	{
+		super(block);
+		setRegistryName(block.getRegistryName());
+	}
+	
+	public static void addStringToTooltip(String s, List<String> tooltip)
+	{
+		Collections.addAll(tooltip, s.replaceAll("&", "\u00a7").split("<br>"));
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	{
+		addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName()), tooltip);
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+			addStringToTooltip(I18n.format("simplethings.tooltip.holdshift"), tooltip);
+		else if (!((SimpleBlockBase) block).addExtraInformation(stack, playerIn, tooltip, advanced))
+			addStringToTooltip(I18n.format("simplethings.tooltip.noextrainfo"), tooltip);
+	}
 }

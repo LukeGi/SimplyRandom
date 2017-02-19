@@ -8,18 +8,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-
 public class BlockEnergyGeneratorSugar extends SimpleBlockBase implements ITileEntityProvider
 {
-    public BlockEnergyGeneratorSugar()
-    {
-        super(Material.IRON, Names.ENERGY_GENERATOR_SUGAR);
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta)
-    {
-        return new TileEnergyGeneratorSugar();
-    }
+	public BlockEnergyGeneratorSugar()
+	{
+		super(Material.IRON, Names.ENERGY_GENERATOR_SUGAR);
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
+		return new TileEnergyGeneratorSugar();
+	}
 }
