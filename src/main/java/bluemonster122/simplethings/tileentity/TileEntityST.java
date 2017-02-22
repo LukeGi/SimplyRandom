@@ -5,12 +5,18 @@ import bluemonster122.simplethings.tileentity.things.IHaveInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 public class TileEntityST extends TileEntity
 {
@@ -27,10 +33,35 @@ public class TileEntityST extends TileEntity
 				ItemStack itemstack = ((IHaveInventory) this).getInventory().getStackInSlot(i);
 				if (itemstack != ItemStack.field_190927_a)
 				{
-					InventoryHelper.spawnItemStack(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), itemstack);
+					InventoryHelper.spawnItemStack(
+					  getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), itemstack);
 				}
 			}
 		}
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		this.writeToNBT(nbt);
+		return new SPacketUpdateTileEntity(getPos(), 0, nbt);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	{
+		this.readFromNBT(pkt.getNbtCompound());
+	}
+	
+	@Override
+	@Nonnull
+	public NBTTagCompound getUpdateTag()
+	{
+		NBTTagCompound nbt = super.getUpdateTag();
+		writeToNBT(nbt);
+		return nbt;
 	}
 	
 	@Override
@@ -52,7 +83,9 @@ public class TileEntityST extends TileEntity
 	{
 		if (this instanceof IHaveBattery)
 		{
-			((IHaveBattery) this).getBattery().receiveEnergy(compound.getInteger("powerStored"), false);
+			EnergyStorage battery = ((IHaveBattery) this).getBattery();
+			battery.extractEnergy(battery.getEnergyStored(), false);
+			battery.receiveEnergy(compound.getInteger("powerStored"), false);
 		}
 		if (this instanceof IHaveInventory)
 		{
@@ -81,11 +114,13 @@ public class TileEntityST extends TileEntity
 	{
 		if (capability.equals(CapabilityEnergy.ENERGY))
 		{
-			return this instanceof IHaveBattery ? CapabilityEnergy.ENERGY.cast(((IHaveBattery) this).getBattery()) : null;
+			return this instanceof IHaveBattery ? CapabilityEnergy.ENERGY.cast(
+			  ((IHaveBattery) this).getBattery()) : null;
 		}
 		if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
 		{
-			return this instanceof IHaveBattery ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(((IHaveInventory) this).getInventory()) : null;
+			return this instanceof IHaveBattery ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(
+			  ((IHaveInventory) this).getInventory()) : null;
 		}
 		return super.getCapability(capability, facing);
 	}

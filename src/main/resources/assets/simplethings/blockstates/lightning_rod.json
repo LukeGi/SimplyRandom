@@ -1,21 +1,21 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "end_rod",
-    "transform": "forge:default-block",
-    "textures": {
-      "end_rod": "simplethings:blocks/lightning_rod",
-      "particle": "simplethings:blocks/lightning_rod"
-    }
-  },
-  "variants": {
-    "normal": [
-      {
-      }
-    ],
-    "inventory": [
-      {
-      }
-    ]
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "end_rod",
+		"transform": "forge:default-block",
+		"textures": {
+			"end_rod": "simplethings:blocks/lightning_rod",
+			"particle": "simplethings:blocks/lightning_rod"
+		}
+	},
+	"variants": {
+		"normal": [
+			{
+			}
+		],
+		"inventory": [
+			{
+			}
+		]
+	}
 }

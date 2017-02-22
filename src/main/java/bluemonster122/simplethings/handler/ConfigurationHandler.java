@@ -19,6 +19,7 @@ public class ConfigurationHandler
 	// POWER GENERATORS
 	public static int energy_from_sugar = 300;
 	public static int sugar_burn_time = 60;
+	public static int max_blocks_broken = 5;
 	
 	public static void init(File configFile)
 	{
@@ -32,14 +33,19 @@ public class ConfigurationHandler
 	private static void loadConfiguration()
 	{
 		// TREE FARM
-		tree_farm_break_energy = configuration.getInt("Energy Consumed On Block Break", "tree_farm", 50, 0, 1000, "Set to 0 to make the farm cost no power.");
-		tree_farm_place_energy = configuration.getInt("Energy Consumed On Block Place", "tree_farm", 10, 0, 500, "Set to 0 to make the farm cost no power.");
-//        TileTreeFarm.usePower = !(tree_farm_break_energy == 0 && tree_farm_place_energy == 0);
+		tree_farm_break_energy = configuration.getInt(
+		  "Energy Consumed On Block Break", "tree_farm", 50, 0, 1000, "Set to 0 to make the farm cost no power.");
+		tree_farm_place_energy = configuration.getInt(
+		  "Energy Consumed On Block Place", "tree_farm", 10, 0, 500, "Set to 0 to make the farm cost no power.");
+		//        TileTreeFarm.usePower = !(tree_farm_break_energy == 0 && tree_farm_place_energy == 0);
 		// COBBLESTONE GENERATOR
-		cobblestone_generator_req_power = configuration.getInt("Cost Per Cobble", "cobblestone_generator", 0, 0, 1000, "If set to 0, the cobblestone is free.");
+		cobblestone_generator_req_power = configuration.getInt(
+		  "Cost Per Cobble", "cobblestone_generator", 0, 0, 1000, "If set to 0, the cobblestone is free.");
 		// POWER GENERATORS
-		energy_from_sugar = configuration.getInt("Energy per sugar", "power_generators", 300, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
-		sugar_burn_time = configuration.getInt("Sugar burn time", "power_generators", 60, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+		energy_from_sugar = configuration.getInt(
+		  "Energy per sugar", "power_generators", 300, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+		sugar_burn_time = configuration.getInt(
+		  "Sugar burn time", "power_generators", 60, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
 		if (configuration.hasChanged())
 		{
 			configuration.save();

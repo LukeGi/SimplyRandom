@@ -16,15 +16,26 @@ public class SimpleThingsConfigGui extends GuiConfig
 {
 	public SimpleThingsConfigGui(GuiScreen parentScreen)
 	{
-		super(parentScreen, getConfigElements(), SimpleThings.MOD_ID, false, false, I18n.format("simplethings.guiconfig.title"));
+		super(parentScreen, getConfigElements(), SimpleThings.MOD_ID, false, false,
+		      I18n.format("simplethings.guiconfig.title")
+		);
 	}
 	
 	private static List<IConfigElement> getConfigElements()
 	{
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
-		list.add(new DummyConfigElement.DummyCategoryElement("Tree Farm Configs", "simplethings.guiconfig.treefarmcategory", ElementTreeFarm.class));
-		list.add(new DummyConfigElement.DummyCategoryElement("Cobblestone Generator Configs", "simplethings.guiconfig.cobblestonegeneratorcategory", ElementCobblestoneGenerator.class));
-		list.add(new DummyConfigElement.DummyCategoryElement("Energy Generator Configs", "simplethings.guiconfig.energygeneratorcategory", ElementEnergyGenerator.class));
+		list.add(
+		  new DummyConfigElement.DummyCategoryElement("Tree Farm Configs", "simplethings.guiconfig.treefarmcategory",
+		                                              ElementTreeFarm.class
+		  ));
+		list.add(new DummyConfigElement.DummyCategoryElement("Cobblestone Generator Configs",
+		                                                     "simplethings.guiconfig.cobblestonegeneratorcategory",
+		                                                     ElementCobblestoneGenerator.class
+		));
+		list.add(new DummyConfigElement.DummyCategoryElement("Energy Generator Configs",
+		                                                     "simplethings.guiconfig.energygeneratorcategory",
+		                                                     ElementEnergyGenerator.class
+		));
 		return list;
 	}
 }

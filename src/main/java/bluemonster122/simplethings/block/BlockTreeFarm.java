@@ -32,19 +32,19 @@ public class BlockTreeFarm extends SimpleBlockBase implements ITileEntityProvide
 		setHardness(7);
 		setResistance(500);
 	}
-//    @Override
-//    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-//        tooltip.add("Each sapling in this farm must have respective amounts of clear space above it, otherwise it will mess with the virtual chopping program.");
-//        tooltip.add("Farms a 7x7 area, this at the centre.");
-//        tooltip.add("Range of this is not currently expandable");
-//        tooltip.add("Can only place saplings on supported blocks" + (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? ", such as:" : ""));
-//
-//        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-//            TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> tooltip.add("   *" + b.getLocalizedName()));
-//        } else {
-//            tooltip.add("Hold SHIFT for more information.");
-//        }
-//    }
+	//    @Override
+	//    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+	//        tooltip.add("Each sapling in this farm must have respective amounts of clear space above it, otherwise it will mess with the virtual chopping program.");
+	//        tooltip.add("Farms a 7x7 area, this at the centre.");
+	//        tooltip.add("Range of this is not currently expandable");
+	//        tooltip.add("Can only place saplings on supported blocks" + (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? ", such as:" : ""));
+	//
+	//        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+	//            TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> tooltip.add("   *" + b.getLocalizedName()));
+	//        } else {
+	//            tooltip.add("Hold SHIFT for more information.");
+	//        }
+	//    }
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
@@ -63,16 +63,22 @@ public class BlockTreeFarm extends SimpleBlockBase implements ITileEntityProvide
 	@SideOnly(Side.CLIENT)
 	public boolean addExtraInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
 	{
-		SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".things", ConfigurationHandler.tree_farm_break_energy, ConfigurationHandler.tree_farm_place_energy), tooltip);
-		SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".blocks"), tooltip);
-		TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(b -> SimpleItemBlockBase.addStringToTooltip("  * " + I18n.format(b.getUnlocalizedName() + ".name"), tooltip));
+		SimpleItemBlockBase.addStringToTooltip(
+		  I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".things",
+		              ConfigurationHandler.tree_farm_break_energy, ConfigurationHandler.tree_farm_place_energy
+		  ), tooltip);
+		SimpleItemBlockBase.addStringToTooltip(
+		  I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra" + ".blocks"), tooltip);
+		TileTreeFarm.ALLOWED_FARMING_BLOCKS.forEach(
+		  b -> SimpleItemBlockBase.addStringToTooltip("  * " + I18n.format(b.getUnlocalizedName() + ".name"), tooltip));
 		return true;
 	}
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY)
 	{
-		playerIn.openGui(SimpleThings.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		playerIn.openGui(
+		  SimpleThings.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	

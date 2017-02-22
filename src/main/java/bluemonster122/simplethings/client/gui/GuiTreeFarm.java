@@ -51,7 +51,10 @@ public class GuiTreeFarm extends GuiContainer
 		if (isPointInRegion(121, 6, 106, 10, mouseX, mouseY))
 		{
 			IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-			drawHoveringText(ImmutableList.of(battery.getEnergyStored() + " / " + battery.getMaxEnergyStored() + " " + "Forge Units"), 0, 0);
+			drawHoveringText(
+			  ImmutableList.of(battery.getEnergyStored() + " / " + battery.getMaxEnergyStored() + " " + "Forge Units"),
+			  0, 0
+			);
 		}
 	}
 	

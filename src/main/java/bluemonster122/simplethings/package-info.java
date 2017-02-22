@@ -1,5 +1,4 @@
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
 package bluemonster122.simplethings;
 
 import mcp.MethodsReturnNonnullByDefault;

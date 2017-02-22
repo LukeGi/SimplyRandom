@@ -25,7 +25,8 @@ public class EnergyHelper
 			BlockPos current = toVisit.pop();
 			visited.add(current);
 			TileEntity tileEntity = worldIn.getTileEntity(current);
-			if (tileEntity != null && (tileEntity.hasCapability(CapabilityEnergy.ENERGY, null) || tileEntity instanceof TilePowerCable))
+			if (tileEntity != null && (tileEntity.hasCapability(
+			  CapabilityEnergy.ENERGY, null) || tileEntity instanceof TilePowerCable))
 			{
 				for (EnumFacing f : EnumFacing.VALUES)
 				{
@@ -36,7 +37,9 @@ public class EnergyHelper
 					}
 				}
 				if (current != posIn && !(tileEntity instanceof TilePowerCable))
+				{
 					recievers.add(current);
+				}
 			}
 		}
 		for (BlockPos pos : recievers)
@@ -44,8 +47,14 @@ public class EnergyHelper
 			IEnergyStorage taker = worldIn.getTileEntity(pos).getCapability(CapabilityEnergy.ENERGY, null);
 			if (taker.canReceive())
 			{
-				energyStorageIn.receiveEnergy(taker.receiveEnergy(energyStorageIn.extractEnergy(energyStorageIn.getEnergyStored(), false), false), false);
-			} else
+				energyStorageIn.extractEnergy(taker.receiveEnergy(energyStorageIn.getEnergyStored(), false), false);
+				worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 3);
+				if (energyStorageIn.getEnergyStored() == 0)
+				{
+					return;
+				}
+			}
+			else
 			{
 				continue;
 			}

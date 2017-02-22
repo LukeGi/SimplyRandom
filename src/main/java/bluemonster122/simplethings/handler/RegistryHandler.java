@@ -1,6 +1,8 @@
 package bluemonster122.simplethings.handler;
 
 import bluemonster122.simplethings.block.*;
+import bluemonster122.simplethings.item.ItemSpear;
+import bluemonster122.simplethings.item.SpearMaterial;
 import bluemonster122.simplethings.tileentity.*;
 import bluemonster122.simplethings.util.MiscEvents;
 import net.minecraft.block.Block;
@@ -19,6 +21,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Arrays;
 @Mod.EventBusSubscriber
 public class RegistryHandler
 {
@@ -34,31 +38,31 @@ public class RegistryHandler
 	public static Item item_power_cable = power_cable.getItemBlock();
 	public static SimpleBlockBase power_generator_sugar = new BlockEnergyGeneratorSugar();
 	public static Item item_power_generator_sugar = power_generator_sugar.getItemBlock();
+	public static Item[] spears = new ItemSpear[SpearMaterial.values().length];
+	
+	static {
+		for (int i = 0; i < SpearMaterial.values().length; i++)
+		{
+			SpearMaterial mat = SpearMaterial.values()[i];
+			spears[i] = new ItemSpear(mat, (mat.name() + "_spear").toLowerCase());
+		}
+	}
 	
 	@SubscribeEvent
 	public static void regsiterBlocks(RegistryEvent.Register<Block> event)
 	{
-		event.getRegistry().registerAll(
-		  tree_farm,
-		  cobblestone_generator,
-		  lightning_rod,
-		  power_generator_fire,
-		  power_generator_sugar,
-		  power_cable
+		event.getRegistry().registerAll(tree_farm, cobblestone_generator, lightning_rod, power_generator_fire,
+		                                power_generator_sugar, power_cable
 		);
 	}
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().registerAll(
-		  item_tree_farm,
-		  item_cobblestone_generator,
-		  item_power_generator_fire,
-		  item_lightning_rod,
-		  item_power_generator_sugar,
-		  item_power_cable
+		event.getRegistry().registerAll(item_tree_farm, item_cobblestone_generator, item_power_generator_fire,
+		                                item_lightning_rod, item_power_generator_sugar, item_power_cable
 		);
+		Arrays.asList(spears).forEach(event.getRegistry()::register);
 	}
 	
 	@SubscribeEvent
@@ -71,28 +75,40 @@ public class RegistryHandler
 		registerModelBasic(item_power_generator_fire);
 		registerModelBasic(item_power_generator_sugar);
 		registerModelBasic(item_power_cable);
+		Arrays.asList(spears).forEach(RegistryHandler::registerModelBasic);
 	}
 	
 	@SideOnly(Side.CLIENT)
 	private static void registerModelBasic(Item item)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+		  item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 	
 	public static void registerTileEntities()
 	{
 		GameRegistry.registerTileEntity(TileTreeFarm.class, tree_farm.getRegistryName().toString());
-		GameRegistry.registerTileEntity(TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString());
+		GameRegistry.registerTileEntity(
+		  TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString());
 		GameRegistry.registerTileEntity(TileLightningRod.class, lightning_rod.getRegistryName().toString());
-		GameRegistry.registerTileEntity(TileEnergyGeneratorFire.class, power_generator_fire.getRegistryName().toString());
-		GameRegistry.registerTileEntity(TileEnergyGeneratorSugar.class, power_generator_sugar.getRegistryName().toString());
+		GameRegistry.registerTileEntity(
+		  TileEnergyGeneratorFire.class, power_generator_fire.getRegistryName().toString());
+		GameRegistry.registerTileEntity(
+		  TileEnergyGeneratorSugar.class, power_generator_sugar.getRegistryName().toString());
 		GameRegistry.registerTileEntity(TilePowerCable.class, power_cable.getRegistryName().toString());
 	}
 	
 	public static void registerRecipes()
 	{
-		GameRegistry.addShapedRecipe(new ItemStack(tree_farm, 1), "SAS", "IOI", "SAS", 'S', new ItemStack(Blocks.SAPLING, 1, OreDictionary.WILDCARD_VALUE), 'A', new ItemStack(Items.IRON_AXE, 1), 'I', new ItemStack(Blocks.IRON_BLOCK, 1), 'O', new ItemStack(Blocks.OBSIDIAN, 1));
-		GameRegistry.addShapedRecipe(new ItemStack(cobblestone_generator, 1), "PPP", "WCL", "PPP", 'W', new ItemStack(Items.WATER_BUCKET, 1), 'C', new ItemStack(Blocks.COBBLESTONE, 1), 'L', new ItemStack(Items.LAVA_BUCKET, 1), 'P', new ItemStack(Items.IRON_PICKAXE, 1));
+		GameRegistry.addShapedRecipe(new ItemStack(tree_farm, 1), "SAS", "IOI", "SAS", 'S',
+		                             new ItemStack(Blocks.SAPLING, 1, OreDictionary.WILDCARD_VALUE), 'A',
+		                             new ItemStack(Items.IRON_AXE, 1), 'I', new ItemStack(Blocks.IRON_BLOCK, 1), 'O',
+		                             new ItemStack(Blocks.OBSIDIAN, 1)
+		);
+		GameRegistry.addShapedRecipe(new ItemStack(cobblestone_generator, 1), "PPP", "WCL", "PPP", 'W',
+		                             new ItemStack(Items.WATER_BUCKET, 1), 'C', new ItemStack(Blocks.COBBLESTONE, 1),
+		                             'L', new ItemStack(Items.LAVA_BUCKET, 1), 'P', new ItemStack(Items.IRON_PICKAXE, 1)
+		);
 	}
 	
 	public static void registerEvents()

@@ -13,13 +13,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-@Mod(
-  modid = SimpleThings.MOD_ID,
-  name = SimpleThings.MOD_NAME,
-  version = SimpleThings.VERSION,
-  guiFactory = SimpleThings.GUI_FACTORY_CLASS,
-  updateJSON = SimpleThings.UPDATE_JSON
-)
+@Mod(modid = SimpleThings.MOD_ID, name = SimpleThings.MOD_NAME, version = SimpleThings.VERSION, guiFactory = SimpleThings.GUI_FACTORY_CLASS, updateJSON = SimpleThings.UPDATE_JSON)
 public class SimpleThings implements IInitialize
 {
 	public static final String MOD_ID = "simplethings";

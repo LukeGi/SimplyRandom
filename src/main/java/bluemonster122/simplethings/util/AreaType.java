@@ -1,11 +1,12 @@
 package bluemonster122.simplethings.util;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Set;
 public enum AreaType
 {
-	SMALL, MEDIUM, LARGE, XL, XXL;
+	AROUND, SMALL, MEDIUM, LARGE, XL, XXL;
 	public static final AreaType[] VALUES = new AreaType[]{SMALL, MEDIUM, LARGE, XL, XXL};
 	
 	public static int getIndex(AreaType type)
@@ -34,6 +35,29 @@ public enum AreaType
 	
 	public Set<BlockPos> getArea()
 	{
-		return null;
+		if (this.equals(AROUND))
+		{
+			return ImmutableSet.of(new BlockPos(-1, 0, -1), new BlockPos(-1, 0, 0), new BlockPos(-1, 0, 1),
+			                       new BlockPos(0, 0, -1), new BlockPos(0, 0, 0), new BlockPos(0, 0, 1),
+			                       new BlockPos(1, 0, -1), new BlockPos(1, 0, 0), new BlockPos(1, 0, 1)
+			);
+		}
+		return ImmutableSet.of(new BlockPos(-3, 0, -3), new BlockPos(-2, 0, -3), new BlockPos(-1, 0, -3),
+		                       new BlockPos(0, 0, -3), new BlockPos(1, 0, -3), new BlockPos(2, 0, -3),
+		                       new BlockPos(3, 0, -3), new BlockPos(-3, 0, -2), new BlockPos(-2, 0, -2),
+		                       new BlockPos(-1, 0, -2), new BlockPos(0, 0, -2), new BlockPos(1, 0, -2),
+		                       new BlockPos(2, 0, -2), new BlockPos(3, 0, -2), new BlockPos(-3, 0, -1),
+		                       new BlockPos(-2, 0, -1), new BlockPos(-1, 0, -1), new BlockPos(0, 0, -1),
+		                       new BlockPos(1, 0, -1), new BlockPos(2, 0, -1), new BlockPos(3, 0, -1),
+		                       new BlockPos(-3, 0, 0), new BlockPos(-2, 0, 0), new BlockPos(-1, 0, 0),
+		                       new BlockPos(1, 0, 0), new BlockPos(2, 0, 0), new BlockPos(3, 0, 0),
+		                       new BlockPos(-3, 0, 1), new BlockPos(-2, 0, 1), new BlockPos(-1, 0, 1),
+		                       new BlockPos(0, 0, 1), new BlockPos(1, 0, 1), new BlockPos(2, 0, 1),
+		                       new BlockPos(3, 0, 1), new BlockPos(-3, 0, 2), new BlockPos(-2, 0, 2),
+		                       new BlockPos(-1, 0, 2), new BlockPos(0, 0, 2), new BlockPos(1, 0, 2),
+		                       new BlockPos(2, 0, 2), new BlockPos(3, 0, 2), new BlockPos(-3, 0, 3),
+		                       new BlockPos(-2, 0, 3), new BlockPos(-1, 0, 3), new BlockPos(0, 0, 3),
+		                       new BlockPos(1, 0, 3), new BlockPos(2, 0, 3), new BlockPos(3, 0, 3)
+		);
 	}
 }

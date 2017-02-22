@@ -30,8 +30,12 @@ public class SimpleItemBlockBase extends ItemBlock
 	{
 		addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName()), tooltip);
 		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+		{
 			addStringToTooltip(I18n.format("simplethings.tooltip.holdshift"), tooltip);
+		}
 		else if (!((SimpleBlockBase) block).addExtraInformation(stack, playerIn, tooltip, advanced))
+		{
 			addStringToTooltip(I18n.format("simplethings.tooltip.noextrainfo"), tooltip);
+		}
 	}
 }

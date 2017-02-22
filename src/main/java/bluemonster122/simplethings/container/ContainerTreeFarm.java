@@ -23,7 +23,8 @@ public class ContainerTreeFarm extends Container
 		int i;
 		int j;
 		// ME
-		IItemHandler inventory = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
+		IItemHandler inventory = tileEntity.getCapability(
+		  CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
 		for (j = 0; j < 6; j++)
 		{
 			for (i = 0; i < 12; i++)
@@ -59,19 +60,30 @@ public class ContainerTreeFarm extends Container
 			{
 				// From TE Inventory to Player Inventory
 				if (!this.mergeItemStack(current, 72, 108, true))
+				{
 					return ItemStack.field_190927_a;
-			} else
+				}
+			}
+			else
 			{
 				// From Player Inventory to TE Inventory
 				if (!this.mergeItemStack(current, 0, 72, false))
+				{
 					return ItemStack.field_190927_a;
+				}
 			}
 			if (current.func_190916_E() == 0)
+			{
 				slot.putStack(ItemStack.field_190927_a);
+			}
 			else
+			{
 				slot.onSlotChanged();
+			}
 			if (current.func_190916_E() == previous.func_190916_E())
+			{
 				return ItemStack.field_190927_a;
+			}
 			slot.func_190901_a(playerIn, current);
 		}
 		return previous;

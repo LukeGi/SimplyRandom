@@ -22,8 +22,11 @@ public class GuiHandler implements IGuiHandler
 			case tree_farm_gui_id:
 				TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 				if (tile instanceof TileTreeFarm)
+				{
 					return new ContainerTreeFarm(player, (TileTreeFarm) tile);
-				throw new IllegalStateException("Cannot open tree farm gui, if tree farm is not at location of tree farm block.");
+				}
+				throw new IllegalStateException(
+				  "Cannot open tree farm gui, if tree farm is not at location of tree farm block.");
 			default:
 				return null;
 		}
@@ -38,8 +41,11 @@ public class GuiHandler implements IGuiHandler
 			case tree_farm_gui_id:
 				TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 				if (tile instanceof TileTreeFarm)
+				{
 					return new GuiTreeFarm(player, (TileTreeFarm) tile);
-				throw new IllegalStateException("Cannot open tree farm gui, if tree farm is not at location of tree farm block.");
+				}
+				throw new IllegalStateException(
+				  "Cannot open tree farm gui, if tree farm is not at location of tree farm block.");
 			default:
 				return null;
 		}

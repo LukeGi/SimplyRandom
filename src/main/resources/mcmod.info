@@ -1,16 +1,18 @@
 [
-  {
-    "modid": "simplethings",
-    "name": "SimpleThings",
-    "description": "A Simple mod that adds a few simple things.",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "https://minecraft.curseforge.com/projects/simple-things",
-    "updateUrl": "https://minecraft.curseforge.com/projects/simple-things/files",
-    "authorList": ["Blue_Monster122"],
-    "credits": "",
-    "logoFile": "assets/simplethings/textures/icon.png",
-    "screenshots": [],
-    "dependencies": []
-  }
+	{
+		"modid": "simplethings",
+		"name": "SimpleThings",
+		"description": "A Simple mod that adds a few simple things.",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "https://minecraft.curseforge.com/projects/simple-things",
+		"updateUrl": "https://minecraft.curseforge.com/projects/simple-things/files",
+		"authorList": [
+			"Blue_Monster122"
+		],
+		"credits": "",
+		"logoFile": "assets/simplethings/textures/icon.png",
+		"screenshots": [],
+		"dependencies": []
+	}
 ]

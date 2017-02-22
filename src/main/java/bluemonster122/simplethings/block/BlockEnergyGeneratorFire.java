@@ -25,7 +25,8 @@ public class BlockEnergyGeneratorFire extends SimpleBlockBase implements ITileEn
 	@SideOnly(Side.CLIENT)
 	public boolean addExtraInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
 	{
-		SimpleItemBlockBase.addStringToTooltip(I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra"), tooltip);
+		SimpleItemBlockBase.addStringToTooltip(
+		  I18n.format("simplethings.tooltip." + getUnlocalizedName() + ".extra"), tooltip);
 		return true;
 	}
 	
