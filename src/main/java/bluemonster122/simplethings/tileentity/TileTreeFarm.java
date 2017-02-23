@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
 public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 {
 	public static Set<Block> ALLOWED_FARMING_BLOCKS = ImmutableSet.of(Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS);
@@ -34,7 +35,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 	private ItemStackHandler inventory = new ItemStackHandler(72);
 	private EnergyStorage battery = new EnergyStorage(1000000);
 	private List<BlockPos> toBreak = new ArrayList<>();
-	
+
 	@Override
 	public void update()
 	{
@@ -60,13 +61,14 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		{
 			scan(grown.get(0));
 		}
+		toBreak = toBreak.stream().filter(bp -> !getWorld().isAirBlock(bp)).collect(Collectors.toList());
 		for (int i = 0; i < ConfigurationHandler.max_blocks_broken && i < toBreak.size(); i++)
 		{
 			blocksToBreak.add(toBreak.remove(i));
 		}
 		handleBlockBreaking(blocksToBreak);
 	}
-	
+
 	private void scan(BlockPos blockPos)
 	{
 		List<BlockPos> treeBlocks = new ArrayList<>();
@@ -96,7 +98,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		  (a, b) -> a.distanceSq(getPos()) > b.distanceSq(getPos()) ? -1 : a.distanceSq(getPos()) == b.distanceSq(
 			getPos()) ? 0 : 1);
 	}
-	
+
 	private void fillAnAir(List<BlockPos> air)
 	{
 		if (getBattery().getEnergyStored() < ConfigurationHandler.tree_farm_place_energy)
@@ -156,8 +158,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 				getWorld().destroyBlock(blockPos, false);
 				drops.forEach(itemStack -> ItemHandlerHelper.insertItem(getInventory(), itemStack, false));
 				getBattery().extractEnergy(ConfigurationHandler.tree_farm_break_energy, false);
-			}
-			else
+			} else
 			{
 				break;
 			}
@@ -169,7 +170,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		}
 		toBreak.addAll(blocksToBreak);
 	}
-	
+
 	public void breakSaplings()
 	{
 		if (farmedArea == null)
@@ -180,37 +181,37 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		  b -> getWorld().getBlockState(b).getBlock() instanceof BlockBush).forEach(
 		  blockPos -> getWorld().destroyBlock(blockPos, true));
 	}
-	
+
 	private boolean isValidBlock(BlockPos down)
 	{
 		return ALLOWED_FARMING_BLOCKS.contains(getWorld().getBlockState(down.down()).getBlock());
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound)
 	{
 		setFarmedArea(AreaType.getFromIndex(compound.getInteger("areaType")));
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
 		compound.setInteger("areaType", AreaType.getIndex(farmedArea));
 		return super.writeToNBT(compound);
 	}
-	
+
 	public void setFarmedArea(AreaType setArea)
 	{
 		farmedArea = setArea;
 	}
-	
+
 	@Override
 	public EnergyStorage getBattery()
 	{
 		return battery;
 	}
-	
+
 	@Override
 	public ItemStackHandler getInventory()
 	{

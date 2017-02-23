@@ -33,7 +33,7 @@ public class TileEntityST extends TileEntity
 	protected void attemptDischarge()
 	{
 		if (!(this instanceof IProvidePower)) return;
-		IEnergyStorage thisBattery = (IEnergyStorage)this;
+		IEnergyStorage thisBattery = ((IHaveBattery)this).getBattery();
 
 		List<BlockPos> network = scanNetwork();
 		List<TileEntity> tiles = network.stream().map(getWorld()::getTileEntity).collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class TileEntityST extends TileEntity
 			if (tileEntity != null && (tileEntity.hasCapability(CapabilityEnergy.ENERGY, null) || tileEntity instanceof TilePowerCable))
 			{
 				IEnergyStorage battery = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
-				if (battery != null && battery.canReceive())
+				if (!networkCache.contains(blockPos) && battery != null && battery.canReceive())
 				{
 					networkCache.add(blockPos);
 				}
@@ -88,7 +88,7 @@ public class TileEntityST extends TileEntity
 
 	private void flush()
 	{
-		networkCache = networkCache.stream().filter(blockPos -> getWorld().getTileEntity(blockPos).hasCapability(CapabilityEnergy.ENERGY, null) && getWorld().getTileEntity(blockPos).getCapability(CapabilityEnergy.ENERGY, null).canReceive()).collect(Collectors.toList());
+		networkCache = networkCache.stream().filter(blockPos -> getWorld().getTileEntity(blockPos) != null).filter(blockPos -> getWorld().getTileEntity(blockPos).hasCapability(CapabilityEnergy.ENERGY, null)).filter(blockPos -> getWorld().getTileEntity(blockPos).getCapability(CapabilityEnergy.ENERGY, null).canReceive()).collect(Collectors.toList());
 	}
 
 	public void dropInventory()
