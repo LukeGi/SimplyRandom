@@ -31,65 +31,6 @@ public abstract class TileEntityGenerator extends TileEntityST implements IProvi
 		}
 	}
 
-	private void attemptDischarge()
-	{
-		List<BlockPos> network = scanNetwork();
-		List<TileEntity> tiles = network.stream().map(getWorld()::getTileEntity).collect(Collectors.toList());
-		for (TileEntity tile : tiles)
-		{
-			IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, null);
-			if (battery != null)
-			{
-				extractPower(battery.receiveEnergy(getEnergyStored(), false), false);
-				if (tile instanceof TileEntityST) {
-					((TileEntityST) tile).sendUpdate();
-				}
-				if (getEnergyStored() <= 0)
-				{
-					break;
-				}
-			}
-		}
-	}
-
-	private List<BlockPos> scanNetwork()
-	{
-		List<BlockPos> recievers = new ArrayList<>();
-		List<BlockPos> visited = new ArrayList<>();
-		Stack<BlockPos> toVisit = new Stack<>();
-		toVisit.add(getPos());
-
-		while (!toVisit.isEmpty())
-		{
-			// get next value
-			// check if this value accepts power
-			// if so add it to the list
-			// then check if the blocks around are in the recievers, visited or tovisit lists, and that they have an energy capability
-			// if they match, add them to the tovisit list
-			// add them to the visited list.
-			BlockPos blockPos = toVisit.pop();
-			TileEntity tileEntity = getWorld().getTileEntity(blockPos);
-			if (tileEntity != null && (tileEntity.hasCapability(CapabilityEnergy.ENERGY, null) || tileEntity instanceof TilePowerCable))
-			{
-				IEnergyStorage battery = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
-				if (battery != null && battery.canReceive())
-				{
-					recievers.add(blockPos);
-				}
-				for (EnumFacing value : EnumFacing.VALUES)
-				{
-					BlockPos element = blockPos.offset(value);
-					if (!getWorld().isAirBlock(element) && !toVisit.contains(element) && !visited.contains(element))
-					{
-						toVisit.add(element);
-					}
-					visited.add(element);
-				}
-			}
-		}
-		return recievers;
-	}
-
 	protected abstract void generatePower();
 
 	protected abstract boolean generateCondition();
