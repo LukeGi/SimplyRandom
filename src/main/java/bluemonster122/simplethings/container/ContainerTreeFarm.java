@@ -61,7 +61,7 @@ public class ContainerTreeFarm extends Container
 				// From TE Inventory to Player Inventory
 				if (!this.mergeItemStack(current, 72, 108, true))
 				{
-					return ItemStack.field_190927_a;
+					return ItemStack.EMPTY;
 				}
 			}
 			else
@@ -69,22 +69,22 @@ public class ContainerTreeFarm extends Container
 				// From Player Inventory to TE Inventory
 				if (!this.mergeItemStack(current, 0, 72, false))
 				{
-					return ItemStack.field_190927_a;
+					return ItemStack.EMPTY;
 				}
 			}
-			if (current.func_190916_E() == 0)
+			if (current.getCount() == 0)
 			{
-				slot.putStack(ItemStack.field_190927_a);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else
 			{
 				slot.onSlotChanged();
 			}
-			if (current.func_190916_E() == previous.func_190916_E())
+			if (current.getCount() == previous.getCount())
 			{
-				return ItemStack.field_190927_a;
+				return ItemStack.EMPTY;
 			}
-			slot.func_190901_a(playerIn, current);
+			slot.onTake(playerIn, current);
 		}
 		return previous;
 	}

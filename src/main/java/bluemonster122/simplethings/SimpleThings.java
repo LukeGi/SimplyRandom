@@ -28,7 +28,7 @@ public class SimpleThings implements IInitialize
 		@Override
 		public ItemStack getTabIconItem()
 		{
-			return ItemStack.field_190927_a;
+			return ItemStack.EMPTY;
 		}
 	};
 	

@@ -23,7 +23,7 @@ public class TileCobblestoneGenerator extends TileEntityST implements ITickable,
 	public void update()
 	{
 		ItemStack stackInSlot = getInventory().getStackInSlot(0);
-		int stackSize = stackInSlot.func_190916_E();
+		int stackSize = stackInSlot.getCount();
 		if (stackSize < 64)
 		{
 			int spaceLeft = 64 - stackSize;

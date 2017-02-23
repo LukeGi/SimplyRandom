@@ -115,7 +115,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		for (int j = 0; j < getInventory().getSlots(); j++)
 		{
 			ItemStack stack = getInventory().getStackInSlot(j);
-			if (stack != ItemStack.field_190927_a && stack.getItem() instanceof ItemBlock)
+			if (stack != ItemStack.EMPTY && stack.getItem() instanceof ItemBlock)
 			{
 				Block block = ((ItemBlock) stack.getItem()).getBlock();
 				if (block == Blocks.SAPLING)
@@ -128,10 +128,9 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 				}
 			}
 		}
-		getWorld().notifyBlockUpdate(
-		  getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+		sendUpdate();
 	}
-	
+
 	private void handleBlockBreaking(List<BlockPos> blocksToBreak)
 	{
 		if (blocksToBreak.isEmpty())
@@ -152,7 +151,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 			block = blockState.getBlock();
 			drops = block.getDrops(getWorld(), blockPos, blockState, 0);
 			if (drops.isEmpty() || ItemHandlerHelper.insertItem(
-			  getInventory(), drops.get(0), true) == ItemStack.field_190927_a)
+			  getInventory(), drops.get(0), true) == ItemStack.EMPTY)
 			{
 				getWorld().destroyBlock(blockPos, false);
 				drops.forEach(itemStack -> ItemHandlerHelper.insertItem(getInventory(), itemStack, false));

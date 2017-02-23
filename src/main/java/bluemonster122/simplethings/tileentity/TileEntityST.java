@@ -18,6 +18,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 public class TileEntityST extends TileEntity
 {
 	public void dropInventory()
@@ -31,7 +32,7 @@ public class TileEntityST extends TileEntity
 			for (int i = 0; i < ((IHaveInventory) this).getInventory().getSlots(); ++i)
 			{
 				ItemStack itemstack = ((IHaveInventory) this).getInventory().getStackInSlot(i);
-				if (itemstack != ItemStack.field_190927_a)
+				if (itemstack != ItemStack.EMPTY)
 				{
 					InventoryHelper.spawnItemStack(
 					  getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), itemstack);
@@ -39,7 +40,13 @@ public class TileEntityST extends TileEntity
 			}
 		}
 	}
-	
+
+	protected void sendUpdate()
+	{
+		getWorld().notifyBlockUpdate(
+		  getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+	}
+
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
@@ -47,14 +54,14 @@ public class TileEntityST extends TileEntity
 		this.writeToNBT(nbt);
 		return new SPacketUpdateTileEntity(getPos(), 0, nbt);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		this.readFromNBT(pkt.getNbtCompound());
 	}
-	
+
 	@Override
 	@Nonnull
 	public NBTTagCompound getUpdateTag()
@@ -63,7 +70,7 @@ public class TileEntityST extends TileEntity
 		writeToNBT(nbt);
 		return nbt;
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
@@ -77,7 +84,7 @@ public class TileEntityST extends TileEntity
 		}
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound)
 	{
@@ -93,7 +100,7 @@ public class TileEntityST extends TileEntity
 		}
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
 	{
@@ -107,7 +114,7 @@ public class TileEntityST extends TileEntity
 		}
 		return super.hasCapability(capability, facing);
 	}
-	
+
 	@Nullable
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
