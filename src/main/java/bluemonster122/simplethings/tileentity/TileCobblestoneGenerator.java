@@ -1,7 +1,8 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.handler.ConfigurationHandler;
-import bluemonster122.simplethings.tileentity.things.IMachine;
+import bluemonster122.simplethings.tileentity.core.IMachine;
+import bluemonster122.simplethings.tileentity.core.TileEntityST;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
@@ -32,7 +33,7 @@ public class TileCobblestoneGenerator extends TileEntityST implements ITickable,
 				spaceLeft--;
 			}
 			ItemHandlerHelper.insertItem(getInventory(), new ItemStack(Blocks.COBBLESTONE, spaceLeft), false);
-			extractPower(spaceLeft, false);
+			extractPower(spaceLeft * ConfigurationHandler.cobblestone_generator_req_power, false);
 		}
 	}
 	

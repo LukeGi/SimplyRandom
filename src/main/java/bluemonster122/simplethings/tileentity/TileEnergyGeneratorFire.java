@@ -1,5 +1,6 @@
 package bluemonster122.simplethings.tileentity;
 
+import bluemonster122.simplethings.tileentity.core.TileEntityGenerator;
 import net.minecraft.init.Blocks;
 
 public class TileEnergyGeneratorFire extends TileEntityGenerator

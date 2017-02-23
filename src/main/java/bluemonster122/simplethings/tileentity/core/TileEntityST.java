@@ -1,8 +1,6 @@
-package bluemonster122.simplethings.tileentity;
+package bluemonster122.simplethings.tileentity.core;
 
-import bluemonster122.simplethings.tileentity.things.IHaveBattery;
-import bluemonster122.simplethings.tileentity.things.IHaveInventory;
-import bluemonster122.simplethings.tileentity.things.IProvidePower;
+import bluemonster122.simplethings.tileentity.TilePowerCable;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

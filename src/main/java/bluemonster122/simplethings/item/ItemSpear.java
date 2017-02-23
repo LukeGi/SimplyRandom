@@ -15,7 +15,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSpear extends Item
+public class ItemSpear extends SimpleItemBase
 {
 	private final float attackDamage;
 

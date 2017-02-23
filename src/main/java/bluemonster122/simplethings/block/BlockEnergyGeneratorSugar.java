@@ -3,6 +3,7 @@ package bluemonster122.simplethings.block;
 import bluemonster122.simplethings.handler.ConfigurationHandler;
 import bluemonster122.simplethings.reference.Names;
 import bluemonster122.simplethings.tileentity.TileEnergyGeneratorSugar;
+import bluemonster122.simplethings.util.ITileEntityProvider1;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockEnergyGeneratorSugar extends SimpleBlockBase implements ITileEntityProvider
+public class BlockEnergyGeneratorSugar extends SimpleBlockBase implements ITileEntityProvider1
 {
 	public BlockEnergyGeneratorSugar()
 	{
@@ -44,5 +45,11 @@ public class BlockEnergyGeneratorSugar extends SimpleBlockBase implements ITileE
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEnergyGeneratorSugar();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileClass()
+	{
+		return TileEnergyGeneratorSugar.class;
 	}
 }

@@ -1,6 +1,7 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.handler.ConfigurationHandler;
+import bluemonster122.simplethings.tileentity.core.TileEntityGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEnergyGeneratorSugar extends TileEntityGenerator

@@ -1,4 +1,4 @@
-package bluemonster122.simplethings.tileentity.things;
+package bluemonster122.simplethings.tileentity.core;
 
 public interface IProvidePower extends IHaveBattery
 {

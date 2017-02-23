@@ -4,6 +4,7 @@ import bluemonster122.simplethings.handler.ConfigurationHandler;
 import bluemonster122.simplethings.item.SimpleItemBlockBase;
 import bluemonster122.simplethings.reference.Names;
 import bluemonster122.simplethings.tileentity.TileCobblestoneGenerator;
+import bluemonster122.simplethings.util.ITileEntityProvider1;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-public class BlockCobblestoneGenerator extends SimpleBlockBase implements ITileEntityProvider
+public class BlockCobblestoneGenerator extends SimpleBlockBase implements ITileEntityProvider1
 {
 	public BlockCobblestoneGenerator()
 	{
@@ -46,5 +47,11 @@ public class BlockCobblestoneGenerator extends SimpleBlockBase implements ITileE
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileCobblestoneGenerator();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileClass()
+	{
+		return TileCobblestoneGenerator.class;
 	}
 }

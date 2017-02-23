@@ -1,7 +1,8 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.handler.ConfigurationHandler;
-import bluemonster122.simplethings.tileentity.things.IMachine;
+import bluemonster122.simplethings.tileentity.core.IMachine;
+import bluemonster122.simplethings.tileentity.core.TileEntityST;
 import bluemonster122.simplethings.util.AreaType;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.*;
