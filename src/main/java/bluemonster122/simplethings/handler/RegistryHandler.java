@@ -46,6 +46,7 @@ public class RegistryHandler
 	public static SimpleItemBase iron_spear = new ItemSpear(SpearMaterial.IRON);
 	public static SimpleItemBase gold_spear = new ItemSpear(SpearMaterial.GOLD);
 	public static SimpleItemBase diamond_spear = new ItemSpear(SpearMaterial.DIAMOND);
+	public static SimpleBlockBase power_storage = new BlockPowerStorage("burn");
 
 	@SubscribeEvent
 	public static void regsiterBlocks(RegistryEvent.Register<Block> event)
