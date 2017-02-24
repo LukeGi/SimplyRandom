@@ -3,9 +3,10 @@ package bluemonster122.simplethings;
 import bluemonster122.simplethings.handler.ConfigurationHandler;
 import bluemonster122.simplethings.handler.GuiHandler;
 import bluemonster122.simplethings.handler.RegistryHandler;
+import bluemonster122.simplethings.network.NetworkManager;
+import bluemonster122.simplethings.tab.CreativeTabST;
 import bluemonster122.simplethings.util.IInitialize;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -23,14 +24,7 @@ public class SimpleThings implements IInitialize
 	public static final String UPDATE_JSON = "https://github.com/bluemonster122/SimpleThings/blob/master/update.json";
 	@Instance(MOD_ID)
 	public static SimpleThings INSTANCE;
-	public static CreativeTabs theTab = new CreativeTabs(MOD_ID)
-	{
-		@Override
-		public ItemStack getTabIconItem()
-		{
-			return ItemStack.EMPTY;
-		}
-	};
+	public static CreativeTabs theTab = new CreativeTabST();
 	
 	@Override
 	@EventHandler
@@ -38,6 +32,7 @@ public class SimpleThings implements IInitialize
 	{
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		RegistryHandler.registerEvents();
+		NetworkManager.init();
 	}
 	
 	@Override

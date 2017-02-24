@@ -2,11 +2,11 @@ package bluemonster122.simplethings.handler;
 
 import bluemonster122.simplethings.block.*;
 import bluemonster122.simplethings.item.ItemSpear;
+import bluemonster122.simplethings.item.SimpleItemBase;
 import bluemonster122.simplethings.item.SpearMaterial;
 import bluemonster122.simplethings.util.IInitModelVarients;
 import bluemonster122.simplethings.util.ITileEntityProvider1;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
@@ -41,16 +41,11 @@ public class RegistryHandler
 	public static SimpleBlockBase power_cable = new BlockPowerCable();
 	public static SimpleBlockBase power_generator_sugar = new BlockEnergyGeneratorSugar();
 	public static SimpleBlockBase machine_block = new SimpleBlockBase(Material.IRON, "machine_block");
-	public static Item[] spears = new ItemSpear[SpearMaterial.values().length];
-
-	static
-	{
-		for (int i = 0; i < SpearMaterial.values().length; i++)
-		{
-			SpearMaterial mat = SpearMaterial.values()[i];
-			spears[i] = new ItemSpear(mat, (mat.name() + "_spear").toLowerCase());
-		}
-	}
+	public static SimpleItemBase wooden_spear = new ItemSpear(SpearMaterial.WOOD);
+	public static SimpleItemBase stone_spear = new ItemSpear(SpearMaterial.STONE);
+	public static SimpleItemBase iron_spear = new ItemSpear(SpearMaterial.IRON);
+	public static SimpleItemBase gold_spear = new ItemSpear(SpearMaterial.GOLD);
+	public static SimpleItemBase diamond_spear = new ItemSpear(SpearMaterial.DIAMOND);
 
 	@SubscribeEvent
 	public static void regsiterBlocks(RegistryEvent.Register<Block> event)

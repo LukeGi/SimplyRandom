@@ -1,5 +1,6 @@
 package bluemonster122.simplethings.item;
 
+import bluemonster122.simplethings.handler.RegistryHandler;
 import bluemonster122.simplethings.tab.CreativeTabST;
 import bluemonster122.simplethings.util.IInitModelVarients;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -10,6 +11,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SimpleItemBase extends Item implements CreativeTabST.ISTObj, IInitModelVarients
 {
+	public SimpleItemBase()
+	{
+		RegistryHandler.ITEMS.add(this);
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModelsAndVariants()

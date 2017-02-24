@@ -20,6 +20,7 @@ public class ConfigurationHandler
 	public static int energy_from_sugar = 300;
 	public static int sugar_burn_time = 60;
 	public static int max_blocks_broken = 5;
+	public static boolean do_fireworks_treefarm = true;
 	
 	public static void init(File configFile)
 	{

@@ -1,6 +1,8 @@
 package bluemonster122.simplethings.tileentity;
 
 import bluemonster122.simplethings.handler.ConfigurationHandler;
+import bluemonster122.simplethings.network.NetworkManager;
+import bluemonster122.simplethings.network.message.MessageParticle;
 import bluemonster122.simplethings.tileentity.core.IMachine;
 import bluemonster122.simplethings.tileentity.core.TileEntityST;
 import bluemonster122.simplethings.util.AreaType;
@@ -12,19 +14,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 {
 	public static Set<Block> ALLOWED_FARMING_BLOCKS = ImmutableSet.of(Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS);
@@ -35,12 +36,13 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 	private AreaType farmedArea = AreaType.SMALL;
 	private ItemStackHandler inventory = new ItemStackHandler(72);
 	private EnergyStorage battery = new EnergyStorage(1000000);
-	private List<BlockPos> toBreak = new ArrayList<>();
-
+	private Queue<WorkingPos> toBreak = new PriorityQueue<>();
+	private long workToTime;
+	
 	@Override
 	public void update()
 	{
-		if (getWorld().isRemote || getWorld().getTotalWorldTime() % 10 != 0)
+		if (getWorld().isRemote)
 		{
 			return;
 		}
@@ -48,31 +50,38 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		{
 			return;
 		}
-		List<BlockPos> blocksToBreak = new ArrayList<>();
-		List<BlockPos> farmSpots = farmedArea.getArea().stream().map(p -> getPos().add(p)).collect(Collectors.toList());
-		List<BlockPos> air = farmSpots.stream().filter(getWorld()::isAirBlock).filter(this::isValidBlock).collect(
-		  Collectors.toList());
-		if (!air.isEmpty())
+		workToTime = System.currentTimeMillis() + 100;
+		if (getWorld().getTotalWorldTime() % 10 == 0)
 		{
-			fillAnAir(air);
+			List<BlockPos> farmSpots = farmedArea.getArea().stream().map(p -> getPos().add(p)).collect(
+			  Collectors.toList());
+			List<BlockPos> air = farmSpots.stream().filter(getWorld()::isAirBlock).filter(this::isValidBlock).collect(
+			  Collectors.toList());
+			if (!air.isEmpty())
+			{
+				fillAnAir(air);
+			}
+			List<BlockPos> grown = farmSpots.stream().filter(p -> !toBreak.contains(p)).filter(isWood).collect(
+			  Collectors.toList());
+			if (grown.size() > 0)
+			{
+				scan(grown.get(0));
+			}
 		}
-		List<BlockPos> grown = farmSpots.stream().filter(p -> !toBreak.contains(p)).filter(isWood).collect(
-		  Collectors.toList());
-		if (grown.size() > 0)
+		while (!toBreak.isEmpty() && work())
 		{
-			scan(grown.get(0));
+			handleBlockBreaking(toBreak.poll());
 		}
-		toBreak = toBreak.stream().filter(bp -> !getWorld().isAirBlock(bp)).collect(Collectors.toList());
-		for (int i = 0; i < ConfigurationHandler.max_blocks_broken && i < toBreak.size(); i++)
-		{
-			blocksToBreak.add(toBreak.remove(i));
-		}
-		handleBlockBreaking(blocksToBreak);
 	}
-
+	
+	private boolean work()
+	{
+		return System.currentTimeMillis() < workToTime;
+	}
+	
 	private void scan(BlockPos blockPos)
 	{
-		List<BlockPos> treeBlocks = new ArrayList<>();
+		List<WorkingPos> treeBlocks = new ArrayList<>();
 		Stack<BlockPos> toScan = new Stack<>();
 		toScan.add(blockPos);
 		while (!toScan.isEmpty())
@@ -80,7 +89,7 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 			BlockPos element = toScan.pop();
 			if (isWood.test(element) || isLeaves.test(element))
 			{
-				treeBlocks.add(element);
+				treeBlocks.add(new WorkingPos(element));
 			}
 			for (BlockPos offset : AreaType.AROUND.getArea())
 			{
@@ -95,11 +104,8 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 			}
 		}
 		toBreak.addAll(treeBlocks.stream().filter(bp -> !toBreak.contains(bp)).collect(Collectors.toList()));
-		toBreak.sort(
-		  (a, b) -> a.distanceSq(getPos()) > b.distanceSq(getPos()) ? -1 : a.distanceSq(getPos()) == b.distanceSq(
-			getPos()) ? 0 : 1);
 	}
-
+	
 	private void fillAnAir(List<BlockPos> air)
 	{
 		if (getBattery().getEnergyStored() < ConfigurationHandler.tree_farm_place_energy)
@@ -133,45 +139,44 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		}
 		sendUpdate();
 	}
-
-	private void handleBlockBreaking(List<BlockPos> blocksToBreak)
+	
+	private void handleBlockBreaking(WorkingPos blockPos)
 	{
-		if (blocksToBreak.isEmpty())
-		{
-			return;
-		}
 		List<ItemStack> drops;
 		IBlockState blockState;
 		Block block;
-		for (int i = blocksToBreak.size() - 1; i >= 0; i--)
-		{
-			BlockPos blockPos = blocksToBreak.get(i);
-			if (getBattery().getEnergyStored() < ConfigurationHandler.tree_farm_break_energy)
-			{
-				break;
-			}
-			blockState = getWorld().getBlockState(blockPos);
-			block = blockState.getBlock();
-			drops = block.getDrops(getWorld(), blockPos, blockState, 0);
-			if (drops.isEmpty() || ItemHandlerHelper.insertItem(
-			  getInventory(), drops.get(0), true) == ItemStack.EMPTY)
-			{
-				getWorld().destroyBlock(blockPos, false);
-				drops.forEach(itemStack -> ItemHandlerHelper.insertItem(getInventory(), itemStack, false));
-				getBattery().extractEnergy(ConfigurationHandler.tree_farm_break_energy, false);
-			} else
-			{
-				break;
-			}
-			blocksToBreak.remove(i);
-		}
-		if (blocksToBreak.isEmpty())
+		if (getBattery().getEnergyStored() < ConfigurationHandler.tree_farm_break_energy)
 		{
 			return;
 		}
-		toBreak.addAll(blocksToBreak);
+		blockState = getWorld().getBlockState(blockPos);
+		block = blockState.getBlock();
+		drops = block.getDrops(getWorld(), blockPos, blockState, 0);
+		if (drops.isEmpty() || ItemHandlerHelper.insertItem(getInventory(), drops.get(0), true) == ItemStack.EMPTY)
+		{
+			getWorld().setBlockToAir(blockPos);
+			drops.forEach(itemStack -> ItemHandlerHelper.insertItem(getInventory(), itemStack, false));
+			getBattery().extractEnergy(ConfigurationHandler.tree_farm_break_energy, false);
+			if (world.rand.nextBoolean())
+			{
+				for (int i = 0; i < world.rand.nextInt(5); i++)
+				{
+					NetworkManager.INSTANCE.sendToAllAround(
+					  new MessageParticle(EnumParticleTypes.PORTAL, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+					                      world.rand.nextDouble() / 100, world.rand.nextDouble() / 10,
+					                      world.rand.nextDouble() / 100
+					  ), new NetworkRegistry.TargetPoint(getWorld().provider.getDimension(), blockPos.getX(),
+					                                     blockPos.getY(), blockPos.getZ(), 32
+					  ));
+				}
+			}
+		}
+		else
+		{
+			toBreak.add(blockPos);
+		}
 	}
-
+	
 	public void breakSaplings()
 	{
 		if (farmedArea == null)
@@ -182,40 +187,54 @@ public class TileTreeFarm extends TileEntityST implements ITickable, IMachine
 		  b -> getWorld().getBlockState(b).getBlock() instanceof BlockBush).forEach(
 		  blockPos -> getWorld().destroyBlock(blockPos, true));
 	}
-
+	
 	private boolean isValidBlock(BlockPos down)
 	{
 		return ALLOWED_FARMING_BLOCKS.contains(getWorld().getBlockState(down.down()).getBlock());
 	}
-
+	
 	@Override
 	public void readFromNBT(NBTTagCompound compound)
 	{
 		setFarmedArea(AreaType.getFromIndex(compound.getInteger("areaType")));
 		super.readFromNBT(compound);
 	}
-
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
 		compound.setInteger("areaType", AreaType.getIndex(farmedArea));
 		return super.writeToNBT(compound);
 	}
-
+	
 	public void setFarmedArea(AreaType setArea)
 	{
 		farmedArea = setArea;
 	}
-
+	
 	@Override
 	public EnergyStorage getBattery()
 	{
 		return battery;
 	}
-
+	
 	@Override
 	public ItemStackHandler getInventory()
 	{
 		return inventory;
+	}
+	
+	private class WorkingPos extends BlockPos
+	{
+		public WorkingPos(BlockPos vec)
+		{
+			super(vec);
+		}
+		
+		@Override
+		public int compareTo(Vec3i that)
+		{
+			return that.getY() == this.getY() ? (that.getZ() == this.getZ() ? that.getX() - this.getX() : that.getZ() - this.getZ()) : that.getY() - this.getY();
+		}
 	}
 }
