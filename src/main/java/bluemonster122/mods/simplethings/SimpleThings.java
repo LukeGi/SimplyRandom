@@ -58,10 +58,8 @@ public class SimpleThings implements IInitialize {
 
     public static BlockST tree_farm;
     public static BlockST cobblestone_generator;
-    public static BlockST lightning_rod;
-    public static BlockST power_generator_fire;
+    public static BlockST generators;
     public static BlockST power_cable;
-    public static BlockST power_generator_sugar;
     public static BlockST machine_block;
     public static BlockST power_storage;
     public static Item wooden_spear;
@@ -75,9 +73,7 @@ public class SimpleThings implements IInitialize {
         event.getRegistry().registerAll(
                 tree_farm = new BlockTreeFarm(),
                 cobblestone_generator = new BlockCobblestoneGenerator(),
-                lightning_rod = new BlockLightningRod(),
-                power_generator_fire = new BlockEnergyGeneratorFire(),
-                power_generator_sugar = new BlockEnergyGeneratorSugar(),
+                generators = new BlockGenerator("generator"),
                 power_cable = new BlockPowerCable(),
                 machine_block = new BlockMachineBlock(),
                 power_storage = new BlockPowerStorage("simple")
@@ -89,10 +85,8 @@ public class SimpleThings implements IInitialize {
         event.getRegistry().registerAll(
                 tree_farm.createItemBlock(),
                 cobblestone_generator.createItemBlock(),
-                lightning_rod.createItemBlock(),
-                power_generator_fire.createItemBlock(),
+                generators.createItemBlock(),
                 power_cable.createItemBlock(),
-                power_generator_sugar.createItemBlock(),
                 machine_block.createItemBlock(),
                 power_storage.createItemBlock(),
                 wooden_spear = new ItemSpear("wooden_spear").setMaterial(ItemSpear.SpearMaterial.WOOD),
@@ -105,6 +99,16 @@ public class SimpleThings implements IInitialize {
 
     public static ResourceLocation location(String path) {
         return new ResourceLocation(MOD_ID, path);
+    }
+
+    public static void registerTileEntities() {
+        GameRegistry.registerTileEntityWithAlternatives(TileTreeFarm.class, tree_farm.getRegistryName().toString(), "tileTreeFarm");
+        GameRegistry.registerTileEntityWithAlternatives(TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString(), "tileCobblestoneGenerator");
+        GameRegistry.registerTileEntityWithAlternatives(TileGeneratorFire.class, generators.getRegistryName().toString() + "tileGeneratorFire");
+        GameRegistry.registerTileEntityWithAlternatives(TileGeneratorSugar.class, generators.getRegistryName().toString() + "tileTreeFarm");
+        GameRegistry.registerTileEntityWithAlternatives(TileLightningRod.class, generators.getRegistryName().toString() + "tileLightningRod");
+        GameRegistry.registerTileEntityWithAlternatives(TilePowerCable.class, power_cable.getRegistryName().toString(), "tilePowerCable");
+        GameRegistry.registerTileEntityWithAlternatives(TilePowerStorage.class, power_storage.getRegistryName().toString(), "tilePowerStorage");
     }
 
     @Override
@@ -137,16 +141,6 @@ public class SimpleThings implements IInitialize {
                 new ItemStack(Items.WATER_BUCKET, 1), 'C', new ItemStack(Blocks.COBBLESTONE, 1),
                 'L', new ItemStack(Items.LAVA_BUCKET, 1), 'P', new ItemStack(Items.IRON_PICKAXE, 1)
         );
-    }
-
-    public static void registerTileEntities() {
-        GameRegistry.registerTileEntityWithAlternatives(TileTreeFarm.class, tree_farm.getRegistryName().toString(), "tileTreeFarm");
-        GameRegistry.registerTileEntityWithAlternatives(TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString(), "tileCobblestoneGenerator");
-        GameRegistry.registerTileEntityWithAlternatives(TileGeneratorFire.class, power_generator_fire.getRegistryName().toString(), "tileGeneratorFire");
-        GameRegistry.registerTileEntityWithAlternatives(TileGeneratorSugar.class, power_generator_sugar.getRegistryName().toString(), "tileTreeFarm");
-        GameRegistry.registerTileEntityWithAlternatives(TileLightningRod.class, lightning_rod.getRegistryName().toString(), "tileLightningRod");
-        GameRegistry.registerTileEntityWithAlternatives(TilePowerCable.class, power_cable.getRegistryName().toString(), "tilePowerCable");
-        GameRegistry.registerTileEntityWithAlternatives(TilePowerStorage.class, power_storage.getRegistryName().toString(), "tilePowerStorage");
     }
 
     @Override

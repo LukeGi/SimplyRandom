@@ -13,18 +13,25 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerItemMod
 public class ClientProxy implements IProxy {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
+        // Spears
         registerItemModel(SimpleThings.wooden_spear, 0, SimpleThings.location("spear"), "material=wood");
         registerItemModel(SimpleThings.stone_spear, 0, SimpleThings.location("spear"), "material=stone");
         registerItemModel(SimpleThings.iron_spear, 0, SimpleThings.location("spear"), "material=iron");
         registerItemModel(SimpleThings.gold_spear, 0, SimpleThings.location("spear"), "material=gold");
         registerItemModel(SimpleThings.diamond_spear, 0, SimpleThings.location("spear"), "material=diamond");
-        registerBlockModelAsItem(SimpleThings.tree_farm);
-        registerBlockModelAsItem(SimpleThings.cobblestone_generator);
-        registerBlockModelAsItem(SimpleThings.lightning_rod);
-        registerBlockModelAsItem(SimpleThings.power_generator_fire);
-        registerBlockModelAsItem(SimpleThings.power_cable);
-        registerBlockModelAsItem(SimpleThings.power_generator_sugar);
+
+        // Machines
         registerBlockModelAsItem(SimpleThings.machine_block);
+        registerBlockModelAsItem(SimpleThings.cobblestone_generator);
+        registerBlockModelAsItem(SimpleThings.tree_farm);
+
+        // Generators
+        registerBlockModelAsItem(SimpleThings.generators, 0, "type=fire");
+        registerBlockModelAsItem(SimpleThings.generators, 1, "type=sugar");
+        registerBlockModelAsItem(SimpleThings.generators, 2, "type=lightning_rod");
+
+        // Power Blocks
+        registerBlockModelAsItem(SimpleThings.power_cable);
         registerBlockModelAsItem(SimpleThings.power_storage);
     }
 

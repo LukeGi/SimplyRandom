@@ -2,7 +2,7 @@ package bluemonster122.mods.simplethings.block;
 
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.tileentity.TilePowerStorage;
-import bluemonster122.mods.simplethings.util.ITileEntityProvider1;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockPowerStorage extends BlockST implements ITileEntityProvider1 {
+public class BlockPowerStorage extends BlockST implements ITileEntityProvider {
     public BlockPowerStorage(String name) {
         super(name + "_battery", Material.IRON);
         setCreativeTab(SimpleThings.theTab);
@@ -28,11 +28,6 @@ public class BlockPowerStorage extends BlockST implements ITileEntityProvider1 {
             playerIn.sendMessage(new TextComponentString("EnergyStored: " + ((TilePowerStorage) worldIn.getTileEntity(pos)).getBattery().getEnergyStored()));
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass() {
-        return TilePowerStorage.class;
     }
 
     @Nullable

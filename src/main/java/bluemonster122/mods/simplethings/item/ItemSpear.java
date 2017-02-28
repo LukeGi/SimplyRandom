@@ -34,21 +34,6 @@ public class ItemSpear extends SimpleItemBase {
         return this;
     }
 
-    public enum SpearMaterial {
-        WOOD(ToolMaterial.WOOD),
-        STONE(ToolMaterial.STONE),
-        IRON(ToolMaterial.IRON),
-        GOLD(ToolMaterial.GOLD),
-        DIAMOND(ToolMaterial.DIAMOND);
-        public final int durability;
-        public final float damage;
-
-        SpearMaterial(ToolMaterial material) {
-            durability = material.getMaxUses();
-            damage = material.getDamageVsEntity();
-        }
-    }
-
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         List<EntityLivingBase> entities = entityLiving.world.getEntitiesWithinAABBExcludingEntity(
@@ -128,6 +113,21 @@ public class ItemSpear extends SimpleItemBase {
             );
         }
         return multimap;
+    }
+
+    public enum SpearMaterial {
+        WOOD(ToolMaterial.WOOD),
+        STONE(ToolMaterial.STONE),
+        IRON(ToolMaterial.IRON),
+        GOLD(ToolMaterial.GOLD),
+        DIAMOND(ToolMaterial.DIAMOND);
+        public final int durability;
+        public final float damage;
+
+        SpearMaterial(ToolMaterial material) {
+            durability = material.getMaxUses();
+            damage = material.getDamageVsEntity();
+        }
     }
 
 

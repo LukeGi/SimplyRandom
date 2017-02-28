@@ -4,7 +4,7 @@ import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.handler.GuiHandler;
 import bluemonster122.mods.simplethings.reference.Names;
 import bluemonster122.mods.simplethings.tileentity.TileTreeFarm;
-import bluemonster122.mods.simplethings.util.ITileEntityProvider1;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
-public class BlockTreeFarm extends BlockST implements ITileEntityProvider1 {
+public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
     public BlockTreeFarm() {
         super(Names.TREE_FARM, Material.IRON);
         setCreativeTab(SimpleThings.theTab);
@@ -68,10 +68,5 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider1 {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileTreeFarm();
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass() {
-        return TileTreeFarm.class;
     }
 }

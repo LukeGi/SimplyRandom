@@ -11,14 +11,14 @@ public class BlockST extends Block {
         setup(name);
     }
 
-    private void setup(String name) {
-        setRegistryName(name);
-        setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
-    }
-
     public BlockST(String name, Material materialIn) {
         super(materialIn);
         setup(name);
+    }
+
+    private void setup(String name) {
+        setRegistryName(name);
+        setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
     }
 
     public ItemBlock createItemBlock() {

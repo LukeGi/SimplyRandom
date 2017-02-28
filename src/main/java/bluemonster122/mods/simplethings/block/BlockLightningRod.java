@@ -3,7 +3,7 @@ package bluemonster122.mods.simplethings.block;
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.reference.Names;
 import bluemonster122.mods.simplethings.tileentity.TileLightningRod;
-import bluemonster122.mods.simplethings.util.ITileEntityProvider1;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
-public class BlockLightningRod extends BlockST implements ITileEntityProvider1 {
+public class BlockLightningRod extends BlockST implements ITileEntityProvider {
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
 
     public BlockLightningRod() {
@@ -99,10 +99,5 @@ public class BlockLightningRod extends BlockST implements ITileEntityProvider1 {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileLightningRod();
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass() {
-        return TileLightningRod.class;
     }
 }
