@@ -57,6 +57,7 @@ public class SimpleThings implements IInitialize {
     public static CreativeTabs theTab = new CreativeTabST();
 
     public static BlockST tree_farm;
+    public static BlockST tree_farm_new;
     public static BlockST cobblestone_generator;
     public static BlockST generators;
     public static BlockST power_cable;
@@ -72,6 +73,7 @@ public class SimpleThings implements IInitialize {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
                 tree_farm = new BlockTreeFarm(),
+                tree_farm = new BlockTreeFarmNew(),
                 cobblestone_generator = new BlockCobblestoneGenerator(),
                 generators = new BlockGenerator("generator"),
                 power_cable = new BlockPowerCable(),
