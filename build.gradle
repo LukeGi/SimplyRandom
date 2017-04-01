@@ -20,7 +20,7 @@ minecraft {
     mappings = "snapshot_20161220"
 
     replace "@VERSION@", project.version
-    replaceIn "Survivalist.java"
+    replaceIn "SimpleThings.java"
 }
 
 dependencies {
