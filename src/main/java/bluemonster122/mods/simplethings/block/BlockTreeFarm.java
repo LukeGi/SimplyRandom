@@ -3,7 +3,8 @@ package bluemonster122.mods.simplethings.block;
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.handler.GuiHandler;
 import bluemonster122.mods.simplethings.reference.Names;
-import bluemonster122.mods.simplethings.tileentity.TileTreeFarm;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarmNew;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -67,6 +68,6 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileTreeFarm();
+        return new TileTreeFarmNew();
     }
 }

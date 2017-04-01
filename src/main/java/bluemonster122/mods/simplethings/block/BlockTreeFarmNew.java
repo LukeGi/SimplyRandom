@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplethings.block;
 
-import bluemonster122.mods.simplethings.tileentity.TileTreeFarmNew;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarmNew;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;

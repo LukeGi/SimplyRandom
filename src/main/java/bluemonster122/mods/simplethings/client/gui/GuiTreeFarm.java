@@ -2,7 +2,7 @@ package bluemonster122.mods.simplethings.client.gui;
 
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.container.ContainerTreeFarm;
-import bluemonster122.mods.simplethings.tileentity.TileTreeFarm;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

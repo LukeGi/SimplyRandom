@@ -8,7 +8,7 @@ import bluemonster122.mods.simplethings.network.message.MessageParticle;
 import bluemonster122.mods.simplethings.proxy.IProxy;
 import bluemonster122.mods.simplethings.tab.CreativeTabST;
 import bluemonster122.mods.simplethings.tileentity.*;
-import bluemonster122.mods.simplethings.util.IInitialize;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarmNew;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -34,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 @Mod(modid = SimpleThings.MOD_ID, version = SimpleThings.VERSION, guiFactory = SimpleThings.GUI_FACTORY_CLASS, updateJSON = SimpleThings.UPDATE_JSON)
-public class SimpleThings implements IInitialize {
+public class SimpleThings {
 
     public static final String MOD_ID = "simplethings";
     public static final String VERSION = "@VERSION@";
@@ -57,7 +57,6 @@ public class SimpleThings implements IInitialize {
     public static CreativeTabs theTab = new CreativeTabST();
 
     public static BlockST tree_farm;
-    public static BlockST tree_farm_new;
     public static BlockST cobblestone_generator;
     public static BlockST generators;
     public static BlockST power_cable;
@@ -73,7 +72,6 @@ public class SimpleThings implements IInitialize {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
                 tree_farm = new BlockTreeFarm(),
-                tree_farm = new BlockTreeFarmNew(),
                 cobblestone_generator = new BlockCobblestoneGenerator(),
                 generators = new BlockGenerator("generator"),
                 power_cable = new BlockPowerCable(),
@@ -104,7 +102,7 @@ public class SimpleThings implements IInitialize {
     }
 
     public static void registerTileEntities() {
-        GameRegistry.registerTileEntityWithAlternatives(TileTreeFarm.class, tree_farm.getRegistryName().toString(), "tileTreeFarm");
+        GameRegistry.registerTileEntityWithAlternatives(TileTreeFarmNew.class, tree_farm.getRegistryName().toString(), "tileTreeFarm");
         GameRegistry.registerTileEntityWithAlternatives(TileCobblestoneGenerator.class, cobblestone_generator.getRegistryName().toString(), "tileCobblestoneGenerator");
         GameRegistry.registerTileEntityWithAlternatives(TileGeneratorFire.class, generators.getRegistryName().toString() + "tileGeneratorFire");
         GameRegistry.registerTileEntityWithAlternatives(TileGeneratorSugar.class, generators.getRegistryName().toString() + "tileTreeFarm");
@@ -113,7 +111,6 @@ public class SimpleThings implements IInitialize {
         GameRegistry.registerTileEntityWithAlternatives(TilePowerStorage.class, power_storage.getRegistryName().toString(), "tilePowerStorage");
     }
 
-    @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
@@ -129,7 +126,6 @@ public class SimpleThings implements IInitialize {
         channel.registerMessage(MessageParticle.MessageHandler.class, MessageParticle.class, id++, Side.CLIENT);
     }
 
-    @Override
     @EventHandler
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(SimpleThings.INSTANCE, new GuiHandler());
@@ -145,7 +141,6 @@ public class SimpleThings implements IInitialize {
         );
     }
 
-    @Override
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
     }

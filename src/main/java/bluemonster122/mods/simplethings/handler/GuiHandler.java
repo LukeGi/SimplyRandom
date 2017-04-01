@@ -2,7 +2,7 @@ package bluemonster122.mods.simplethings.handler;
 
 import bluemonster122.mods.simplethings.client.gui.GuiTreeFarm;
 import bluemonster122.mods.simplethings.container.ContainerTreeFarm;
-import bluemonster122.mods.simplethings.tileentity.TileTreeFarm;
+import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

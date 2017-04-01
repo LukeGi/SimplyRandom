@@ -1,4 +1,4 @@
-package bluemonster122.mods.simplethings.tileentity;
+package bluemonster122.mods.simplethings.tileentity.treefarm;
 
 import bluemonster122.mods.simplethings.handler.ConfigurationHandler;
 import bluemonster122.mods.simplethings.tileentity.core.IMachine;

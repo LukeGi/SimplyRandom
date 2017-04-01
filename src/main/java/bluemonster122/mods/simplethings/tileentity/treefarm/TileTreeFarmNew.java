@@ -1,4 +1,4 @@
-package bluemonster122.mods.simplethings.tileentity;
+package bluemonster122.mods.simplethings.tileentity.treefarm;
 
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.reference.Names;
@@ -11,22 +11,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import sun.plugin.dom.exception.InvalidStateException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class TileTreeFarmNew extends TileEntity implements ITickable {
 
     private static final String TREE_FARM_PLAYER_NAME = String.format("%s:%s", SimpleThings.MOD_ID, Names.TREE_FARM);
-    private static final GameProfile profile = new GameProfile(UUID.fromString(TREE_FARM_PLAYER_NAME), TREE_FARM_PLAYER_NAME);
+    private static final GameProfile profile = new GameProfile(UUID.randomUUID(), TREE_FARM_PLAYER_NAME);
     private static final Vec3i[] farmedPositions = new Vec3i[]{new Vec3i(-3, 0, -3), new Vec3i(-3, 0, -2), new Vec3i(-2, 0, -3), new Vec3i(-2, 0, -2), new Vec3i(-3, 0, 3), new Vec3i(-3, 0, 2), new Vec3i(-2, 0, 3), new Vec3i(-2, 0, 2), new Vec3i(3, 0, -3), new Vec3i(3, 0, -2), new Vec3i(2, 0, -3), new Vec3i(2, 0, -2), new Vec3i(3, 0, 3), new Vec3i(3, 0, 2), new Vec3i(2, 0, 3), new Vec3i(2, 0, 2)};
-
+    public EntityPlayerMP fakePlayer;
     private boolean requiresSync = true;
     private int currentPos = -1;
-
-    public EntityPlayerMP fakePlayer;
+    private TreeChoppa farmer = new TreeChoppa(this);
 
     @Override
     public void update() {
@@ -44,11 +40,7 @@ public class TileTreeFarmNew extends TileEntity implements ITickable {
                 fakePlayer = new FakePlayer(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(getWorld().provider.getDimension()), profile);
             }
             // Do the Work needed on the server side
-            try {
-                requiresSync |= updateServer();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            updateServer();
 
             // If the tile needs to sync it's data
             if (requiresSync) {
@@ -67,32 +59,20 @@ public class TileTreeFarmNew extends TileEntity implements ITickable {
         getWorld().theProfiler.endSection();
     }
 
-    private boolean updateServer() throws Exception {
-        if (currentPos == -1) {
-            currentPos = getWorld().rand.nextInt(farmedPositions.length);
-            return false;
-        }
-        BlockPos current = getPos().add(farmedPositions[currentPos]);
-        TreeFarmer farmer = new TreeFarmer(current, this, getWorld());
-
-        List<BlockPos> cutList = new ArrayList<>();
-        if (farmer.shouldCutTree()) if (farmer.cutTree()) if (farmer.handleDrops()) requiresSync |= farmer.addBlocksToChop(cutList);
-        if (requiresSync = false) {
-            cutList.clear();
-        } else {
-            BlockCutter.addBlocks(cutList);
-        }
-
-        if (farmer.shouldPlantSapling()) if (farmer.plantSapling()) requiresSync |= true;
-
-        farmer = null;
-        return false;
-    }
-
     private void updateClient() {
 
     }
 
-    private class BlockCutter {
+    private void updateServer() {
+        if (world.getTotalWorldTime() % 20 != 17) return;
+        if (currentPos == -1 || currentPos >= farmedPositions.length) {
+            currentPos = 0;
+            return;
+        }
+        BlockPos current = getPos().add(farmedPositions[currentPos]);
+        currentPos++;
+        farmer.scanTree(current);
+
     }
+
 }
