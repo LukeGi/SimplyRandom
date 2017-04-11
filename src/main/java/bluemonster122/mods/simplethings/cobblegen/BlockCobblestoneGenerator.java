@@ -1,8 +1,8 @@
-package bluemonster122.mods.simplethings.block;
+package bluemonster122.mods.simplethings.cobblegen;
 
 import bluemonster122.mods.simplethings.SimpleThings;
+import bluemonster122.mods.simplethings.block.BlockST;
 import bluemonster122.mods.simplethings.reference.Names;
-import bluemonster122.mods.simplethings.tileentity.TileCobblestoneGenerator;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;

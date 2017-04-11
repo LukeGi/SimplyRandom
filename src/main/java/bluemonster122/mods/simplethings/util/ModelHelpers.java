@@ -1,5 +1,6 @@
 package bluemonster122.mods.simplethings.util;
 
+import bluemonster122.mods.simplethings.block.IEnumMeta;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -43,5 +44,15 @@ public class ModelHelpers {
 
     public static void registerItemModel(final ItemStack stack, final String variantName) {
         registerItemModel(stack.getItem(), stack.getMetadata(), variantName);
+    }
+
+    public static void registerIEnumMeta(Item item, IEnumMeta[] variants) {
+        for (IEnumMeta variant : variants)
+            registerItemModel(item, variant.getMeta(), String.format("variant=%s", variant.getName()));
+    }
+
+    public static void registerIEnumMeta(Block block, IEnumMeta[] variants) {
+        for (IEnumMeta variant : variants)
+            registerBlockModelAsItem(block, variant.getMeta(), String.format("variant=%s", variant.getName()));
     }
 }

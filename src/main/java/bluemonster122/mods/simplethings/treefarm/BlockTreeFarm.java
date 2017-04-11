@@ -1,10 +1,10 @@
-package bluemonster122.mods.simplethings.block;
+package bluemonster122.mods.simplethings.treefarm;
 
 import bluemonster122.mods.simplethings.SimpleThings;
+import bluemonster122.mods.simplethings.block.BlockST;
 import bluemonster122.mods.simplethings.handler.GuiHandler;
 import bluemonster122.mods.simplethings.reference.Names;
-import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
-import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarmNew;
+import bluemonster122.mods.simplethings.tanks.TileTank;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +14,9 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,9 +26,20 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
     public BlockTreeFarm() {
         super(Names.TREE_FARM, Material.IRON);
         setCreativeTab(SimpleThings.theTab);
+        setLightOpacity(0);
         setHarvestLevel("pickaxe", 3);
         setHardness(7);
         setResistance(500);
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileTank ){
+            FluidStack stack = ((TileTank)tile).tank.getFluid();
+            return stack == null || stack.amount <= 0 ? 0 : stack.getFluid().getLuminosity(stack);
+        }
+        return super.getLightValue(state, world, pos);
     }
 
     @SuppressWarnings("deprecation")
@@ -47,7 +60,6 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
         if (tileEntity instanceof TileTreeFarm) {
             TileTreeFarm farmTile = (TileTreeFarm) tileEntity;
             farmTile.dropInventory();
-            farmTile.breakSaplings();
         }
         super.breakBlock(worldIn, pos, state);
     }
@@ -68,6 +80,6 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileTreeFarmNew();
+        return new TileTreeFarm();
     }
 }

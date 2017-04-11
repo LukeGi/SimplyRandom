@@ -1,8 +1,6 @@
-package bluemonster122.mods.simplethings.client.gui;
+package bluemonster122.mods.simplethings.treefarm;
 
-import bluemonster122.mods.simplethings.SimpleThings;
-import bluemonster122.mods.simplethings.container.ContainerTreeFarm;
-import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -19,7 +17,7 @@ import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiTreeFarm extends GuiContainer {
-    ResourceLocation TREE_FARM_GUI = new ResourceLocation(SimpleThings.MOD_ID, "textures/gui/treefarm.png");
+    ResourceLocation TREE_FARM_GUI = new ResourceLocation(ModInfo.MOD_ID, "textures/gui/treefarm.png");
     EntityPlayer player;
     TileTreeFarm tile;
 
@@ -35,7 +33,7 @@ public class GuiTreeFarm extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         if (isPointInRegion(121, 6, 106, 10, mouseX, mouseY)) {
-            IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+            IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, null);
             drawHoveringText(
                     ImmutableList.of(battery.getEnergyStored() + " / " + battery.getMaxEnergyStored() + " " + "Forge Units"),
                     0, 0

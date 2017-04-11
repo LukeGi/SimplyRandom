@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplethings.client.gui.configs;
 
-import bluemonster122.mods.simplethings.SimpleThings;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
@@ -15,7 +15,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class SimpleThingsConfigGui extends GuiConfig {
     public SimpleThingsConfigGui(GuiScreen parentScreen) {
-        super(parentScreen, getConfigElements(), SimpleThings.MOD_ID, false, false,
+        super(parentScreen, getConfigElements(), ModInfo.MOD_ID, false, false,
                 I18n.format("simplethings.guiconfig.title")
         );
     }

@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplethings.handler;
 
-import bluemonster122.mods.simplethings.SimpleThings;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -51,7 +51,7 @@ public class ConfigurationHandler {
 
     @SubscribeEvent
     public static void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equalsIgnoreCase(SimpleThings.MOD_ID)) {
+        if (event.getModID().equalsIgnoreCase(ModInfo.MOD_ID)) {
             loadConfiguration();
         }
     }

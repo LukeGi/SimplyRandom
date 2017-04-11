@@ -8,7 +8,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class TileLightningRod extends TileEntityST implements ITickable {
     private boolean hasGold = false, hasWood = false, hasPiston = false, hasWater = false;
@@ -151,6 +157,31 @@ public class TileLightningRod extends TileEntityST implements ITickable {
         hasPiston = compound.getBoolean("hasPiston");
         hasGold = compound.getBoolean("hasGold");
         super.readFromNBT(compound);
+    }
+
+    @Override
+    public Set<Consumer<NBTTagCompound>> getAllWrites() {
+        return null;
+    }
+
+    @Override
+    public Set<Consumer<NBTTagCompound>> getAllReads() {
+        return null;
+    }
+
+    @Override
+    public Map<Capability, Supplier<Capability>> getCaps() {
+        return null;
+    }
+
+    @Override
+    public Set<Consumer<NBTTagCompound>> getMinWrites() {
+        return null;
+    }
+
+    @Override
+    public Set<Consumer<NBTTagCompound>> getMinReads() {
+        return null;
     }
 
     // TODO: 11/19/2016 Make this functional

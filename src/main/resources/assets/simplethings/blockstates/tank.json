@@ -1,0 +1,41 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "simplethings:tank"
+  },
+  "variants": {
+    "variant":{
+      "glass": {
+        "textures": {
+          "0":"simplethings:block/tank/glass_side",
+          "1":"simplethings:block/tank/glass_top"
+        }
+      },
+      "iron": {
+        "textures": {
+          "0":"simplethings:block/tank/iron_side",
+          "1":"simplethings:block/tank/iron_top"
+        }
+      },
+      "gold": {
+        "textures": {
+          "0":"simplethings:block/tank/gold_side",
+          "1":"simplethings:block/tank/gold_top"
+        }
+      },
+      "diamond":{
+        "textures": {
+          "0":"simplethings:block/tank/diamond_side",
+          "1":"simplethings:block/tank/diamond_top"
+        }
+      },
+      "obsidian": {
+        "textures": {
+          "0":"simplethings:block/tank/obsidian_side",
+          "1":"simplethings:block/tank/obsidian_top"
+        }
+      }
+    }
+  }
+}

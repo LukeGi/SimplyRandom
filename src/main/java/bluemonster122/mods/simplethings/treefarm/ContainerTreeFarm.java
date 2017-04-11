@@ -1,6 +1,5 @@
-package bluemonster122.mods.simplethings.container;
+package bluemonster122.mods.simplethings.treefarm;
 
-import bluemonster122.mods.simplethings.tileentity.treefarm.TileTreeFarm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
