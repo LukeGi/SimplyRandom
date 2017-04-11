@@ -1,8 +1,8 @@
 package bluemonster122.mods.simplethings.tanks;
 
-import bluemonster122.mods.simplethings.tileentity.core.TileEntityST;
+import bluemonster122.mods.simplethings.core.block.IHaveTank;
+import bluemonster122.mods.simplethings.core.block.TileST;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -12,31 +12,46 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class TileTank extends TileEntityST {
+public class TileTank extends TileST implements IHaveTank {
     public FluidTank tank = new FluidTank(32000);
     public int tier = 0;
 
-    public NBTTagCompound writeTank(NBTTagCompound compound) {
-        tank.writeToNBT(compound);
-        return compound;
+
+    /**
+     * Gets the Tile's current Tank.
+     *
+     * @return The Tile's current Tank.
+     */
+    @Override
+    public FluidTank getTank() {
+        return tank;
     }
 
-    public NBTTagCompound readTank(NBTTagCompound compound) {
-        createTank();
-        tank.readFromNBT(compound);
-        return compound;
-    }
-
-    private void createTank() {
+    /**
+     * Creates a new Tank for the Tile.
+     *
+     * @return a new Tank for the Tile.
+     */
+    @Override
+    public FluidTank createTank() {
         try {
             tier = (byte) world.getBlockState(pos).getValue(BlockTank.VARIANT).getMeta();
         } catch (Exception ignore) {
         }
-        tank.setCapacity((8 << tier) * 1000);
+        return new FluidTank((8 << tier) * 1000);
+    }
+
+
+    /**
+     * Sets the given ItemStackHandler to be the Tile's Tank.
+     *
+     * @param tank new Inventory.
+     */
+    @Override
+    public void setTank(FluidTank tank) {
+        this.tank = tank;
     }
 
     @Override
@@ -45,27 +60,17 @@ public class TileTank extends TileEntityST {
     }
 
     @Override
-    public Set<Consumer<NBTTagCompound>> getAllWrites() {
-        return getMinWrites();
-    }
-
-    @Override
-    public Set<Consumer<NBTTagCompound>> getAllReads() {
-        return getMinReads();
-    }
-
-    @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
         return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank));
     }
 
     @Override
-    public Set<Consumer<NBTTagCompound>> getMinWrites() {
-        return ImmutableSet.of(super::writeNBTLegacy, this::writeTank);
+    public NBTTagCompound writeChild(NBTTagCompound tag) {
+        return tag;
     }
 
     @Override
-    public Set<Consumer<NBTTagCompound>> getMinReads() {
-        return ImmutableSet.of(super::readNBTLegacy, this::readTank);
+    public NBTTagCompound readChild(NBTTagCompound tag) {
+        return tag;
     }
 }

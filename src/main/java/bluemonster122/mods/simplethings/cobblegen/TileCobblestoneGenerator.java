@@ -1,44 +1,32 @@
 package bluemonster122.mods.simplethings.cobblegen;
 
-import bluemonster122.mods.simplethings.handler.ConfigurationHandler;
-import bluemonster122.mods.simplethings.tileentity.core.TileEntityST;
+import bluemonster122.mods.simplethings.core.block.IHaveInventory;
+import bluemonster122.mods.simplethings.core.block.TileST;
+import bluemonster122.mods.simplethings.core.energy.BatteryST;
+import bluemonster122.mods.simplethings.core.energy.IEnergyRecieverST;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class TileCobblestoneGenerator extends TileEntityST implements ITickable {
+public class TileCobblestoneGenerator extends TileST implements ITickable, IEnergyRecieverST, IHaveInventory {
     /**
      * Inventory
      */
-    private ItemStackHandler inventory = new ItemStackHandler(1);
+    private ItemStackHandler inventory = createInventory();
     /**
      * Battery
      */
-    private EnergyStorage battery = createBattery();
-
-    @Override
-    public Set<Consumer<NBTTagCompound>> getAllWrites() {
-        return getMinWrites();
-    }
-
-    @Override
-    public Set<Consumer<NBTTagCompound>> getAllReads() {
-        return getMinReads();
-    }
+    private BatteryST battery = createBattery();
 
     @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
@@ -49,40 +37,13 @@ public class TileCobblestoneGenerator extends TileEntityST implements ITickable 
     }
 
     @Override
-    public Set<Consumer<NBTTagCompound>> getMinWrites() {
-        return ImmutableSet.of(super::writeNBTLegacy, this::writeInventory, this::writeEnergy);
+    public NBTTagCompound writeChild(NBTTagCompound tag) {
+        return tag;
     }
 
     @Override
-    public Set<Consumer<NBTTagCompound>> getMinReads() {
-        return ImmutableSet.of(super::readNBTLegacy, this::readInventory, this::readEnergy);
-    }
-
-    public NBTTagCompound writeInventory(NBTTagCompound tag) {
-        NBTTagCompound nbtTagCompound = inventory.serializeNBT();
-        tag.setTag("inventory", nbtTagCompound);
+    public NBTTagCompound readChild(NBTTagCompound tag) {
         return tag;
-    }
-
-    public NBTTagCompound readInventory(NBTTagCompound tag) {
-        NBTTagCompound nbtTagCompound = tag.getCompoundTag("inventory");
-        inventory.deserializeNBT(nbtTagCompound);
-        return tag;
-    }
-
-    public NBTTagCompound writeEnergy(NBTTagCompound tag) {
-        tag.setInteger("storedEnergy", battery.getEnergyStored());
-        return tag;
-    }
-
-    public NBTTagCompound readEnergy(NBTTagCompound tag) {
-        battery = createBattery();
-        battery.receiveEnergy(tag.getInteger("storedEnergy"), false);
-        return tag;
-    }
-
-    private EnergyStorage createBattery() {
-        return new EnergyStorage(1000);
     }
 
     /**
@@ -94,12 +55,72 @@ public class TileCobblestoneGenerator extends TileEntityST implements ITickable 
         int stackSize = stackInSlot.getCount();
         if (stackSize < 64) {
             int spaceLeft;
-            if (ConfigurationHandler.cobblestone_generator_req_power > 0)
-                spaceLeft = Math.min(64 - stackSize, battery.getEnergyStored() / ConfigurationHandler.cobblestone_generator_req_power);
+            if (FRCobbleGen.Cobble_RF > 0)
+                spaceLeft = Math.min(64 - stackSize, battery.getEnergyStored() / FRCobbleGen.Cobble_RF);
             else
                 spaceLeft = 64 - stackSize;
             ItemHandlerHelper.insertItem(inventory, new ItemStack(Blocks.COBBLESTONE, spaceLeft), false);
-            battery.extractEnergy(spaceLeft * ConfigurationHandler.cobblestone_generator_req_power, false);
+            battery.extractEnergy(spaceLeft * FRCobbleGen.Cobble_RF, false);
         }
+    }
+
+    /**
+     * Sets the given BatteryST to be the Tile's Battery.
+     *
+     * @param battery new Battery.
+     */
+    @Override
+    public void setBattery(BatteryST battery) {
+        this.battery = battery;
+    }
+
+    /**
+     * Gets the Tile's current battery.
+     *
+     * @return The Tile's current battery.
+     */
+    @Override
+    public BatteryST getBattery() {
+        return battery;
+    }
+
+    /**
+     * Creates a new Battery for the Tile.
+     *
+     * @return a new Battery for the Tile.
+     */
+    @Override
+    public BatteryST createBattery() {
+        return new BatteryST(1000);
+    }
+
+    /**
+     * Gets the Tile's current Inventory.
+     *
+     * @return The Tile's current Inventory.
+     */
+    @Override
+    public ItemStackHandler getInventory() {
+        return inventory;
+    }
+
+    /**
+     * Creates a new Inventory for the Tile.
+     *
+     * @return a new Inventory for the Tile.
+     */
+    @Override
+    public ItemStackHandler createInventory() {
+        return new ItemStackHandler(1);
+    }
+
+    /**
+     * Sets the given ItemStackHandler to be the Tile's Inventory.
+     *
+     * @param inventory new Inventory.
+     */
+    @Override
+    public void setInventory(ItemStackHandler inventory) {
+        this.inventory = inventory;
     }
 }

@@ -8,7 +8,7 @@
     }
   },
   "variants": {
-    "type": {
+    "variant": {
       "fire": {
         "textures": {
           "side": "simplethings:block/energy_generator_fire"

@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplethings.tanks;
 
 import bluemonster122.mods.simplethings.SimpleThings;
-import bluemonster122.mods.simplethings.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.block.IEnumMeta;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,32 +29,32 @@ public class ItemTankUpgrade extends Item {
         if (world.isRemote) return EnumActionResult.SUCCESS;
         IBlockState state = world.getBlockState(pos);
         ItemStack stack = player.getHeldItem(hand);
-        if (state.getBlock().equals(TankRegistry.tank) && !(EnumTankUpgrade.BASE.getMeta() == stack.getMetadata())) {
+        if (state.getBlock().equals(FRTank.tank) && !(Types.BASE.getMeta() == stack.getMetadata())) {
             switch (state.getValue(BlockTank.VARIANT)) {
                 case GLASS:
-                    if (EnumTankUpgrade.GLASS_TO_IRON.getMeta() == stack.getMetadata()){
-                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.EnumTankType.IRON), 3);
+                    if (Types.GLASS_TO_IRON.getMeta() == stack.getMetadata()){
+                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.IRON), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case IRON:
-                    if (EnumTankUpgrade.IRON_TO_GOLD.getMeta() == stack.getMetadata()){
-                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.EnumTankType.GOLD), 3);
+                    if (Types.IRON_TO_GOLD.getMeta() == stack.getMetadata()){
+                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.GOLD), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case GOLD:
-                    if (EnumTankUpgrade.GOLD_TO_OBSIDIAN.getMeta() == stack.getMetadata()){
-                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.EnumTankType.OBSIDIAN), 3);
+                    if (Types.GOLD_TO_OBSIDIAN.getMeta() == stack.getMetadata()){
+                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.OBSIDIAN), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case OBSIDIAN:
-                    if (EnumTankUpgrade.OBSIDIAN_TO_DIAMOND.getMeta() == stack.getMetadata()){
-                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.EnumTankType.DIAMOND), 3);
+                    if (Types.OBSIDIAN_TO_DIAMOND.getMeta() == stack.getMetadata()){
+                        world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.DIAMOND), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
@@ -68,31 +68,31 @@ public class ItemTankUpgrade extends Item {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return String.format("item.%s:%s", ModInfo.MOD_ID, "tank_upgrade" + EnumTankUpgrade.byMeta(itemStack.getMetadata()).getName());
+        return String.format("item.%s:%s", ModInfo.MOD_ID, "tank_upgrade" + Types.byMeta(itemStack.getMetadata()).getName());
     }
 
     @Override
     public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> itemList) {
-        for (ItemTankUpgrade.EnumTankUpgrade type : ItemTankUpgrade.EnumTankUpgrade.values()) {
+        for (Types type : Types.VARIANTS) {
             itemList.add(new ItemStack(item, 1, type.getMeta()));
         }
     }
 
-    public enum EnumTankUpgrade implements IEnumMeta {
+    public enum Types implements IEnumMeta {
         BASE,
         GLASS_TO_IRON,
         IRON_TO_GOLD,
         GOLD_TO_OBSIDIAN,
         OBSIDIAN_TO_DIAMOND;
 
-        protected static final EnumTankUpgrade[] VARIANTS = values();
+        protected static final Types[] VARIANTS = values();
         private int meta;
 
-        EnumTankUpgrade() {
+        Types() {
             meta = ordinal();
         }
 
-        public static EnumTankUpgrade byMeta(int meta) {
+        public static Types byMeta(int meta) {
             return VARIANTS[Math.abs(meta) % VARIANTS.length];
         }
 

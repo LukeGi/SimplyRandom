@@ -19,8 +19,8 @@ public class ElementCobblestoneGenerator extends GuiConfigEntries.CategoryEntry 
     @Override
     protected GuiScreen buildChildScreen() {
         return new GuiConfig(this.owningScreen, (new ConfigElement(
-                ConfigurationHandler.configuration.getCategory("cobblestone_generator"))).getChildElements(),
-                this.owningScreen.modID, "cobblestone_generator",
+                ConfigurationHandler.configuration.getCategory("cobble_gen"))).getChildElements(),
+                this.owningScreen.modID, "cobble_gen",
                 this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
                 this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
                 GuiConfig.getAbridgedConfigPath(ForgeModContainer.getConfig().toString())

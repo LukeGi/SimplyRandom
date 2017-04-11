@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplethings.treefarm;
 
 import bluemonster122.mods.simplethings.SimpleThings;
-import bluemonster122.mods.simplethings.block.BlockST;
+import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.handler.GuiHandler;
 import bluemonster122.mods.simplethings.reference.Names;
 import bluemonster122.mods.simplethings.tanks.TileTank;

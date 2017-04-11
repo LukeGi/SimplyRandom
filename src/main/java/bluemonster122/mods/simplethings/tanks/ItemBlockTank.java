@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplethings.tanks;
 
-import bluemonster122.mods.simplethings.item.ItemBlockEnum;
+import bluemonster122.mods.simplethings.core.block.ItemBlockEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

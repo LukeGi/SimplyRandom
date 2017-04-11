@@ -1,8 +1,9 @@
 package bluemonster122.mods.simplethings.tanks;
 
 import bluemonster122.mods.simplethings.SimpleThings;
-import bluemonster122.mods.simplethings.block.BlockEnum;
-import bluemonster122.mods.simplethings.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.block.BlockEnum;
+import bluemonster122.mods.simplethings.core.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.block.IPickup;
 import com.google.common.collect.Lists;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -31,23 +32,22 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockTank extends BlockEnum implements ITileEntityProvider {
-    public static final PropertyEnum<EnumTankType> VARIANT = PropertyEnum.create("variant", EnumTankType.class);
+public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup {
+    public static final PropertyEnum<Types> VARIANT = PropertyEnum.create("variant", Types.class);
     private static final AxisAlignedBB AABB = new AxisAlignedBB(1 / 16F, 0, 1 / 16F, 15 / 16f, 1, 15 / 16f);
 
     public BlockTank() {
-        super("tank", Material.GLASS, EnumTankType.VARIANTS);
+        super("tank", Material.GLASS, Types.VARIANTS);
         setCreativeTab(SimpleThings.theTab);
         setHardness(5000f);
         setResistance(1f);
-        setDefaultState(getDefaultState().withProperty(VARIANT, EnumTankType.GLASS));
+        setDefaultState(getDefaultState().withProperty(VARIANT, Types.GLASS));
     }
 
     @SuppressWarnings("deprecation")
@@ -59,7 +59,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
     @Override
     @Deprecated
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, EnumTankType.byMeta(meta));
+        return this.getDefaultState().withProperty(VARIANT, Types.byMeta(meta));
     }
 
     @Override
@@ -106,30 +106,26 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack heldItem = playerIn.getHeldItem(hand);
-        if (heldItem.getItem() == TankRegistry.upgrade) return false;
-        if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
-            return false;
-        }
-        IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-        FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
-        if (result.isSuccess())
-            playerIn.setHeldItem(hand, result.getResult());
-        else if (playerIn.isSneaking()) {
-            List<ItemStack> drops = getDrops(worldIn, pos, state, 0);
-            worldIn.destroyBlock(pos, false);
-            for (ItemStack stack : drops) {
-                ItemHandlerHelper.giveItemToPlayer(playerIn, stack);
+        if (!pickup(worldIn, pos, state, playerIn, hand)) {
+            ItemStack heldItem = playerIn.getHeldItem(hand);
+            if (heldItem.getItem() == FRTank.upgrade) return false;
+            if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+            TileEntity te = worldIn.getTileEntity(pos);
+            if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
+                return false;
             }
+            IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+            FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
+            if (result.isSuccess())
+                playerIn.setHeldItem(hand, result.getResult());
+            // prevent interaction so stuff like buckets and other things don't place the liquid block
+            te.markDirty();
+            IBlockState blockState = worldIn.getBlockState(pos);
+            worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
+            return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+        } else {
             return true;
         }
-        // prevent interaction so stuff like buckets and other things don't place the liquid block
-        te.markDirty();
-        IBlockState blockState = worldIn.getBlockState(pos);
-        worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
-        return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
     }
 
     @Override
@@ -143,7 +139,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> itemStacks) {
-        for (EnumTankType type : EnumTankType.VARIANTS) {
+        for (Types type : Types.VARIANTS) {
             itemStacks.add(new ItemStack(item, 1, type.getMeta()));
         }
     }
@@ -159,23 +155,14 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
         List<ItemStack> ret = Lists.newArrayList();
         Random rand = world instanceof World ? ((World) world).rand : RANDOM;
         Item item = this.getItemDropped(state, rand, fortune);
-        ItemStack stack = null;
-        if (item != null) {
-            stack = new ItemStack(item, 1, this.damageDropped(state));
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof TileTank && stack != null) {
-                if (((TileTank) te).tank.getFluid() != null) {
-                    NBTTagCompound tag = new NBTTagCompound();
-                    ((TileTank) te).writeTank(tag);
-                    stack.setTagCompound(tag);
-                }
+        NBTTagCompound tag = null;
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileTank) {
+            if (((TileTank) te).tank.getFluid() != null) {
+                tag = ((TileTank) te).writeTank(new NBTTagCompound());
             }
-            ret.add(stack);
         }
-
-
-        // save liquid data on the stack
-
+        ret.add(new ItemStack(item, 1, this.damageDropped(state), tag));
         return ret;
     }
 
@@ -190,17 +177,17 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
         return new TileTank();
     }
 
-    public enum EnumTankType implements IEnumMeta, Comparable<EnumTankType> {
+    public enum Types implements IEnumMeta, Comparable<Types> {
         GLASS,
         IRON,
         GOLD,
         OBSIDIAN,
         DIAMOND;
 
-        protected static final EnumTankType[] VARIANTS = values();
+        protected static final Types[] VARIANTS = values();
         private int meta;
 
-        public static EnumTankType byMeta(int meta) {
+        public static Types byMeta(int meta) {
             return VARIANTS[Math.abs(meta) % VARIANTS.length];
         }
 
@@ -209,7 +196,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider {
             return meta;
         }
 
-        EnumTankType() {
+        Types() {
             meta = ordinal();
         }
     }

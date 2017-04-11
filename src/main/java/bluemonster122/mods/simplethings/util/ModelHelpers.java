@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplethings.util;
 
-import bluemonster122.mods.simplethings.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.block.IEnumMeta;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;

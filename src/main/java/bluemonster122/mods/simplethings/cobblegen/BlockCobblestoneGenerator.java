@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplethings.cobblegen;
 
 import bluemonster122.mods.simplethings.SimpleThings;
-import bluemonster122.mods.simplethings.block.BlockST;
+import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.reference.Names;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
