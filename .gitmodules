@@ -1,3 +1,6 @@
 [submodule "CoFHLib"]
 	path = CoFHLib
 	url = https://github.com/TheCBProject/CoFHLib.git
+[submodule "BuildCraftAPI"]
+	path = BuildCraftAPI
+	url = https://github.com/BuildCraft/BuildCraftAPI.git

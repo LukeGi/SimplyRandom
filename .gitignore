@@ -3,6 +3,7 @@
 !/.gitmodules
 !/update.json
 !/CoFHLib
+!/BuildCraftAPI
 !/src
 !/gradle
 !/gradlew
