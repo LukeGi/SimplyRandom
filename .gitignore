@@ -2,6 +2,7 @@
 !/.gitignore
 !/.gitmodules
 !/update.json
+!/CoFHLib
 !/src
 !/gradle
 !/gradlew
