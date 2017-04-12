@@ -2,7 +2,6 @@
 !/.gitignore
 !/.gitmodules
 !/update.json
-!/CoFHLib
 !/BuildCraftAPI
 !/src
 !/gradle
