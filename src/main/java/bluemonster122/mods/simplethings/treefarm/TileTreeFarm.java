@@ -19,9 +19,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -58,8 +60,8 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
         return ImmutableMap.of(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory),
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast(battery)
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, () -> CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
+                CapabilityEnergy.ENERGY, () -> CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
         );
     }
 

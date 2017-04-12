@@ -11,7 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -31,8 +33,8 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
         return ImmutableMap.of(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory),
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast(battery)
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, () -> CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
+                CapabilityEnergy.ENERGY, () -> CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
         );
     }
 
@@ -65,16 +67,6 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     }
 
     /**
-     * Sets the given BatteryST to be the Tile's Battery.
-     *
-     * @param battery new Battery.
-     */
-    @Override
-    public void setBattery(BatteryST battery) {
-        this.battery = battery;
-    }
-
-    /**
      * Gets the Tile's current battery.
      *
      * @return The Tile's current battery.
@@ -82,6 +74,16 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     @Override
     public BatteryST getBattery() {
         return battery;
+    }
+
+    /**
+     * Sets the given BatteryST to be the Tile's Battery.
+     *
+     * @param battery new Battery.
+     */
+    @Override
+    public void setBattery(BatteryST battery) {
+        this.battery = battery;
     }
 
     /**

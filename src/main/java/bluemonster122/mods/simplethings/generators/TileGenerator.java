@@ -6,11 +6,12 @@ import bluemonster122.mods.simplethings.core.energy.IEnergyProviderST;
 import com.google.common.collect.ImmutableMap;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-public abstract class TileGenerator extends TileST implements IEnergyProviderST{
+public abstract class TileGenerator extends TileST implements IEnergyProviderST {
 
     public BatteryST battery = createBattery();
 
@@ -37,7 +38,7 @@ public abstract class TileGenerator extends TileST implements IEnergyProviderST{
     @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
         return ImmutableMap.of(
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast(battery)
+                CapabilityEnergy.ENERGY, () -> CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
         );
     }
 }

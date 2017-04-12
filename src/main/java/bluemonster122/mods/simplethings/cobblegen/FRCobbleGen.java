@@ -59,6 +59,11 @@ public class FRCobbleGen implements IFeatureRegistry {
 
     }
 
+    @Override
+    public void registerOreDict() {
+
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public void registerRenders() {

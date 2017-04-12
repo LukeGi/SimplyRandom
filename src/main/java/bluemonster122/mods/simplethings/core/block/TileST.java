@@ -86,9 +86,9 @@ public abstract class TileST extends TileEntity {
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         Map<Capability, Supplier<Capability>> caps = getCaps();
-        for (ImmutableMap.Entry cap : caps.entrySet()) {
+        for (ImmutableMap.Entry<Capability, Supplier<Capability>> cap : caps.entrySet()) {
             if (capability.equals(cap.getKey())) {
-                return (T) cap.getValue();
+                return (T) cap.getValue().get();
             }
         }
         return super.getCapability(capability, facing);

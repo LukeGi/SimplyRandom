@@ -153,6 +153,11 @@ public class FRTank implements IFeatureRegistry {
 
     }
 
+    @Override
+    public void registerOreDict() {
+
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public void registerRenders() {

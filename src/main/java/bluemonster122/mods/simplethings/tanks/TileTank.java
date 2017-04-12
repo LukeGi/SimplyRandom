@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -43,7 +44,6 @@ public class TileTank extends TileST implements IHaveTank {
         return new FluidTank((8 << tier) * 1000);
     }
 
-
     /**
      * Sets the given ItemStackHandler to be the Tile's Tank.
      *
@@ -61,7 +61,7 @@ public class TileTank extends TileST implements IHaveTank {
 
     @Override
     public Map<Capability, Supplier<Capability>> getCaps() {
-        return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank));
+        return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, () -> CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast((IFluidHandler) tank));
     }
 
     @Override

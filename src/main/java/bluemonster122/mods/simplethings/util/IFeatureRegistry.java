@@ -17,6 +17,8 @@ public interface IFeatureRegistry {
 
     void registerEvents();
 
+    void registerOreDict();
+
     @SideOnly(Side.CLIENT)
     void registerRenders();
 

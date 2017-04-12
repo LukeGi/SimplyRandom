@@ -1,48 +1,38 @@
-package bluemonster122.mods.simplethings.core;
+package bluemonster122.mods.simplethings.pump;
 
+import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import static bluemonster122.mods.simplethings.util.ModelHelpers.registerIEnumMeta;
+import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockModelAsItem;
 
-public class FRCore implements IFeatureRegistry {
+public class FRPump implements IFeatureRegistry {
 
-    public static final FRCore INSTANCE = new FRCore();
+    public static final FRPump INSTANCE = new FRPump();
+
+    public BlockST pump = new BlockPump();
 
     @Override
     public void registerBlocks() {
-
+        GameRegistry.register(pump);
     }
 
     @Override
     public void registerItems() {
-        GameRegistry.register(misc);
+        GameRegistry.register(pump.createItemBlock());
     }
 
     @Override
     public void registerRecipes() {
-        //@formatter:off
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(
-                new ItemStack(misc, 1, ItemMisc.Types.WRENCH.getMeta()),
-                "I I",
-                "ISI",
-                " S ",
-                'S', "stick",
-                'I', "ingotIron"
-        ));
-
-        //@formatter:on
     }
 
     @Override
     public void registerTileEntities() {
-
+        GameRegistry.registerTileEntity(TilePump.class, "simplethings:pump");
     }
 
     @Override
@@ -52,6 +42,7 @@ public class FRCore implements IFeatureRegistry {
 
     @Override
     public void registerEvents() {
+
     }
 
     @Override
@@ -62,7 +53,7 @@ public class FRCore implements IFeatureRegistry {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerRenders() {
-        registerIEnumMeta(misc, ItemMisc.Types.VARIANTS);
+        registerBlockModelAsItem(pump);
     }
 
     @SideOnly(Side.CLIENT)
@@ -71,7 +62,6 @@ public class FRCore implements IFeatureRegistry {
 
     }
 
-    private FRCore() {
+    private FRPump() {
     }
-    public static ItemMisc misc = new ItemMisc();
 }

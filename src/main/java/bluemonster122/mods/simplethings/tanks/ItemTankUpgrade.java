@@ -68,7 +68,7 @@ public class ItemTankUpgrade extends Item {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return String.format("item.%s:%s", ModInfo.MOD_ID, "tank_upgrade" + Types.byMeta(itemStack.getMetadata()).getName());
+        return String.format("item.%s:%s.%s", ModInfo.MOD_ID, "tank_upgrade", Types.byMeta(itemStack.getMetadata()).getName());
     }
 
     @Override

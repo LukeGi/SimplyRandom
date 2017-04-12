@@ -15,7 +15,7 @@ public class ItemMisc extends ItemST {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return String.format("item.%s:%s", ModInfo.MOD_ID, "tank_upgrade" + Types.byMeta(itemStack.getMetadata()).getName());
+        return String.format("item.%s:%s.%s", ModInfo.MOD_ID, "misc", Types.byMeta(itemStack.getMetadata()).getName());
     }
 
     @Override

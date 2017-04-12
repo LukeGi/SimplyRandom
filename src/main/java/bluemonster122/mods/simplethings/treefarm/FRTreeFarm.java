@@ -2,12 +2,15 @@ package bluemonster122.mods.simplethings.treefarm;
 
 import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockModelAsItem;
@@ -57,6 +60,15 @@ public class FRTreeFarm implements IFeatureRegistry {
     @Override
     public void registerEvents() {
 
+    }
+
+    @Override
+    public void registerOreDict() {
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            String name = type.getName();
+            OreDictionary.registerOre("sapling",new ItemStack(Blocks.SAPLING, 1, type.getMetadata()));
+            OreDictionary.registerOre("sapling" + name.substring(0,1).toUpperCase() + name.substring(1), new ItemStack(Blocks.SAPLING, 1, type.getMetadata()));
+        }
     }
 
     @SideOnly(Side.CLIENT)
