@@ -29,7 +29,7 @@ public class ItemTankUpgrade extends Item {
         if (world.isRemote) return EnumActionResult.SUCCESS;
         IBlockState state = world.getBlockState(pos);
         ItemStack stack = player.getHeldItem(hand);
-        if (state.getBlock().equals(FRTank.tank) && !(Types.BASE.getMeta() == stack.getMetadata())) {
+        if (state.getBlock().equals(FRTank.tank)) {
             switch (state.getValue(BlockTank.VARIANT)) {
                 case GLASS:
                     if (Types.GLASS_TO_IRON.getMeta() == stack.getMetadata()){
@@ -79,7 +79,6 @@ public class ItemTankUpgrade extends Item {
     }
 
     public enum Types implements IEnumMeta {
-        BASE,
         GLASS_TO_IRON,
         IRON_TO_GOLD,
         GOLD_TO_OBSIDIAN,

@@ -1,8 +1,10 @@
 package bluemonster122.mods.simplethings.tanks;
 
-import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.client.renderer.BoxRendererManager;
 import bluemonster122.mods.simplethings.client.renderer.TESRTank;
+import bluemonster122.mods.simplethings.core.FRCore;
+import bluemonster122.mods.simplethings.core.ItemMisc;
+import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -55,42 +57,82 @@ public class FRTank implements IFeatureRegistry {
 
         GameRegistry.addRecipe(new UpgradeRecipe(
                 iron_tank,
-                "GUG",
-                "UTU",
-                "GUG",
-                'G', "blockGlass",
+                "UPU",
+                "PTP",
+                "UPU",
+                'P', "paneGlass",
                 'U', "ingotIron",
                 'T', glass_tank
         ));
 
         GameRegistry.addRecipe(new UpgradeRecipe(
                 gold_tank,
-                "GUG",
-                "UTU",
-                "GUG",
-                'G', "blockGlass",
+                "UPU",
+                "PTP",
+                "UPU",
+                'P', "paneGlass",
                 'U', "ingotGold",
                 'T', iron_tank
         ));
 
         GameRegistry.addRecipe(new UpgradeRecipe(
                 obsidian_tank,
-                "GUG",
-                "UTU",
-                "GUG",
-                'G', "blockGlass",
+                "UPU",
+                "PTP",
+                "UPU",
+                'P', "paneGlass",
                 'U', "obsidian",
                 'T', gold_tank
         ));
 
         GameRegistry.addRecipe(new UpgradeRecipe(
                 diamond_tank,
-                "GUG",
-                "UTU",
-                "GUG",
-                'G', "blockGlass",
+                "UPU",
+                "PTP",
+                "UPU",
+                'P', "paneGlass",
                 'U', "gemDiamond",
                 'T', obsidian_tank
+        ));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(upgrade, 1, ItemTankUpgrade.Types.GLASS_TO_IRON.getMeta()),
+                "UPU",
+                "PWP",
+                "UPU",
+                'P', "paneGlass",
+                'U', "ingotIron",
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+        ));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(upgrade, 1, ItemTankUpgrade.Types.IRON_TO_GOLD.getMeta()),
+                "UPU",
+                "PWP",
+                "UPU",
+                'P', "paneGlass",
+                'U', "ingotGold",
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+        ));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(upgrade, 1, ItemTankUpgrade.Types.GOLD_TO_OBSIDIAN.getMeta()),
+                "UPU",
+                "PWP",
+                "UPU",
+                'P', "paneGlass",
+                'U', "obsidian",
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+        ));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(upgrade, 1, ItemTankUpgrade.Types.OBSIDIAN_TO_DIAMOND.getMeta()),
+                "UPU",
+                "PWP",
+                "UPU",
+                'P', "paneGlass",
+                'U', "gemDiamond",
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
         ));
 
         //@formatter:on
