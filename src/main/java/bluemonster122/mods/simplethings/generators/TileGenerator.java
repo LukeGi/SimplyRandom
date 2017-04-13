@@ -9,7 +9,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public abstract class TileGenerator extends TileST implements IEnergyProviderST {
 
@@ -36,9 +35,9 @@ public abstract class TileGenerator extends TileST implements IEnergyProviderST 
     }
 
     @Override
-    public Map<Capability, Supplier<Capability>> getCaps() {
+    public Map<Capability, Capability> getCaps() {
         return ImmutableMap.of(
-                CapabilityEnergy.ENERGY, () -> CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
+                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
         );
     }
 }

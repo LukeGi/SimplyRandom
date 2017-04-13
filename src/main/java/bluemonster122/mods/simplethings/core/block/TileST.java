@@ -22,7 +22,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public abstract class TileST extends TileEntity {
 
@@ -77,7 +76,7 @@ public abstract class TileST extends TileEntity {
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        Map<Capability, Supplier<Capability>> caps = getCaps();
+        Map<Capability, Capability> caps = getCaps();
         return caps.keySet().contains(capability) || super.hasCapability(capability, facing);
     }
 
@@ -85,16 +84,16 @@ public abstract class TileST extends TileEntity {
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        Map<Capability, Supplier<Capability>> caps = getCaps();
-        for (ImmutableMap.Entry<Capability, Supplier<Capability>> cap : caps.entrySet()) {
+        Map<Capability, Capability> caps = getCaps();
+        for (ImmutableMap.Entry cap : caps.entrySet()) {
             if (capability.equals(cap.getKey())) {
-                return (T) cap.getValue().get();
+                return (T) cap.getValue();
             }
         }
         return super.getCapability(capability, facing);
     }
 
-    public abstract Map<Capability, Supplier<Capability>> getCaps();
+    public abstract Map<Capability, Capability> getCaps();
 
     public NBTTagCompound writeInventory(NBTTagCompound tag) {
         if (this instanceof IHaveInventory) {
@@ -155,6 +154,7 @@ public abstract class TileST extends TileEntity {
         writeInventory(tag);
         writeTank(tag);
         writeChild(tag);
+        readFromNBT(tag);
         return tag;
     }
 

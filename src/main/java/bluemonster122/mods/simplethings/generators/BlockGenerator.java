@@ -47,25 +47,23 @@ public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IP
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!pickup(worldIn, pos, state, playerIn, hand)) {
-            if (!worldIn.isRemote) {
-                switch (state.getValue(VARIANT)) {
-                    case SUGAR:
-                        ItemStack heldItem = playerIn.getHeldItem(hand);
-                        if (heldItem.getItem().equals(Items.SUGAR)) {
-                            TileEntity tile = worldIn.getTileEntity(pos);
-                            if (tile instanceof TileGeneratorSugar) {
-                                heldItem.shrink(1);
-                                playerIn.setHeldItem(hand, heldItem);
-                                ((TileGeneratorSugar) tile).addBurnTime(FRGenerators.Sugar_Burntime);
-                                return true;
-                            }
+        if (!worldIn.isRemote) {
+            switch (state.getValue(VARIANT)) {
+                case SUGAR:
+                    ItemStack heldItem = playerIn.getHeldItem(hand);
+                    if (heldItem.getItem().equals(Items.SUGAR)) {
+                        TileEntity tile = worldIn.getTileEntity(pos);
+                        if (tile instanceof TileGeneratorSugar) {
+                            heldItem.shrink(1);
+                            playerIn.setHeldItem(hand, heldItem);
+                            ((TileGeneratorSugar) tile).addBurnTime(FRGenerators.Sugar_Burntime);
+                            return true;
                         }
-                        break;
-                    case FIRE:
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                case FIRE:
+                default:
+                    break;
             }
         }
         return false;

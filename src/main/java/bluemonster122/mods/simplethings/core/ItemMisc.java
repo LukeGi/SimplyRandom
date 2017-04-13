@@ -1,28 +1,33 @@
 package bluemonster122.mods.simplethings.core;
 
 import bluemonster122.mods.simplethings.core.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.block.IPickup;
 import bluemonster122.mods.simplethings.item.ItemST;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import buildcraft.api.tools.IToolWrench;
 import cofh.item.IToolHammer;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Optional.Interface;
-import net.minecraftforge.fml.common.Optional.InterfaceList;
-import net.minecraftforge.fml.common.Optional.Method;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
-@InterfaceList({
-        @Interface(modid = "cofhapi|item", iface = "cofh.item.IToolHammer"),
-        @Interface(modid = "BuildCraftAPI|core", iface = "buildcraft.api.tools.IToolWrench")
-})
+@Interface(modid = "BuildCraftAPI|core", iface = "buildcraft.api.tools.IToolWrench")
 public class ItemMisc extends ItemST implements IToolHammer, IToolWrench {
     public ItemMisc() {
         super("misc", true);
@@ -41,6 +46,25 @@ public class ItemMisc extends ItemST implements IToolHammer, IToolWrench {
     }
 
     @Override
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+
+        if (world.isAirBlock(pos)) {
+            return EnumActionResult.PASS;
+        }
+        PlayerInteractEvent event = new PlayerInteractEvent.RightClickBlock(player, hand, pos, side, new Vec3d(hitX, hitY, hitZ));
+        if (MinecraftForge.EVENT_BUS.post(event) || event.getResult() == Result.DENY) {
+            return EnumActionResult.PASS;
+        }
+        if (!world.isRemote && isUsable(player.getHeldItem(hand), player, pos) && player.isSneaking() && block instanceof IPickup) {
+            ((IPickup) block).pickup(world, pos, state, player);
+            return EnumActionResult.SUCCESS;
+        }
+        return EnumActionResult.PASS;
+    }
+
+    @Override
     public int getItemStackLimit(ItemStack stack) {
         int limit;
         switch (Types.byMeta(stack.getMetadata())) {
@@ -54,87 +78,49 @@ public class ItemMisc extends ItemST implements IToolHammer, IToolWrench {
         return limit;
     }
 
-    /*          IToolHammer           */
-
-    /**
-     * Called to ensure that the tool can be used on a block.
-     *
-     * @param item The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools).
-     * @param user The entity using the tool.
-     * @param pos  Coordinates of the block.
-     * @return True if this tool can be used.
-     */
+    /* IToolHammer */
     @Override
-    @Method(modid = "cofhapi|item")
     public boolean isUsable(ItemStack item, EntityLivingBase user, BlockPos pos) {
-        return true;
+        switch (Types.byMeta(item.getMetadata())) {
+            case WRENCH:
+                return true;
+            default:
+                return false;
+        }
     }
 
-    /**
-     * Called to ensure that the tool can be used on an entity.
-     *
-     * @param item   The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools).
-     * @param user   The entity using the tool.
-     * @param entity The entity the tool is being used on.
-     * @return True if this tool can be used.
-     */
     @Override
-    @Method(modid = "cofhapi|item")
     public boolean isUsable(ItemStack item, EntityLivingBase user, Entity entity) {
-        return false;
+        switch (Types.byMeta(item.getMetadata())) {
+            case WRENCH:
+                return true;
+            default:
+                return false;
+        }
     }
 
-    /**
-     * Callback for when the tool has been used reactively.
-     *
-     * @param item The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools).
-     * @param user The entity using the tool.
-     * @param pos  Coordinates of the block.
-     */
     @Override
-    @Method(modid = "cofhapi|item")
     public void toolUsed(ItemStack item, EntityLivingBase user, BlockPos pos) {
 
     }
 
-    /**
-     * Callback for when the tool has been used reactively.
-     *
-     * @param item   The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools).
-     * @param user   The entity using the tool.
-     * @param entity The entity the tool is being used on.
-     */
     @Override
-    @Method(modid = "cofhapi|item")
     public void toolUsed(ItemStack item, EntityLivingBase user, Entity entity) {
 
     }
 
-    /*          IToolWrench           */
-
-    /*** Called to ensure that the wrench can be used.
-     *
-     * @param player - The player doing the wrenching
-     * @param hand - Which hand was holding the wrench
-     * @param wrench - The item stack that holds the wrench
-     * @param rayTrace - The object that is being wrenched
-     *
-     * @return true if wrenching is allowed, false if not */
+    /* IToolWrench */
     @Override
-    @Method(modid = "BuildCraftAPI|core")
     public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
-        return false;
+        switch (Types.byMeta(wrench.getMetadata())) {
+            case WRENCH:
+                return true;
+            default:
+                return false;
+        }
     }
 
-    /*** Callback after the wrench has been used. This can be used to decrease durability or for other purposes.
-     *  @param player - The player doing the wrenching
-     * @param hand - Which hand was holding the wrench
-
-     * @param wrench - The item stack that holds the wrench
-
-     * @param rayTrace - The object that is being wrenched   */
     @Override
-    @Method(modid = "BuildCraftAPI|core")
     public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
 
     }

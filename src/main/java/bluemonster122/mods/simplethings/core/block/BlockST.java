@@ -1,6 +1,5 @@
 package bluemonster122.mods.simplethings.core.block;
 
-import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -18,8 +17,8 @@ public class BlockST extends Block {
     }
 
     private void setup(String name) {
-        setRegistryName(ModInfo.MOD_ID, name);
-        setUnlocalizedName(getRegistryName().toString());
+        setRegistryName(name);
+        setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
     }
 
     public ItemBlock createItemBlock() {

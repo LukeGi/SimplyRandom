@@ -18,7 +18,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class TileCobblestoneGenerator extends TileST implements ITickable, IEnergyRecieverST, IHaveInventory {
     /**
@@ -31,10 +30,10 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     private BatteryST battery = createBattery();
 
     @Override
-    public Map<Capability, Supplier<Capability>> getCaps() {
+    public Map<Capability, Capability> getCaps() {
         return ImmutableMap.of(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, () -> CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
-                CapabilityEnergy.ENERGY, () -> CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
+                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
         );
     }
 

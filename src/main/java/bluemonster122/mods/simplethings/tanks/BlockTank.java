@@ -106,26 +106,22 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!pickup(worldIn, pos, state, playerIn, hand)) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if (heldItem.getItem() == FRTank.upgrade) return false;
-            if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
-                return false;
-            }
-            IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-            FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
-            if (result.isSuccess())
-                playerIn.setHeldItem(hand, result.getResult());
-            // prevent interaction so stuff like buckets and other things don't place the liquid block
-            te.markDirty();
-            IBlockState blockState = worldIn.getBlockState(pos);
-            worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
-            return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-        } else {
-            return true;
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if (heldItem.getItem() == FRTank.upgrade) return false;
+        if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
+            return false;
         }
+        IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+        FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
+        if (result.isSuccess())
+            playerIn.setHeldItem(hand, result.getResult());
+        // prevent interaction so stuff like buckets and other things don't place the liquid block
+        te.markDirty();
+        IBlockState blockState = worldIn.getBlockState(pos);
+        worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
+        return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
     }
 
     @Override
