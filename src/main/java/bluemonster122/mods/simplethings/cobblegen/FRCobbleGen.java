@@ -14,20 +14,19 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockMo
 
 public class FRCobbleGen implements IFeatureRegistry {
     public static final FRCobbleGen INSTANCE = new FRCobbleGen();
-    public static int Cobble_RF = 0;
 
     @Override
-    public void registerBlocks() {
+    public void registerBlocks( ) {
         GameRegistry.register(cobblestone_generator);
     }
 
     @Override
-    public void registerItems() {
+    public void registerItems( ) {
         GameRegistry.register(cobblestone_generator.createItemBlock());
     }
 
     @Override
-    public void registerRecipes() {
+    public void registerRecipes( ) {
         //@formatter:off
 
         GameRegistry.addRecipe(new ShapedOreRecipe(
@@ -45,7 +44,7 @@ public class FRCobbleGen implements IFeatureRegistry {
     }
 
     @Override
-    public void registerTileEntities() {
+    public void registerTileEntities( ) {
         GameRegistry.registerTileEntity(TileCobblestoneGenerator.class, "simplethings:cobblestone_generator");
     }
 
@@ -55,29 +54,29 @@ public class FRCobbleGen implements IFeatureRegistry {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerEvents( ) {
 
     }
 
     @Override
-    public void registerOreDict() {
+    public void registerOreDict( ) {
 
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerRenders() {
+    public void registerRenders( ) {
         registerBlockModelAsItem(cobblestone_generator);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerClientEvents() {
+    public void registerClientEvents( ) {
 
     }
 
-    private FRCobbleGen() {
+    private FRCobbleGen( ) {
     }
-
+    public static int Cobble_RF = 0;
     public static BlockST cobblestone_generator = new BlockCobblestoneGenerator();
 }

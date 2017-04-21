@@ -23,17 +23,14 @@ public abstract class BlockEnum extends BlockST {
     }
 
     public String getUnlocalizedName(ItemStack itemStack) {
-        if (itemStack != null && itemStack.getItem() != null && Block.getBlockFromItem(itemStack.getItem()) instanceof BlockST) {
-            if (VARIANTS.length > 0) {
-                return String.format("tile.%s:%s", ModInfo.MOD_ID, VARIANTS[Math.abs(itemStack.getMetadata() % VARIANTS.length)].getName());
-            }
+        if (itemStack != ItemStack.EMPTY && Block.getBlockFromItem(itemStack.getItem()) instanceof BlockST && VARIANTS.length > 0) {
+            return String.format("tile.%s:%s", ModInfo.MOD_ID, VARIANTS[Math.abs(itemStack.getMetadata() % VARIANTS.length)].getName());
         }
-
         return super.getUnlocalizedName();
     }
 
     @Override
-    public ItemBlock createItemBlock() {
+    public ItemBlock createItemBlock( ) {
         return new ItemBlockEnum(this);
     }
 }

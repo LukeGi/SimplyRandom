@@ -17,14 +17,7 @@ public class ElementEnergyGenerator extends GuiConfigEntries.CategoryEntry {
     }
 
     @Override
-    protected GuiScreen buildChildScreen() {
-        return new GuiConfig(
-                this.owningScreen,
-                (new ConfigElement(ConfigurationHandler.configuration.getCategory("power_generators"))).getChildElements(),
-                this.owningScreen.modID, "power_generators",
-                this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
-                this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
-                GuiConfig.getAbridgedConfigPath(ForgeModContainer.getConfig().toString())
-        );
+    protected GuiScreen buildChildScreen( ) {
+        return new GuiConfig(this.owningScreen, (new ConfigElement(ConfigurationHandler.INSTANCE.configuration.getCategory("power_generators"))).getChildElements(), this.owningScreen.modID, "power_generators", this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart, this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart, GuiConfig.getAbridgedConfigPath(ForgeModContainer.getConfig().toString()));
     }
 }

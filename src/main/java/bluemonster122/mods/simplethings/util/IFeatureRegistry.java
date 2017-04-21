@@ -5,23 +5,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IFeatureRegistry {
-    void registerBlocks();
+    void registerBlocks( );
 
-    void registerItems();
+    void registerItems( );
 
-    void registerRecipes();
+    void registerRecipes( );
 
-    void registerTileEntities();
+    void registerTileEntities( );
 
     void loadConfigs(Configuration configuration);
 
-    void registerEvents();
+    void registerEvents( );
 
-    void registerOreDict();
-
-    @SideOnly(Side.CLIENT)
-    void registerRenders();
+    void registerOreDict( );
 
     @SideOnly(Side.CLIENT)
-    void registerClientEvents();
+    void registerRenders( );
+
+    @SideOnly(Side.CLIENT)
+    void registerClientEvents( );
 }

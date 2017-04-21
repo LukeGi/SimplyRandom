@@ -2,12 +2,16 @@ package bluemonster122.mods.simplethings.treefarm;
 
 import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.client.renderer.BoxRender;
+import bluemonster122.mods.simplethings.core.IHaveGui;
 import bluemonster122.mods.simplethings.core.block.IHaveInventory;
 import bluemonster122.mods.simplethings.core.block.TileST;
 import bluemonster122.mods.simplethings.core.energy.BatteryST;
 import bluemonster122.mods.simplethings.core.energy.IEnergyRecieverST;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -17,6 +21,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -32,7 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST, IHaveInventory {
+import static bluemonster122.mods.simplethings.treefarm.FRTreeFarm.INSTANCE;
+
+public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST, IHaveInventory, IHaveGui {
     private static final Vec3i[] farmedPositions = new Vec3i[]{new Vec3i(-3, 0, -3), new Vec3i(-3, 0, -2), new Vec3i(-2, 0, -3), new Vec3i(-2, 0, -2), new Vec3i(-3, 0, 3), new Vec3i(-3, 0, 2), new Vec3i(-2, 0, 3), new Vec3i(-2, 0, 2), new Vec3i(3, 0, -3), new Vec3i(3, 0, -2), new Vec3i(2, 0, -3), new Vec3i(2, 0, -2), new Vec3i(3, 0, 3), new Vec3i(3, 0, 2), new Vec3i(2, 0, 3), new Vec3i(2, 0, 2)};
     static NonNullList<ItemStack> sapling = OreDictionary.getOres("sapling");
     static List<Item> validItems = new ArrayList<>();
@@ -57,11 +64,8 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     private BoxRender render;
 
     @Override
-    public Map<Capability, Capability> getCaps() {
-        return ImmutableMap.of(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
-        );
+    public Map<Capability, Capability> getCaps( ) {
+        return ImmutableMap.of(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory), CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery));
     }
 
     @Override
@@ -82,7 +86,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * Like the old updateEntity(), except more generic.
      */
     @Override
-    public void update() {
+    public void update( ) {
         if (getWorld().isRemote) {
             //noinspection MethodCallSideOnly
             updateClient();
@@ -91,7 +95,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
         }
     }
 
-    public void updateServer() {
+    public void updateServer( ) {
         battery.receiveEnergy(100, false);
         sendUpdate();
         nextTime--;
@@ -101,42 +105,36 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
             currentPos = 0;
         }
         BlockPos current = getPos().add(farmedPositions[currentPos]);
-        int energyReq = farmer.scanTree(current, false) * FRTreeFarm.tree_farm_break_energy;
+        int energyReq = farmer.scanTree(current, false) * INSTANCE.getBreakEnergy();
         if (battery.getEnergyStored() >= energyReq) {
             battery.extractEnergy(energyReq, false);
             farmer.scanTree(current, true);
-            if (world.isAirBlock(current))
-                plantSapling();
+            if (world.isAirBlock(current)) plantSapling();
         }
         nextTime = 5;
     }
 
     @SuppressWarnings("deprecation")
-    private void plantSapling() {
+    private void plantSapling( ) {
         sapling.forEach(i -> validItems.add(i.getItem()));
         for (int i = 0; i < inventory.getSlots(); i++) {
             ItemStack stack = inventory.getStackInSlot(i);
             Item item = stack.getItem();
-            if (validItems.contains(item)) {
-                if (item instanceof ItemBlock) {
-                    Block block = ((ItemBlock) item).getBlock();
-                    SimpleThings.logger.info(block.getStateFromMeta(stack.getMetadata()));
-                    if (world.setBlockState(getPos().add(farmedPositions[currentPos]), block.getStateFromMeta(stack.getMetadata()), 3))
-                        stack.shrink(1);
-                }
+            if (validItems.contains(item) && item instanceof ItemBlock) {
+                Block block = ((ItemBlock) item).getBlock();
+                SimpleThings.INSTANCE.logger.info(block.getStateFromMeta(stack.getMetadata()));
+                if (world.setBlockState(getPos().add(farmedPositions[currentPos]), block.getStateFromMeta(stack.getMetadata()), 3))
+                    stack.shrink(1);
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateClient() {
+    public void updateClient( ) {
         if (this.currentPos < 0 || this.currentPos >= farmedPositions.length) return;
         if (render != null) render.cleanUp();
         BlockPos current = pos.add(farmedPositions[this.currentPos]);
-        render = BoxRender.create(new Color(0, 255, 255, 50),
-                new Vec3d(current.getX() - 0.0005f, current.getY() - 0.0005f, current.getZ() - 0.0005f),
-                new Vec3d(current.getX() + 1.0005f, current.getY() + 1.0005f, current.getZ() + 1.0005f)
-        );
+        render = BoxRender.create(new Color(0, 255, 255, 50), new Vec3d(current.getX() - 0.0005f, current.getY() - 0.0005f, current.getZ() - 0.0005f), new Vec3d(current.getX() + 1.0005f, current.getY() + 1.0005f, current.getZ() + 1.0005f));
         render.show();
     }
 
@@ -146,7 +144,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * @return The battery object.
      */
     @Override
-    public BatteryST getBattery() {
+    public BatteryST getBattery( ) {
         return battery;
     }
 
@@ -166,7 +164,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * @return a new Battery for the Tile.
      */
     @Override
-    public BatteryST createBattery() {
+    public BatteryST createBattery( ) {
         return new BatteryST(1000000);
     }
 
@@ -176,7 +174,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * @return The Tile's current Inventory.
      */
     @Override
-    public ItemStackHandler getInventory() {
+    public ItemStackHandler getInventory( ) {
         return inventory;
     }
 
@@ -186,7 +184,7 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * @return a new Inventory for the Tile.
      */
     @Override
-    public ItemStackHandler createInventory() {
+    public ItemStackHandler createInventory( ) {
         return new ItemStackHandler(72);
     }
 
@@ -198,5 +196,20 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     @Override
     public void setInventory(ItemStackHandler inventory) {
         this.inventory = inventory;
+    }
+
+    @Override
+    public String getName( ) {
+        return "simplethings:tree_farm";
+    }
+
+    @Override
+    public Gui createGui(InventoryPlayer player, World world, BlockPos pos) {
+        return new GuiTreeFarm(player, this);
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer player, World world, BlockPos pos) {
+        return new ContainerTreeFarm(player, this);
     }
 }

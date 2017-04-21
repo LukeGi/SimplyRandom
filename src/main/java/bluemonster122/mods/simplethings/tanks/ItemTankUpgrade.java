@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplethings.tanks;
 
-import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.core.block.IEnumMeta;
+import bluemonster122.mods.simplethings.core.ItemST;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,12 +15,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemTankUpgrade extends Item {
-    public ItemTankUpgrade() {
-        super();
-        setRegistryName("tank_upgrade");
-        setHasSubtypes(true);
-        setCreativeTab(SimpleThings.theTab);
+public class ItemTankUpgrade extends ItemST {
+    public ItemTankUpgrade( ) {
+        super("tank_upgrade", true);
     }
 
 
@@ -32,28 +29,28 @@ public class ItemTankUpgrade extends Item {
         if (state.getBlock().equals(FRTank.tank)) {
             switch (state.getValue(BlockTank.VARIANT)) {
                 case GLASS:
-                    if (Types.GLASS_TO_IRON.getMeta() == stack.getMetadata()){
+                    if (Types.GLASS_TO_IRON.getMeta() == stack.getMetadata()) {
                         world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.IRON), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case IRON:
-                    if (Types.IRON_TO_GOLD.getMeta() == stack.getMetadata()){
+                    if (Types.IRON_TO_GOLD.getMeta() == stack.getMetadata()) {
                         world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.GOLD), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case GOLD:
-                    if (Types.GOLD_TO_OBSIDIAN.getMeta() == stack.getMetadata()){
+                    if (Types.GOLD_TO_OBSIDIAN.getMeta() == stack.getMetadata()) {
                         world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.OBSIDIAN), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
                     }
                     break;
                 case OBSIDIAN:
-                    if (Types.OBSIDIAN_TO_DIAMOND.getMeta() == stack.getMetadata()){
+                    if (Types.OBSIDIAN_TO_DIAMOND.getMeta() == stack.getMetadata()) {
                         world.setBlockState(pos, state.withProperty(BlockTank.VARIANT, BlockTank.Types.DIAMOND), 3);
                         stack.shrink(1);
                         player.setHeldItem(hand, stack);
@@ -79,25 +76,22 @@ public class ItemTankUpgrade extends Item {
     }
 
     public enum Types implements IEnumMeta {
-        GLASS_TO_IRON,
-        IRON_TO_GOLD,
-        GOLD_TO_OBSIDIAN,
-        OBSIDIAN_TO_DIAMOND;
+        GLASS_TO_IRON, IRON_TO_GOLD, GOLD_TO_OBSIDIAN, OBSIDIAN_TO_DIAMOND;
 
         protected static final Types[] VARIANTS = values();
         private int meta;
-
-        Types() {
-            meta = ordinal();
-        }
 
         public static Types byMeta(int meta) {
             return VARIANTS[Math.abs(meta) % VARIANTS.length];
         }
 
         @Override
-        public int getMeta() {
+        public int getMeta( ) {
             return meta;
+        }
+
+        Types( ) {
+            meta = ordinal();
         }
     }
 }

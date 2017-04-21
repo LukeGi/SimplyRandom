@@ -39,10 +39,9 @@ public class TESRTank extends TileEntitySpecialRenderer<TileTank> {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        if(Minecraft.isAmbientOcclusionEnabled()) {
+        if (Minecraft.isAmbientOcclusionEnabled()) {
             GL11.glShadeModel(GL11.GL_SMOOTH);
-        }
-        else {
+        } else {
             GL11.glShadeModel(GL11.GL_FLAT);
         }
 

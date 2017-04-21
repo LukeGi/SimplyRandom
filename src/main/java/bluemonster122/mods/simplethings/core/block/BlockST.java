@@ -1,9 +1,15 @@
 package bluemonster122.mods.simplethings.core.block;
 
+import bluemonster122.mods.simplethings.SimpleThings;
+import bluemonster122.mods.simplethings.core.ItemBlockST;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class BlockST extends Block {
     public BlockST(String name, Material blockMaterialIn, MapColor blockMapColorIn) {
@@ -16,12 +22,22 @@ public class BlockST extends Block {
         setup(name);
     }
 
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof IHaveInventory) {
+            ((IHaveInventory) tileEntity).dropContents(worldIn, pos);
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
+
     private void setup(String name) {
         setRegistryName(name);
         setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
+        setCreativeTab(SimpleThings.theTab);
     }
 
-    public ItemBlock createItemBlock() {
-        return (ItemBlock) new ItemBlock(this).setRegistryName(getRegistryName());
+    public ItemBlock createItemBlock( ) {
+        return new ItemBlockST(this);
     }
 }

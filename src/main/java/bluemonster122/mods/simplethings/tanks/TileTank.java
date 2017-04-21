@@ -15,9 +15,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import java.util.Map;
 
 public class TileTank extends TileST implements IHaveTank {
-    public FluidTank tank = createTank();
     public int tier = 0;
-
+    public FluidTank tank = createTank();
 
     /**
      * Gets the Tile's current Tank.
@@ -25,7 +24,7 @@ public class TileTank extends TileST implements IHaveTank {
      * @return The Tile's current Tank.
      */
     @Override
-    public FluidTank getTank() {
+    public FluidTank getTank( ) {
         return tank;
     }
 
@@ -35,7 +34,7 @@ public class TileTank extends TileST implements IHaveTank {
      * @return a new Tank for the Tile.
      */
     @Override
-    public FluidTank createTank() {
+    public FluidTank createTank( ) {
         try {
             tier = (byte) world.getBlockState(pos).getValue(BlockTank.VARIANT).getMeta();
         } catch (Exception ignore) {
@@ -59,7 +58,7 @@ public class TileTank extends TileST implements IHaveTank {
     }
 
     @Override
-    public Map<Capability, Capability> getCaps() {
+    public Map<Capability, Capability> getCaps( ) {
         return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast((IFluidHandler) tank));
     }
 

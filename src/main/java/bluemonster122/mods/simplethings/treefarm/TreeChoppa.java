@@ -40,7 +40,7 @@ public class TreeChoppa {
         scanBlock(pos, tree, pos);
         if (!cut) return tree.size();
         if (tree.isEmpty()) return 0;
-        SimpleThings.logger.info(String.format("Scanning has taken %s nano seconds", System.nanoTime() - startTime));
+        SimpleThings.INSTANCE.logger.info(String.format("Scanning has taken %s nano seconds", System.nanoTime() - startTime));
         cutTree(tree);
         return tree.size();
     }
@@ -52,12 +52,9 @@ public class TreeChoppa {
 
         IBlockState state = world.getBlockState(pos);
         int leaves;
-        if (state.getMaterial().equals(Material.LEAVES))
-            leaves = 1;
-        else if (state.getBlock() instanceof BlockLog)
-            leaves = 2;
-        else
-            leaves = 0;
+        if (state.getMaterial().equals(Material.LEAVES)) leaves = 1;
+        else if (state.getBlock() instanceof BlockLog) leaves = 2;
+        else leaves = 0;
         switch (leaves) {
             case 0:
                 break;
@@ -84,10 +81,8 @@ public class TreeChoppa {
     }
 
     private boolean isInRange(BlockPos origin, BlockPos test) {
-        if (Math.abs(origin.getX() - test.getX()) > 13)
-            return false;
-        if (Math.abs(origin.getZ() - test.getZ()) > 13)
-            return false;
+        if (Math.abs(origin.getX() - test.getX()) > 13) return false;
+        if (Math.abs(origin.getZ() - test.getZ()) > 13) return false;
         return true;
     }
 
@@ -140,6 +135,6 @@ public class TreeChoppa {
                 world.spawnEntity(entityIn);
             }
         }
-        SimpleThings.logger.info(String.format("Cutting has taken %s nano seconds", System.nanoTime() - startTime));
+        SimpleThings.INSTANCE.logger.info(String.format("Cutting has taken %s nano seconds", System.nanoTime() - startTime));
     }
 }

@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -18,14 +18,14 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 public class GuiTreeFarm extends GuiContainer {
     ResourceLocation TREE_FARM_GUI = new ResourceLocation(ModInfo.MOD_ID, "textures/gui/treefarm.png");
-    EntityPlayer player;
+    InventoryPlayer playerInventory;
     TileTreeFarm tile;
 
-    public GuiTreeFarm(EntityPlayer player, TileTreeFarm treefarm) {
-        super(new ContainerTreeFarm(player, treefarm));
+    public GuiTreeFarm(InventoryPlayer playerInventory, TileTreeFarm treefarm) {
+        super(new ContainerTreeFarm(playerInventory, treefarm));
         this.xSize = 234;
         this.ySize = 214;
-        this.player = player;
+        this.playerInventory = playerInventory;
         this.tile = treefarm;
     }
 
@@ -34,10 +34,7 @@ public class GuiTreeFarm extends GuiContainer {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         if (isPointInRegion(121, 6, 106, 10, mouseX, mouseY)) {
             IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, null);
-            drawHoveringText(
-                    ImmutableList.of(battery.getEnergyStored() + " / " + battery.getMaxEnergyStored() + " " + "Forge Units"),
-                    0, 0
-            );
+            drawHoveringText(ImmutableList.of(battery.getEnergyStored() + " / " + battery.getMaxEnergyStored() + " " + "RF"), 0, 0);
         }
     }
 

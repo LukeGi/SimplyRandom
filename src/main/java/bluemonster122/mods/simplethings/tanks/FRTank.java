@@ -3,8 +3,8 @@ package bluemonster122.mods.simplethings.tanks;
 import bluemonster122.mods.simplethings.client.renderer.BoxRendererManager;
 import bluemonster122.mods.simplethings.client.renderer.TESRTank;
 import bluemonster122.mods.simplethings.core.FRCore;
-import bluemonster122.mods.simplethings.core.ItemMisc;
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.Names.OreDict;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -26,12 +26,12 @@ public class FRTank implements IFeatureRegistry {
     public static final IFeatureRegistry INSTANCE = new FRTank();
 
     @Override
-    public void registerBlocks() {
+    public void registerBlocks( ) {
         GameRegistry.register(tank);
     }
 
     @Override
-    public void registerItems() {
+    public void registerItems( ) {
         GameRegistry.register(tank.createItemBlock());
         GameRegistry.register(upgrade);
         glass_tank = new ItemStack(tank, 1, 0);
@@ -42,7 +42,7 @@ public class FRTank implements IFeatureRegistry {
     }
 
     @Override
-    public void registerRecipes() {
+    public void registerRecipes( ) {
         RecipeSorter.register("tank_upgrade_recipe", UpgradeRecipe.class, RecipeSorter.Category.SHAPED, "");
         //@formatter:off
 
@@ -51,8 +51,8 @@ public class FRTank implements IFeatureRegistry {
                 "GPG",
                 "P P",
                 "GPG",
-                'G', "blockGlass",
-                'P', "paneGlass"
+                'G', OreDict.GLASS_BLOCK,
+                'P', OreDict.GLASS_PANES
         ));
 
         GameRegistry.addRecipe(new UpgradeRecipe(
@@ -60,8 +60,8 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PTP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "ingotIron",
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.IRON_INGOT,
                 'T', glass_tank
         ));
 
@@ -70,8 +70,8 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PTP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "ingotGold",
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.GOLD_INGOT,
                 'T', iron_tank
         ));
 
@@ -80,8 +80,8 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PTP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "obsidian",
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.OBSIDIAN,
                 'T', gold_tank
         ));
 
@@ -90,8 +90,8 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PTP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "gemDiamond",
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.DIAMOND,
                 'T', obsidian_tank
         ));
 
@@ -100,9 +100,9 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PWP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "ingotIron",
-                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.IRON_INGOT,
+                'W', new ItemStack(FRCore.wrench)
         ));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(
@@ -110,9 +110,9 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PWP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "ingotGold",
-                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.GOLD_INGOT,
+                'W', new ItemStack(FRCore.wrench)
         ));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(
@@ -120,9 +120,9 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PWP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "obsidian",
-                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.OBSIDIAN,
+                'W', new ItemStack(FRCore.wrench)
         ));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(
@@ -130,37 +130,37 @@ public class FRTank implements IFeatureRegistry {
                 "UPU",
                 "PWP",
                 "UPU",
-                'P', "paneGlass",
-                'U', "gemDiamond",
-                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WRENCH.getMeta())
+                'P', OreDict.GLASS_PANES,
+                'U', OreDict.DIAMOND,
+                'W', new ItemStack(FRCore.wrench)
         ));
 
         //@formatter:on
     }
 
     @Override
-    public void registerTileEntities() {
+    public void registerTileEntities( ) {
         GameRegistry.registerTileEntity(TileTank.class, "simplethings:tank");
     }
 
     @Override
     public void loadConfigs(Configuration configuration) {
-
+        /* NO OPERATION */
     }
 
     @Override
-    public void registerEvents() {
-
+    public void registerEvents( ) {
+        /* NO OPERATION */
     }
 
     @Override
-    public void registerOreDict() {
-
+    public void registerOreDict( ) {
+        /* NO OPERATION */
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerRenders() {
+    public void registerRenders( ) {
         registerIEnumMeta(tank, BlockTank.Types.VARIANTS);
         registerIEnumMeta(upgrade, ItemTankUpgrade.Types.VARIANTS);
         ClientRegistry.bindTileEntitySpecialRenderer(TileTank.class, new TESRTank());
@@ -168,7 +168,7 @@ public class FRTank implements IFeatureRegistry {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerClientEvents() {
+    public void registerClientEvents( ) {
         MinecraftForge.EVENT_BUS.register(BoxRendererManager.INSTANCE);
     }
 
@@ -186,13 +186,14 @@ public class FRTank implements IFeatureRegistry {
         }
     }
 
-    private FRTank() {
+    private FRTank( ) {
     }
-    public static BlockST tank = new BlockTank();
-    public static Item upgrade = new ItemTankUpgrade();
-    public static ItemStack glass_tank;
-    public static ItemStack iron_tank;
-    public static ItemStack gold_tank;
-    public static ItemStack obsidian_tank;
-    public static ItemStack diamond_tank;
+
+    public static final BlockST tank = new BlockTank();
+    public static final Item upgrade = new ItemTankUpgrade();
+    private ItemStack glass_tank;
+    private ItemStack iron_tank;
+    private ItemStack gold_tank;
+    private ItemStack obsidian_tank;
+    private ItemStack diamond_tank;
 }

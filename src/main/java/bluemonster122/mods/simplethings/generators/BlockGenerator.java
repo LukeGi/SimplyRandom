@@ -1,9 +1,9 @@
 package bluemonster122.mods.simplethings.generators;
 
-import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.core.block.BlockEnum;
 import bluemonster122.mods.simplethings.core.block.IEnumMeta;
 import bluemonster122.mods.simplethings.core.block.IPickup;
+import bluemonster122.mods.simplethings.reference.Names;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -26,9 +26,8 @@ import javax.annotation.Nullable;
 public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IPickup {
     public static final PropertyEnum<Types> VARIANT = PropertyEnum.create("variant", Types.class);
 
-    public BlockGenerator() {
-        super("generator", Material.IRON, Types.VARIANTS);
-        setCreativeTab(SimpleThings.theTab);
+    public BlockGenerator( ) {
+        super(Names.Blocks.GENERATOR, Material.IRON, Types.VARIANTS);
         setHardness(5000f);
         setResistance(1f);
         setDefaultState(getDefaultState().withProperty(VARIANT, Types.SUGAR));
@@ -77,7 +76,7 @@ public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IP
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState( ) {
         return new BlockStateContainer(this, VARIANT);
     }
 
@@ -95,8 +94,7 @@ public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IP
     }
 
     public enum Types implements IEnumMeta, Comparable<Types> {
-        SUGAR,
-        FIRE;
+        SUGAR, FIRE;
 
         protected static final Types[] VARIANTS = values();
         private int meta;
@@ -106,11 +104,11 @@ public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IP
         }
 
         @Override
-        public int getMeta() {
+        public int getMeta( ) {
             return meta;
         }
 
-        Types() {
+        Types( ) {
             meta = ordinal();
         }
     }

@@ -9,12 +9,13 @@ import static bluemonster122.mods.simplethings.SimpleThings.featureRegistries;
 @SideOnly(Side.CLIENT)
 public class ClientProxy implements IProxy {
     @Override
-    public void preInit() {
+    public void preInit( ) {
         featureRegistries.forEach(IFeatureRegistry::registerClientEvents);
         featureRegistries.forEach(IFeatureRegistry::registerRenders);
     }
 
     @Override
-    public void init() {
+    public void init( ) {
+        /* NO OPERATION */
     }
 }

@@ -20,7 +20,7 @@ public abstract class TileGenerator extends TileST implements IEnergyProviderST 
      * @return The Tile's current battery.
      */
     @Override
-    public BatteryST getBattery() {
+    public BatteryST getBattery( ) {
         return battery;
     }
 
@@ -35,9 +35,7 @@ public abstract class TileGenerator extends TileST implements IEnergyProviderST 
     }
 
     @Override
-    public Map<Capability, Capability> getCaps() {
-        return ImmutableMap.of(
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
-        );
+    public Map<Capability, Capability> getCaps( ) {
+        return ImmutableMap.of(CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery));
     }
 }

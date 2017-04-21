@@ -16,12 +16,12 @@ public class GuiFactory implements IModGuiFactory {
     }
 
     @Override
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
+    public Class<? extends GuiScreen> mainConfigGuiClass( ) {
         return SimpleThingsConfigGui.class;
     }
 
     @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories( ) {
         return null;
     }
 

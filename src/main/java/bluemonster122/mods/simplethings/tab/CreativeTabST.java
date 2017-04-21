@@ -5,12 +5,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
 public class CreativeTabST extends CreativeTabs {
-    public CreativeTabST() {
+    public CreativeTabST( ) {
         super(ModInfo.MOD_ID);
     }
 
     @Override
-    public ItemStack getTabIconItem() {
+    public ItemStack getTabIconItem( ) {
         return ItemStack.EMPTY;
     }
 }

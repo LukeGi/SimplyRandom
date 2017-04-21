@@ -10,7 +10,7 @@ public interface IEnergyProviderST extends IEnergyReceiver, IHaveBattery {
      * @param from
      */
     @Override
-    default boolean canConnectEnergy(EnumFacing from){
+    default boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 
@@ -20,7 +20,7 @@ public interface IEnergyProviderST extends IEnergyReceiver, IHaveBattery {
      * @param from
      */
     @Override
-    default int getEnergyStored(EnumFacing from){
+    default int getEnergyStored(EnumFacing from) {
         return getBattery().getEnergyStored();
     }
 
@@ -30,7 +30,7 @@ public interface IEnergyProviderST extends IEnergyReceiver, IHaveBattery {
      * @param from
      */
     @Override
-    default int getMaxEnergyStored(EnumFacing from){
+    default int getMaxEnergyStored(EnumFacing from) {
         return getBattery().getMaxEnergyStored();
     }
 
@@ -43,7 +43,7 @@ public interface IEnergyProviderST extends IEnergyReceiver, IHaveBattery {
      * @return Amount of energy that was (or would have been, if simulated) received.
      */
     @Override
-    default int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate){
+    default int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         return getBattery().receiveEnergy(maxReceive, simulate);
     }
 }

@@ -9,17 +9,5 @@ tile.simplethings:energy_generator_fire.name=Fire Energy Extractor
 tile.simplethings:energy_generator_sugar.name=Glucose Energy Extractor
 
 
-# Tooltips
-simplethings.tooltip.tile.simplethings:tree_farm=The farm requires each sapling be in a suitable situtaion for growth.<br>Farms a 7x7 area, centered on the farm.<br>Range of this is not expandable.
-simplethings.tooltip.tile.simplethings:tree_farm.extra.noenergy=The people in charge have me this free to use, no energy cost.
-simplethings.tooltip.tile.simplethings:tree_farm.extra.energy=Break Cost = %s <br>Place Cost = %s
-simplethings.tooltip.tile.simplethings:tree_farm.extra.blocks=Blocks the farm can place saplings on are:
-simplethings.tooltip.tile.simplethings:cobblestone_generator=This block has no GUI, simply take things from it with wires or hoppers.
-simplethings.tooltip.tile.simplethings:cobblestone_generator.extra.noenergy=Can provide cobblestone as fast as you can pull it.
-simplethings.tooltip.tile.simplethings:cobblestone_generator.extra.energy=Costs %s FU per Cobblestone
-simplethings.tooltip.tile.simplethings:lightning_rod=
-simplethings.tooltip.tile.simplethings:energy_generator_fire=
-simplethings.tooltip.tile.simplethings:energy_generator_fire.extra=Generates 1 FU/t, when fire is 2 above.
-simplethings.tooltip.tile.simplethings:energy_generator_sugar=
-simplethings.tooltip.holdshift=Hold &aSHIFT&7 to show more information
-simplethings.tooltip.noextrainfo=No Extra Information for this Block
+# Containers
+simplethings:crafting_table=Workstation

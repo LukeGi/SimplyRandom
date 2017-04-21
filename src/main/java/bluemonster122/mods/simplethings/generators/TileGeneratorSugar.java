@@ -17,7 +17,7 @@ public class TileGeneratorSugar extends TileGenerator implements ITickable {
      * @return a new Battery for the Tile.
      */
     @Override
-    public BatteryST createBattery() {
+    public BatteryST createBattery( ) {
         return new BatteryST(1000);
     }
 
@@ -37,7 +37,7 @@ public class TileGeneratorSugar extends TileGenerator implements ITickable {
      * Like the old updateEntity(), except more generic.
      */
     @Override
-    public void update() {
+    public void update( ) {
         if (!getWorld().isRemote) {
             if (burntime > 0) {
                 if (battery.receiveEnergy(FRGenerators.Sugar_RF, true) == FRGenerators.Sugar_RF) {

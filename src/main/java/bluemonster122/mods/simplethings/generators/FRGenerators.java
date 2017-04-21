@@ -13,22 +13,22 @@ public class FRGenerators implements IFeatureRegistry {
     public static final FRGenerators INSTANCE = new FRGenerators();
 
     @Override
-    public void registerBlocks() {
+    public void registerBlocks( ) {
         GameRegistry.register(generators);
     }
 
     @Override
-    public void registerItems() {
+    public void registerItems( ) {
         GameRegistry.register(generators.createItemBlock());
     }
 
     @Override
-    public void registerRecipes() {
+    public void registerRecipes( ) {
 
     }
 
     @Override
-    public void registerTileEntities() {
+    public void registerTileEntities( ) {
         GameRegistry.registerTileEntity(TileGeneratorSugar.class, "simplethings:sugar_generator");
         GameRegistry.registerTileEntity(TileGeneratorFire.class, "simplethings:fire_generator");
     }
@@ -41,29 +41,30 @@ public class FRGenerators implements IFeatureRegistry {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerEvents( ) {
 
     }
 
     @Override
-    public void registerOreDict() {
+    public void registerOreDict( ) {
 
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerRenders() {
+    public void registerRenders( ) {
         registerIEnumMeta(generators, BlockGenerator.Types.VARIANTS);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerClientEvents() {
+    public void registerClientEvents( ) {
 
     }
 
-    private FRGenerators() {
+    private FRGenerators( ) {
     }
+
     public static int Fire_RF = 1;
     public static int Sugar_Burntime = 10;
     public static int Sugar_RF = 10;

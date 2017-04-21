@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 /**
- * This is the instance class for BoxRenders. It is a Factory class with a .create method.
+ * This is the INSTANCE class for BoxRenders. It is a Factory class with a .create method.
  * You MUST remember to .show() a box after creation.
  */
 @SideOnly(Side.CLIENT)
@@ -24,15 +24,6 @@ public class BoxRender {
     private BoxMode mode;
     private int renderList;
     private double[] position;
-
-    private BoxRender(Color color) {
-        this.r = color.getRed() / 255f;
-        this.g = color.getGreen() / 255f;
-        this.b = color.getBlue() / 255f;
-        this.a = color.getAlpha() / 255f;
-        position = new double[6];
-        BoxRendererManager.INSTANCE.addBox(this);
-    }
 
     /**
      * This is a factory method that will create a box with the <code>BoxMode#NORMAL</code> mode.
@@ -70,15 +61,14 @@ public class BoxRender {
     /**
      * Method used by the <code>BoxRendererManager.class</code> to render each box.
      */
-    public void render() {
-        if (GL11.glIsList(renderList))
-            GL11.glCallList(renderList);
+    public void render( ) {
+        if (GL11.glIsList(renderList)) GL11.glCallList(renderList);
     }
 
     /**
      * This method will generate the box in OpenGL memory, leading to it being rendered.
      */
-    public void show() {
+    public void show( ) {
         double xmin = position[0];
         double ymin = position[1];
         double zmin = position[2];
@@ -119,7 +109,7 @@ public class BoxRender {
     /**
      * This method will remove the box from the <code>BoxRendererManager.class</code>
      */
-    public void cleanUp() {
+    public void cleanUp( ) {
         BoxRendererManager.INSTANCE.removeBox(this);
     }
 
@@ -128,5 +118,14 @@ public class BoxRender {
      */
     public enum BoxMode {
         NORMAL, ENDLESS, NORMAL_NO_LINES, ENDLESS_NO_LINES;
+    }
+
+    private BoxRender(Color color) {
+        this.r = color.getRed() / 255f;
+        this.g = color.getGreen() / 255f;
+        this.b = color.getBlue() / 255f;
+        this.a = color.getAlpha() / 255f;
+        position = new double[6];
+        BoxRendererManager.INSTANCE.addBox(this);
     }
 }

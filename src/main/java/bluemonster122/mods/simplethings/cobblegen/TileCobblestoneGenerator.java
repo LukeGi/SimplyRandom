@@ -30,11 +30,8 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     private BatteryST battery = createBattery();
 
     @Override
-    public Map<Capability, Capability> getCaps() {
-        return ImmutableMap.of(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory),
-                CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery)
-        );
+    public Map<Capability, Capability> getCaps( ) {
+        return ImmutableMap.of(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory), CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery));
     }
 
     @Override
@@ -51,15 +48,14 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
      * Like the old updateEntity(), except more generic.
      */
     @Override
-    public void update() {
+    public void update( ) {
         ItemStack stackInSlot = inventory.getStackInSlot(0);
         int stackSize = stackInSlot.getCount();
         if (stackSize < 64) {
             int spaceLeft;
             if (FRCobbleGen.Cobble_RF > 0)
                 spaceLeft = Math.min(64 - stackSize, battery.getEnergyStored() / FRCobbleGen.Cobble_RF);
-            else
-                spaceLeft = 64 - stackSize;
+            else spaceLeft = 64 - stackSize;
             ItemHandlerHelper.insertItem(inventory, new ItemStack(Blocks.COBBLESTONE, spaceLeft), false);
             battery.extractEnergy(spaceLeft * FRCobbleGen.Cobble_RF, false);
         }
@@ -71,7 +67,7 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
      * @return The Tile's current battery.
      */
     @Override
-    public BatteryST getBattery() {
+    public BatteryST getBattery( ) {
         return battery;
     }
 
@@ -91,7 +87,7 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
      * @return a new Battery for the Tile.
      */
     @Override
-    public BatteryST createBattery() {
+    public BatteryST createBattery( ) {
         return new BatteryST(1000);
     }
 
@@ -101,7 +97,7 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
      * @return The Tile's current Inventory.
      */
     @Override
-    public ItemStackHandler getInventory() {
+    public ItemStackHandler getInventory( ) {
         return inventory;
     }
 
@@ -111,7 +107,7 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
      * @return a new Inventory for the Tile.
      */
     @Override
-    public ItemStackHandler createInventory() {
+    public ItemStackHandler createInventory( ) {
         return new ItemStackHandler(1);
     }
 
@@ -123,5 +119,10 @@ public class TileCobblestoneGenerator extends TileST implements ITickable, IEner
     @Override
     public void setInventory(ItemStackHandler inventory) {
         this.inventory = inventory;
+    }
+
+    @Override
+    public String getName( ) {
+        return "simplethings:cobble_gen";
     }
 }

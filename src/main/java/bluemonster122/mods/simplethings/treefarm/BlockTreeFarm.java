@@ -23,23 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
-    public BlockTreeFarm() {
-        super(Names.TREE_FARM, Material.IRON);
-        setCreativeTab(SimpleThings.theTab);
+    public BlockTreeFarm( ) {
+        super(Names.Blocks.TREE_FARM, Material.IRON);
         setLightOpacity(0);
         setHarvestLevel("pickaxe", 3);
         setHardness(7);
         setResistance(500);
-    }
-
-    @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileTank ){
-            FluidStack stack = ((TileTank)tile).tank.getFluid();
-            return stack == null || stack.amount <= 0 ? 0 : stack.getFluid().getLuminosity(stack);
-        }
-        return super.getLightValue(state, world, pos);
     }
 
     @SuppressWarnings("deprecation")
@@ -54,28 +43,27 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
         return false;
     }
 
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof TileTreeFarm) {
-            TileTreeFarm farmTile = (TileTreeFarm) tileEntity;
-            farmTile.dropInventory();
-        }
-        super.breakBlock(worldIn, pos, state);
-    }
-
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getBlockLayer( ) {
         return BlockRenderLayer.CUTOUT;
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
-        playerIn.openGui(
-                SimpleThings.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        playerIn.openGui(SimpleThings.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileTank) {
+            FluidStack stack = ((TileTank) tile).tank.getFluid();
+            return stack == null || stack.amount <= 0 ? 0 : stack.getFluid().getLuminosity(stack);
+        }
+        return super.getLightValue(state, world, pos);
     }
 
     @Override

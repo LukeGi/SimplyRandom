@@ -1,6 +1,5 @@
 package bluemonster122.mods.simplethings.tanks;
 
-import bluemonster122.mods.simplethings.SimpleThings;
 import bluemonster122.mods.simplethings.core.block.BlockEnum;
 import bluemonster122.mods.simplethings.core.block.IEnumMeta;
 import bluemonster122.mods.simplethings.core.block.IPickup;
@@ -42,9 +41,8 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
     public static final PropertyEnum<Types> VARIANT = PropertyEnum.create("variant", Types.class);
     private static final AxisAlignedBB AABB = new AxisAlignedBB(1 / 16F, 0, 1 / 16F, 15 / 16f, 1, 15 / 16f);
 
-    public BlockTank() {
+    public BlockTank( ) {
         super("tank", Material.GLASS, Types.VARIANTS);
-        setCreativeTab(SimpleThings.theTab);
         setHardness(5000f);
         setResistance(1f);
         setDefaultState(getDefaultState().withProperty(VARIANT, Types.GLASS));
@@ -100,7 +98,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getBlockLayer( ) {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -115,8 +113,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
         }
         IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
         FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
-        if (result.isSuccess())
-            playerIn.setHeldItem(hand, result.getResult());
+        if (result.isSuccess()) playerIn.setHeldItem(hand, result.getResult());
         // prevent interaction so stuff like buckets and other things don't place the liquid block
         te.markDirty();
         IBlockState blockState = worldIn.getBlockState(pos);
@@ -141,7 +138,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState( ) {
         return new BlockStateContainer(this, VARIANT);
     }
 
@@ -151,19 +148,21 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
         List<ItemStack> ret = Lists.newArrayList();
         Random rand = world instanceof World ? ((World) world).rand : RANDOM;
         Item item = this.getItemDropped(state, rand, fortune);
-        NBTTagCompound tag = null;
+        ItemStack stack;
+        stack = new ItemStack(item, 1, this.damageDropped(state));
         TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileTank) {
-            if (((TileTank) te).tank.getFluid() != null) {
-                tag = ((TileTank) te).writeTank(new NBTTagCompound());
-            }
+        if (te instanceof TileTank && stack != ItemStack.EMPTY && ((TileTank) te).tank.getFluid() != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            ((TileTank) te).writeTank(tag);
+            stack.setTagCompound(tag);
         }
-        ret.add(new ItemStack(item, 1, this.damageDropped(state), tag));
+        ret.add(stack);
+
         return ret;
     }
 
     @Override
-    public ItemBlock createItemBlock() {
+    public ItemBlock createItemBlock( ) {
         return new ItemBlockTank(this);
     }
 
@@ -174,11 +173,7 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
     }
 
     public enum Types implements IEnumMeta, Comparable<Types> {
-        GLASS,
-        IRON,
-        GOLD,
-        OBSIDIAN,
-        DIAMOND;
+        GLASS, IRON, GOLD, OBSIDIAN, DIAMOND;
 
         protected static final Types[] VARIANTS = values();
         private int meta;
@@ -188,11 +183,11 @@ public class BlockTank extends BlockEnum implements ITileEntityProvider, IPickup
         }
 
         @Override
-        public int getMeta() {
+        public int getMeta( ) {
             return meta;
         }
 
-        Types() {
+        Types( ) {
             meta = ordinal();
         }
     }

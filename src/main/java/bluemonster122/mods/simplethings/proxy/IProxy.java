@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplethings.proxy;
 
 public interface IProxy {
-    void preInit();
+    void preInit( );
 
-    void init();
+    void init( );
 }

@@ -13,7 +13,7 @@ public class TileGeneratorFire extends TileGenerator implements ITickable {
      * @return a new Battery for the Tile.
      */
     @Override
-    public BatteryST createBattery() {
+    public BatteryST createBattery( ) {
         return new BatteryST(1000);
     }
 
@@ -31,7 +31,7 @@ public class TileGeneratorFire extends TileGenerator implements ITickable {
      * Like the old updateEntity(), except more generic.
      */
     @Override
-    public void update() {
+    public void update( ) {
         if (!getWorld().isRemote) {
             if (getWorld().getBlockState(getPos().up(2)).getBlock().equals(Blocks.FIRE)) {
                 if (battery.receiveEnergy(FRGenerators.Fire_RF, true) > 0) {

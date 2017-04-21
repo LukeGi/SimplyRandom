@@ -2,9 +2,11 @@
   "forge_marker": 1,
   "defaults": {
     "transform": "forge:default-block",
-    "model": "cube_all",
+    "model": "cube_bottom_top",
     "textures": {
-      "all": "simplethings:block/machine_base"
+      "top": "simplethings:block/pump/pump_top",
+      "bottom": "simplethings:block/pump/pump_bottom",
+      "side": "simplethings:block/pump/pump"
     }
   },
   "variants": {

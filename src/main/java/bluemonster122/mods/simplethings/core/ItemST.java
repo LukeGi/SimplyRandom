@@ -1,4 +1,4 @@
-package bluemonster122.mods.simplethings.item;
+package bluemonster122.mods.simplethings.core;
 
 import bluemonster122.mods.simplethings.SimpleThings;
 import net.minecraft.item.Item;

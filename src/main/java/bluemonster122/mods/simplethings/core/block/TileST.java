@@ -4,8 +4,6 @@ import bluemonster122.mods.simplethings.core.energy.BatteryST;
 import bluemonster122.mods.simplethings.core.energy.IHaveBattery;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -15,8 +13,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -47,7 +43,7 @@ public abstract class TileST extends TileEntity {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
+    public SPacketUpdateTileEntity getUpdatePacket( ) {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
     }
 
@@ -55,7 +51,7 @@ public abstract class TileST extends TileEntity {
 
     @Override
     @Nonnull
-    public NBTTagCompound getUpdateTag() {
+    public NBTTagCompound getUpdateTag( ) {
         NBTTagCompound tag = new NBTTagCompound();
         writeGeneral(tag);
         return tag;
@@ -93,7 +89,7 @@ public abstract class TileST extends TileEntity {
         return super.getCapability(capability, facing);
     }
 
-    public abstract Map<Capability, Capability> getCaps();
+    public abstract Map<Capability, Capability> getCaps( );
 
     public NBTTagCompound writeInventory(NBTTagCompound tag) {
         if (this instanceof IHaveInventory) {
@@ -109,7 +105,7 @@ public abstract class TileST extends TileEntity {
             ItemStackHandler inventory = ((IHaveInventory) this).createInventory();
             NBTTagCompound nbtTagCompound = tag.getCompoundTag("inventory");
             inventory.deserializeNBT(nbtTagCompound);
-            ((IHaveInventory)this).setInventory(inventory);
+            ((IHaveInventory) this).setInventory(inventory);
         }
         return tag;
     }
@@ -126,7 +122,7 @@ public abstract class TileST extends TileEntity {
         if (this instanceof IHaveBattery) {
             BatteryST battery = ((IHaveBattery) this).createBattery();
             battery.receiveEnergy(tag.getInteger("storedEnergy"), false);
-            ((IHaveBattery)this).setBattery(battery);
+            ((IHaveBattery) this).setBattery(battery);
         }
         return tag;
     }
@@ -143,7 +139,7 @@ public abstract class TileST extends TileEntity {
         if (this instanceof IHaveTank) {
             FluidTank tank = ((IHaveTank) this).createTank();
             tank.readFromNBT(tag);
-            ((IHaveTank)this).setTank(tank);
+            ((IHaveTank) this).setTank(tank);
         }
         return tag;
     }
@@ -171,28 +167,8 @@ public abstract class TileST extends TileEntity {
 
     public abstract NBTTagCompound readChild(NBTTagCompound tag);
 
-    protected void sendUpdate() {
+    protected void sendUpdate( ) {
         IBlockState state = getWorld().getBlockState(getPos());
         getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-    }
-
-    public void dropInventory() {
-        if (getWorld().isRemote) {
-            return;
-        }
-        if (hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            IItemHandler itemHandler = getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            if (itemHandler != null && itemHandler.getSlots() > 0) {
-                double x = getPos().getX() + .5;
-                double y = getPos().getY() + .5;
-                double z = getPos().getZ() + .5;
-                for (int i = 0; i < itemHandler.getSlots(); i++) {
-                    ItemStack stack = itemHandler.getStackInSlot(i);
-                    if (stack != ItemStack.EMPTY) {
-                        getWorld().spawnEntity(new EntityItem(world, x, y, z, stack));
-                    }
-                }
-            }
-        }
     }
 }

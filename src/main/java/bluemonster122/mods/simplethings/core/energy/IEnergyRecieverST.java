@@ -3,15 +3,14 @@ package bluemonster122.mods.simplethings.core.energy;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 
-public interface IEnergyRecieverST extends IEnergyReceiver, IHaveBattery{
+public interface IEnergyRecieverST extends IEnergyReceiver, IHaveBattery {
     /**
      * Returns TRUE if the TileEntity can connect on a given side.
      *
      * @param from
      */
     @Override
-    default boolean canConnectEnergy(EnumFacing from)
-    {
+    default boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 

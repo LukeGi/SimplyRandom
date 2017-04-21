@@ -12,12 +12,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelHelpers {
+    private static final String inventory = "inventory";
+
     public static void registerBlockModelAsItem(final Block block) {
         registerBlockModelAsItem(block, 0);
     }
+    ;
 
     public static void registerBlockModelAsItem(final Block block, int meta) {
-        registerBlockModelAsItem(block, meta, "inventory");
+        registerBlockModelAsItem(block, meta, inventory);
     }
 
     public static void registerBlockModelAsItem(final Block block, int meta, final String variantName) {
@@ -35,11 +38,11 @@ public class ModelHelpers {
     }
 
     public static void registerItemModel(final Item item) {
-        registerItemModel(item, 0, "inventory");
+        registerItemModel(item, 0, inventory);
     }
 
     public static void registerItemModel(final ItemStack stack) {
-        registerItemModel(stack.getItem(), stack.getMetadata(), "inventory");
+        registerItemModel(stack.getItem(), stack.getMetadata(), inventory);
     }
 
     public static void registerItemModel(final ItemStack stack, final String variantName) {
@@ -54,5 +57,8 @@ public class ModelHelpers {
     public static void registerIEnumMeta(Block block, IEnumMeta[] variants) {
         for (IEnumMeta variant : variants)
             registerBlockModelAsItem(block, variant.getMeta(), String.format("variant=%s", variant.getName()));
+    }
+
+    private ModelHelpers( ) {
     }
 }

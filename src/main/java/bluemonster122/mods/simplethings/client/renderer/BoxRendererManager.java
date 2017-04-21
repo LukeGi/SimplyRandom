@@ -23,9 +23,6 @@ public class BoxRendererManager {
     public static final BoxRendererManager INSTANCE = new BoxRendererManager();
     private static List<BoxRender> renders = new ArrayList<>();
 
-    private BoxRendererManager() {
-    }
-
     public void addBox(BoxRender r) {
         renders.add(r);
     }
@@ -63,5 +60,8 @@ public class BoxRendererManager {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
+    }
+
+    private BoxRendererManager( ) {
     }
 }
