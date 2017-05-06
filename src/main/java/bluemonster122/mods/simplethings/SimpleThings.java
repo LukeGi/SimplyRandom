@@ -6,6 +6,7 @@ import bluemonster122.mods.simplethings.core.network.MessageCraftingSync;
 import bluemonster122.mods.simplethings.generators.FRGenerators;
 import bluemonster122.mods.simplethings.handler.ConfigurationHandler;
 import bluemonster122.mods.simplethings.handler.GuiHandler;
+import bluemonster122.mods.simplethings.overlayoverhaul.FROverlays;
 import bluemonster122.mods.simplethings.proxy.IProxy;
 import bluemonster122.mods.simplethings.pump.FRPump;
 import bluemonster122.mods.simplethings.reference.ModInfo;
@@ -42,6 +43,7 @@ public class SimpleThings {
         featureRegistries.add(FRCobbleGen.INSTANCE);
         featureRegistries.add(FRGenerators.INSTANCE);
         featureRegistries.add(FRCrafters.INSTANCE);
+        featureRegistries.add(FROverlays.INSTANCE);
     }
 
     public Logger logger;

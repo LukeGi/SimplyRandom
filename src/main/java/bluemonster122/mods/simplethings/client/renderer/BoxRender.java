@@ -117,7 +117,7 @@ public class BoxRender {
      * Property enum used to store the mode of the box
      */
     public enum BoxMode {
-        NORMAL, ENDLESS, NORMAL_NO_LINES, ENDLESS_NO_LINES;
+        NORMAL, ENDLESS, NORMAL_NO_LINES, ENDLESS_NO_LINES
     }
 
     private BoxRender(Color color) {

@@ -17,7 +17,6 @@ public class ModelHelpers {
     public static void registerBlockModelAsItem(final Block block) {
         registerBlockModelAsItem(block, 0);
     }
-    ;
 
     public static void registerBlockModelAsItem(final Block block, int meta) {
         registerBlockModelAsItem(block, meta, inventory);
