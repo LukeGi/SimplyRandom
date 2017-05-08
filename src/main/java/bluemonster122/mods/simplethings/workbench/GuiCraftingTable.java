@@ -23,8 +23,8 @@ public class GuiCraftingTable extends GuiContainer {
 
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String string = tile.getName();
-        this.fontRendererObj.drawString(I18n.format(string, new Object[0]), 28, 6, 4210752);
-        this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRendererObj.drawString(I18n.format(string), 28, 6, 4210752);
+        this.fontRendererObj.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {

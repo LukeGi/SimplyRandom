@@ -82,8 +82,7 @@ public class TreeChoppa {
 
     private boolean isInRange(BlockPos origin, BlockPos test) {
         if (Math.abs(origin.getX() - test.getX()) > 13) return false;
-        if (Math.abs(origin.getZ() - test.getZ()) > 13) return false;
-        return true;
+        return Math.abs(origin.getZ() - test.getZ()) <= 13;
     }
 
     private void cutTree(Set<BlockPos> tree) {
