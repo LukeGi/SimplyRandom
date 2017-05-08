@@ -5,7 +5,6 @@ import bluemonster122.mods.simplethings.core.block.TileST;
 import com.google.common.collect.ImmutableMap;
 import com.sun.istack.internal.NotNull;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,9 +15,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.wrappers.BlockLiquidWrapper;
-import net.minecraftforge.fluids.capability.wrappers.BlockWrapper;
-import net.minecraftforge.fluids.capability.wrappers.FluidBlockWrapper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -32,7 +28,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
     private int ticks = 0;
 
     @Override
-    public Map<Capability, Capability> getCaps() {
+    public Map<Capability, Capability> getCaps( ) {
         return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast((IFluidHandler) tank));
     }
 
@@ -49,7 +45,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
     }
 
     @Override
-    public FluidTank getTank() {
+    public FluidTank getTank( ) {
         return tank;
     }
 
@@ -59,12 +55,12 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
     }
 
     @Override
-    public FluidTank createTank() {
+    public FluidTank createTank( ) {
         return new FluidTank(Fluid.BUCKET_VOLUME);
     }
 
     @Override
-    public void update() {
+    public void update( ) {
         if (getWorld().isRemote) {
             updateClient();
         } else {
@@ -73,7 +69,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         }
     }
 
-    private void updateServer() {
+    private void updateServer( ) {
         if (blockedFaces == null) {
             blockedFaces = EnumSet.noneOf(EnumFacing.class);
             for (EnumFacing value : EnumFacing.VALUES) {
@@ -90,8 +86,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             }
             if (ticks == 0) {
                 ticks = 1200;
-                if (layersToFill.isEmpty())
-                    refreshQueues();
+                if (layersToFill.isEmpty()) refreshQueues();
             }
             BlockPos posToFill = getNextSpot(true);
             if (posToFill != null && !placeFluidAt(posToFill)) {
@@ -148,7 +143,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         return remove_value ? bottom_layer.pollFirst() : bottom_layer.peekFirst();
     }
 
-    private void refreshQueues() {
+    private void refreshQueues( ) {
         visited.clear();
         layersToFill.clear();
         fluidBlocks.clear();
@@ -158,7 +153,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         populateQueues();
     }
 
-    private void populateQueues() {
+    private void populateQueues( ) {
         if (tank.getFluid() == null) {
             return;
         }
@@ -177,14 +172,12 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             return;
         }
         for (EnumFacing face : EnumFacing.VALUES) {
-            if (face != EnumFacing.UP) {
-                queueForFilling(pos.offset(face));
-            }
+            queueForFilling(pos.offset(face));
         }
     }
 
     private void queueForFilling(BlockPos pos) {
-        if (pos.getY() < 0 || pos.getY() > 255) {
+        if (pos.getY() < 0 || pos.getY() > 255 || pos.getY() > getPos().getY()) {
             return;
         }
         if (visited.add(pos)) {
@@ -195,8 +188,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             if (handler != null) {
                 FluidStack stack = handler.drain(Fluid.BUCKET_VOLUME, false);
                 if (stack != null) {
-                    if (stack.getFluid().equals(tank.getFluid().getFluid()))
-                        fluidBlocks.add(pos);
+                    if (stack.getFluid().equals(tank.getFluid().getFluid())) fluidBlocks.add(pos);
                     if (stack.amount < Fluid.BUCKET_VOLUME) {
                         addToFill(pos);
                     }
@@ -217,12 +209,12 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         return (state.getMaterial().isReplaceable() && FluidUtil.getFluidHandler(getWorld(), pos, null) == null) || state.getMaterial() == Material.AIR;
     }
 
-    private void updateClient() {
+    private void updateClient( ) {
         /* NO OPERATION */
     }
 
     @Override
-    public void invalidate() {
+    public void invalidate( ) {
         super.invalidate();
         layersToFill.clear();
         fluidBlocks.clear();

@@ -2,6 +2,7 @@ package bluemonster122.mods.simplethings.pump;
 
 import bluemonster122.mods.simplethings.core.FRCore;
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names.OreDict;
 import bluemonster122.mods.simplethings.tanks.BlockTank;
 import bluemonster122.mods.simplethings.tanks.FRTank;
@@ -21,6 +22,7 @@ public class FRPump implements IFeatureRegistry {
     public static final FRPump INSTANCE = new FRPump();
     private final BlockST pump = new BlockPump();
     private final BlockST floodgate = new BlockFloodGate();
+    private static boolean shouldLoad = false;
 
     @Override
 
@@ -52,6 +54,11 @@ public class FRPump implements IFeatureRegistry {
                 'B', new ItemStack(Items.BUCKET)
         ));
 
+//        GameRegistry.addRecipe(new ShapedOreRecipe(
+//                new ItemStack(floodgate, 1),
+//                "","",""
+//        ));
+
         //@formatter:on
     }
 
@@ -63,6 +70,7 @@ public class FRPump implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
+        shouldLoad = configuration.getBoolean("Pump", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the pump and floodgate");
         setPumpEnergy(configuration.getInt("RF use per pump-ed block", "Pump", 2, 0, 100, "Set this to 0 for free pump."));
     }
 
@@ -87,6 +95,11 @@ public class FRPump implements IFeatureRegistry {
     @Override
     public void registerClientEvents( ) {
         /* NO OPERATION */
+    }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return shouldLoad;
     }
 
     public int getPumpEnergy( ) {

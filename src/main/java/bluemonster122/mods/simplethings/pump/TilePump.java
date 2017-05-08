@@ -10,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -37,7 +36,8 @@ import java.util.function.Predicate;
 import static bluemonster122.mods.simplethings.pump.FRPump.INSTANCE;
 
 public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, ITickable {
-    private static final Predicate<IBlockState> isValid = state -> state.getBlock() instanceof IFluidBlock || state.getBlock() instanceof BlockLiquid || state.equals(Blocks.AIR.getDefaultState());
+    private static final Predicate<IBlockState> isFluid = state -> state.getBlock() instanceof IFluidBlock || state.getBlock() instanceof BlockLiquid;
+    private static final Predicate<IBlockState> isValid = state -> isFluid.or(s -> s.getMaterial().equals(Material.AIR)).test(state);
     public FluidTank tank = createTank();
     public BatteryST battery = createBattery();
     Deque<BlockPos> fluids = new ArrayDeque<>();
@@ -133,19 +133,23 @@ public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, IT
             //noinspection MethodCallSideOnly
             updateClient();
         } else {
-            if (getWorld().getTotalWorldTime() % (hitFluid ? 10 : 100) == 0) updateServer();
+            if (getWorld().getTotalWorldTime() % (hitFluid && canWork ? 10 : 100) == 0) updateServer();
             sendUpdate();
         }
     }
 
     private void updateServer( ) {
-        battery.receiveEnergy(1, false);
+        battery.receiveEnergy(10, false);
         canWork = battery.getEnergyStored() >= INSTANCE.getPumpEnergy();
         if (!canWork) return;
 
         if (tank.getFluid() != null) {
             attemptPushFluid();
         } else {
+            if (probe == 0) {
+                probe++;
+                return;
+            }
             BlockPos down = getPos().down(probe);
             IBlockState state = getWorld().getBlockState(down);
             Block block = state.getBlock();
@@ -158,8 +162,8 @@ public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, IT
             } else if (block instanceof BlockLiquid) {
                 hitFluid = true;
                 if (state.getMaterial().equals(Material.WATER) && hasInfinate(down)) {
-                        fluids.add(down);
-                        return;
+                    fluids.add(down);
+                    return;
                 }
                 scanForBlock(down);
             } else {
@@ -230,18 +234,22 @@ public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, IT
 
     @SideOnly(Side.CLIENT)
     private void updateClient( ) {
-        if (pipe != null) pipe.cleanUp();
-        if (!canWork) {
-            if (pipe != null || probe == -1) return;
-            createPipe();
+        if (probe == -1) {
+            if (pipe != null) pipe.cleanUp();
+            return;
         } else {
-            if (!hitFluid) createPipe();
+            if (pipe != null) pipe.cleanUp();
+            if (canWork && hitFluid) {
+                createPipe(getPos().getY() - probe + 14/16f);
+            } else {
+                createPipe(getPos().getY() - probe + 30/16f - ((1 / 100f) * (getWorld().getTotalWorldTime() % 100)));
+            }
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private void createPipe( ) {
-        pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35, getPos().getY() + 0.01, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65, getPos().getY() - probe + .5 - ((1 / 100f) * (getWorld().getTotalWorldTime() % 100)), getPos().getZ() + 0.65), BoxRender.BoxMode.ENDLESS);
+    private void createPipe(double y) {
+        pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35, getPos().getY() + 0.01, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65, y, getPos().getZ() + 0.65), BoxRender.BoxMode.ENDLESS);
         pipe.show();
     }
 

@@ -9,4 +9,5 @@ public class ModInfo {
     public static final String GUI_FACTORY_CLASS = MOD_DIR + "client.GuiFactory";
     public static final String UPDATE_JSON = "https://github.com/bluemonster122/SimpleThings/blob/master/update.json";
     public static final String CHANNEL = "simplethings";
+    public static final String CONFIG_FEATURES = "_____FEATURES_____";
 }

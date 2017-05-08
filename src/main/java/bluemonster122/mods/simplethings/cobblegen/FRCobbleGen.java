@@ -1,6 +1,7 @@
 package bluemonster122.mods.simplethings.cobblegen;
 
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,8 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockMo
 
 public class FRCobbleGen implements IFeatureRegistry {
     public static final FRCobbleGen INSTANCE = new FRCobbleGen();
+
+    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -50,6 +53,7 @@ public class FRCobbleGen implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
+        shouldLoad = configuration.getBoolean("Cobblestone Generator", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the Cobblestone Generator");
         Cobble_RF = configuration.getInt("RF Cost Per Cobble", "cobble_gen", 0, 0, 1000, "If set to 0, the cobblestone is free.");
     }
 
@@ -73,6 +77,11 @@ public class FRCobbleGen implements IFeatureRegistry {
     @Override
     public void registerClientEvents( ) {
 
+    }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return shouldLoad;
     }
 
     private FRCobbleGen( ) {

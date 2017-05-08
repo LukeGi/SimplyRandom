@@ -36,6 +36,7 @@ public class SimpleThings {
     public static final List<IFeatureRegistry> featureRegistries = new ArrayList<>();
 
     static {
+        theTab = new CreativeTabST();
         featureRegistries.add(FRCore.INSTANCE);
         featureRegistries.add(FRTank.INSTANCE);
         featureRegistries.add(FRPump.INSTANCE);
@@ -54,7 +55,7 @@ public class SimpleThings {
         logger = event.getModLog();
         ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
         for (IFeatureRegistry registry : featureRegistries) {
-            registry.registerBlocks();
+            if (registry.shouldLoad()) registry.registerBlocks();
             registry.registerItems();
             registry.registerEvents();
             registry.registerOreDict();
@@ -82,9 +83,10 @@ public class SimpleThings {
     public void postInit(FMLPostInitializationEvent event) {
         featureRegistries.forEach(IFeatureRegistry::registerRecipes);
     }
-    public static CreativeTabs theTab = new CreativeTabST();
+
+    public static CreativeTabs theTab;
     @Instance(value = ModInfo.MOD_ID)
-    public static SimpleThings INSTANCE = new SimpleThings();
+    public static SimpleThings INSTANCE;
     @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 }

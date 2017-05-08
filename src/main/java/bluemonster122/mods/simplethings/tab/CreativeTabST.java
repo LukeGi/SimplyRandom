@@ -1,5 +1,6 @@
 package bluemonster122.mods.simplethings.tab;
 
+import bluemonster122.mods.simplethings.core.FRCore;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,6 @@ public class CreativeTabST extends CreativeTabs {
 
     @Override
     public ItemStack getTabIconItem( ) {
-        return ItemStack.EMPTY;
+        return new ItemStack(FRCore.wrench);
     }
 }

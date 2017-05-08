@@ -170,5 +170,6 @@ public abstract class TileST extends TileEntity {
     protected void sendUpdate( ) {
         IBlockState state = getWorld().getBlockState(getPos());
         getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+        markDirty();
     }
 }

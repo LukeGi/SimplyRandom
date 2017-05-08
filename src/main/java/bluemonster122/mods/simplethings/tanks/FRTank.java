@@ -4,6 +4,7 @@ import bluemonster122.mods.simplethings.client.renderer.BoxRendererManager;
 import bluemonster122.mods.simplethings.client.renderer.TESRTank;
 import bluemonster122.mods.simplethings.core.FRCore;
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names.OreDict;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraft.inventory.InventoryCrafting;
@@ -24,6 +25,8 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerIEnumMe
 
 public class FRTank implements IFeatureRegistry {
     public static final IFeatureRegistry INSTANCE = new FRTank();
+
+    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -145,7 +148,7 @@ public class FRTank implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        /* NO OPERATION */
+        shouldLoad = configuration.getBoolean("Tanks", ModInfo.CONFIG_FEATURES, true, "Set to false to disable all the tanks");
     }
 
     @Override
@@ -170,6 +173,11 @@ public class FRTank implements IFeatureRegistry {
     @Override
     public void registerClientEvents( ) {
         MinecraftForge.EVENT_BUS.register(BoxRendererManager.INSTANCE);
+    }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return shouldLoad;
     }
 
     private class UpgradeRecipe extends ShapedOreRecipe {

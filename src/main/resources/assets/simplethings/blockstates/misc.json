@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "builtin/generated",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "variant": {
+      "iron_rod": {
+        "textures": {
+          "layer0": "simplethings:item/misc/iron_rod"
+        }
+      },
+      "wooden_gear": {
+        "textures": {
+          "layer0": "simplethings:item/misc/wooden_gear"
+        }
+      },
+      "stone_gear": {
+        "textures": {
+          "layer0": "simplethings:item/misc/stone_gear"
+        }
+      }
+    }
+  }
+}

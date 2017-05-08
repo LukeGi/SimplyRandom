@@ -1,6 +1,7 @@
 package bluemonster122.mods.simplethings.treefarm;
 
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraft.block.BlockPlanks;
@@ -18,6 +19,7 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockMo
 
 public class FRTreeFarm implements IFeatureRegistry {
     public static final FRTreeFarm INSTANCE = new FRTreeFarm();
+    public static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -54,6 +56,7 @@ public class FRTreeFarm implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
+        shouldLoad = configuration.getBoolean("Tree Farm", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the tree farm");
         setBreakEnergy(configuration.getInt("Energy Consumed On Block Break", "tree_farm", 50, 0, 1000, "Set to 0 to make the farm cost no power."));
     }
 
@@ -81,6 +84,11 @@ public class FRTreeFarm implements IFeatureRegistry {
     @Override
     public void registerClientEvents( ) {
         /* NO OPERATION */
+    }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return shouldLoad;
     }
 
     public int getBreakEnergy( ) {

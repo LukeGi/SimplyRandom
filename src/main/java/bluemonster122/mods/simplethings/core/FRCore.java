@@ -108,6 +108,12 @@ public class FRCore implements IFeatureRegistry {
     public void registerClientEvents( ) {
         /* NO OPERATION */
     }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return true;
+    }
+
     private FRCore( ) {
     }
 }

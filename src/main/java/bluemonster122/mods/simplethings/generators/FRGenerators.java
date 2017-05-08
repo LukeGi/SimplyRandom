@@ -1,6 +1,7 @@
 package bluemonster122.mods.simplethings.generators;
 
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -11,6 +12,7 @@ import static bluemonster122.mods.simplethings.util.ModelHelpers.registerIEnumMe
 
 public class FRGenerators implements IFeatureRegistry {
     public static final FRGenerators INSTANCE = new FRGenerators();
+    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -35,6 +37,7 @@ public class FRGenerators implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
+        shouldLoad = configuration.getBoolean("Generators", ModInfo.CONFIG_FEATURES, true, "Set to false to disable all the generators");
         Sugar_RF = configuration.getInt("Sugar Generator's rate (RF/t)", "generators", 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
         Sugar_Burntime = configuration.getInt("Sugar Generator's burntime per sugar", "generators", 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
         Fire_RF = configuration.getInt("Fire Generator's rate (RF/t)", "generators", 1, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
@@ -60,6 +63,11 @@ public class FRGenerators implements IFeatureRegistry {
     @Override
     public void registerClientEvents( ) {
 
+    }
+
+    @Override
+    public boolean shouldLoad( ) {
+        return shouldLoad;
     }
 
     private FRGenerators( ) {

@@ -83,6 +83,6 @@
     }
   },
   "textures": {
-    "layer0": "simplethings:items/wrench"
+    "layer0": "simplethings:item/wrench"
   }
 }
