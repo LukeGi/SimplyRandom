@@ -88,11 +88,11 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
                 tank.drain(Fluid.BUCKET_VOLUME, true);
                 return;
             }
-//            if (ticks == 0) {
-//                ticks = 1200;
+            if (ticks == 0) {
+                ticks = 1200;
                 if (layersToFill.isEmpty())
                     refreshQueues();
-//            }
+            }
             BlockPos posToFill = getNextSpot(true);
             if (posToFill != null && !placeFluidAt(posToFill)) {
                 ticks = 0;
