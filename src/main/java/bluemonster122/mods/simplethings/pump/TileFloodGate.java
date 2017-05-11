@@ -3,8 +3,8 @@ package bluemonster122.mods.simplethings.pump;
 import bluemonster122.mods.simplethings.core.block.IHaveTank;
 import bluemonster122.mods.simplethings.core.block.TileST;
 import com.google.common.collect.ImmutableMap;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,7 +73,8 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         if (blockedFaces == null) {
             blockedFaces = EnumSet.noneOf(EnumFacing.class);
             for (EnumFacing value : EnumFacing.VALUES) {
-                if (!isValidBlock(getPos().offset(value))) {
+                BlockPos offset = getPos().offset(value);
+                if (!getWorld().isAirBlock(offset) && !getWorld().getBlockState(offset).getMaterial().isLiquid()) {
                     blockedFaces.add(value);
                 }
             }
@@ -85,20 +86,19 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
                 return;
             }
             if (ticks == 0) {
-                ticks = 1200;
+                ticks = 200;
                 if (layersToFill.isEmpty()) refreshQueues();
             }
             BlockPos posToFill = getNextSpot(true);
             if (posToFill != null && !placeFluidAt(posToFill)) {
-                ticks = 0;
                 return;
             }
-            ticks--;
+            if (layersToFill.isEmpty()) ticks--;
         }
     }
 
     private boolean placeFluidAt(BlockPos fillPos) {
-        if (isValidBlock(fillPos)) {
+        if (isValidBlock(fillPos) || isFlowing(fillPos)) {
             boolean placed;
             Block b = tank.getFluid().getFluid().getBlock();
 
@@ -126,7 +126,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
      * @return The next position that should be filled by the flodo gate.
      */
     @Nullable
-    private BlockPos getNextSpot(@NotNull boolean remove_value) {
+    private BlockPos getNextSpot(boolean remove_value) {
         if (layersToFill.isEmpty()) {
             return null;
         }
@@ -181,23 +181,38 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             return;
         }
         if (visited.add(pos)) {
-            if ((pos.getX() - getPos().getX()) * (pos.getX() - getPos().getX()) + (pos.getZ() - getPos().getZ()) * (pos.getZ() - getPos().getZ()) > 4096) {
+            if (pos.getDistance(getPos().getX(), pos.getY(), getPos().getZ()) > 4096) {
                 return;
             }
             IFluidHandler handler = FluidUtil.getFluidHandler(getWorld(), pos, null);
             if (handler != null) {
                 FluidStack stack = handler.drain(Fluid.BUCKET_VOLUME, false);
                 if (stack != null) {
-                    if (stack.getFluid().equals(tank.getFluid().getFluid())) fluidBlocks.add(pos);
-                    if (stack.amount < Fluid.BUCKET_VOLUME) {
-                        addToFill(pos);
+                    if (stack.getFluid() == tank.getFluid().getFluid()) {
+                        fluidBlocks.add(pos);
                     }
                 }
+            }
+            if (isFlowing(pos)){
+                addToFill(pos);
+                fluidBlocks.add(pos);
             }
             if (isValidBlock(pos)) {
                 addToFill(pos);
             }
         }
+    }
+
+    private boolean isFlowing(BlockPos pos) {
+        IBlockState state = getWorld().getBlockState(pos);
+        Block block = state.getBlock();
+        if (block instanceof BlockLiquid) {
+            System.out.println(pos.toString() + ":" + state.getValue(BlockLiquid.LEVEL));
+            return state.getValue(BlockLiquid.LEVEL) != 0;
+        } else if (block instanceof BlockFluidBase) {
+            return state.getValue(BlockFluidBase.LEVEL) != 0;
+        }
+        return false;
     }
 
     private void addToFill(BlockPos pos) {

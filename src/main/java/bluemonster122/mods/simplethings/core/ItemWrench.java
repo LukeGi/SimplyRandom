@@ -1,8 +1,8 @@
 package bluemonster122.mods.simplethings.core;
 
 import bluemonster122.mods.simplethings.core.block.IPickup;
+import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names.Items;
-import buildcraft.api.tools.IToolWrench;
 import cofh.api.item.IToolHammer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,15 +20,21 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.Optional.Interface;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
 import javax.annotation.Nullable;
 
 @Interface(modid = "BuildCraftAPI|core", iface = "buildcraft.api.tools.IToolWrench")
-public class ItemWrench extends ItemST implements IToolHammer, IToolWrench {
+public class ItemWrench extends ItemST implements IToolHammer{
     public ItemWrench( ) {
         super(Items.WRENCH, false);
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack itemStack) {
+        return String.format("item.%s.%s", ModInfo.MOD_ID, Items.WRENCH);
     }
 
     @Nullable
@@ -88,12 +94,12 @@ public class ItemWrench extends ItemST implements IToolHammer, IToolWrench {
     }
 
     /* IToolWrench */
-    @Override
+    @Optional.Method(modid = "BuildCraftAPI|core")
     public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         return true;
     }
 
-    @Override
+    @Optional.Method(modid = "BuildCraftAPI|core")
     public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         /* NO OPERATION */
     }

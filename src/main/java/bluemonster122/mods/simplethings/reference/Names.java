@@ -24,6 +24,8 @@ public class Names {
         public static final String STRING = "string";
         public static final String STICK = "stickWood";
         public static final String IRON_STICK = "stickIron";
+        public static final String IRON_BARS = "barsIron";
+        public static final String SUGAR = "sugar";
 
         private OreDict( ) {
         }

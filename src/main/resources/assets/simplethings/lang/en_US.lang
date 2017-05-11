@@ -2,12 +2,30 @@
 itemGroup.simplethings=Tab of Simplicity
 
 # Blocks
-tile.simplethings:tree_farm.name=Tree Farm
-tile.simplethings:cobblestone_generator.name=Cobblestone Generator
-tile.simplethings:lightning_rod.name=Lightning Rod
-tile.simplethings:energy_generator_fire.name=Fire Energy Extractor
-tile.simplethings:energy_generator_sugar.name=Glucose Energy Extractor
+tile.simplethings.tree_farm.name=Tree Farm
+tile.simplethings.cobblestone_generator.name=Cobblestone Generator
+tile.simplethings:fire.name=Fire Energy Extractor
+tile.simplethings:sugar.name=Glucose Energy Extractor
+tile.simplethings.pump.name=Pump
+tile.simplethings.flood_gate.name=Flood Gate
+tile.simplethings.crafting_table.name=Crafting Stayble
+tile.simplethings.crafting_table_auto.name=Auto-Crafting Table
+tile.simplethings:glass.name=Glass Tank
+tile.simplethings:iron.name=Iron Tank
+tile.simplethings:gold.name=Gold Tank
+tile.simplethings:obsidian.name=Obsidian Tank
+tile.simplethings:diamond.name=Diamond Tank
 
+#Item
+item.simplethings.wrench.name=Wrench
+item.simplethings:misc.iron_rod.name=Iron Stick
+item.simplethings:misc.wooden_gear.name=Wooden Gear
+item.simplethings:misc.stone_gear.name=Stone Gear
+item.simplethings:misc.machine_base.name=Machine Components
+item.simplethings:tank_upgrade.glass_to_iron.name=Glass to Iron Tank Upgrade
+item.simplethings:tank_upgrade.iron_to_gold.name=Iron to Gold Tank Upgrade
+item.simplethings:tank_upgrade.gold_to_obsidian.name=Gold to Obsidian Tank Upgrade
+item.simplethings:tank_upgrade.obsidian_to_diamond.name=Obsidian to Diamond Tank Upgrade
 
 # Containers
 simplethings:crafting_table=Workstation

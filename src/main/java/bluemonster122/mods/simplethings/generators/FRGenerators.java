@@ -1,12 +1,20 @@
 package bluemonster122.mods.simplethings.generators;
 
+import bluemonster122.mods.simplethings.core.FRCore;
+import bluemonster122.mods.simplethings.core.ItemMisc;
 import bluemonster122.mods.simplethings.core.block.BlockST;
+import bluemonster122.mods.simplethings.generators.BlockGenerator.Types;
 import bluemonster122.mods.simplethings.reference.ModInfo;
+import bluemonster122.mods.simplethings.reference.Names;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import static bluemonster122.mods.simplethings.util.ModelHelpers.registerIEnumMeta;
 
@@ -26,7 +34,30 @@ public class FRGenerators implements IFeatureRegistry {
 
     @Override
     public void registerRecipes( ) {
+        //@formatter:off
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(generators, 1, Types.SUGAR.getMeta()),
+                "WSW",
+                "SMS",
+                "WSW",
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.WOODEN_GEAR.getMeta()),
+                'M', new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
+                'S', Names.OreDict.SUGAR
+        ));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(generators, 1, Types.FIRE.getMeta()),
+                "ISI",
+                "FMF",
+                "ISI",
+                'I', Names.OreDict.IRON_STICK,
+                'S', new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
+                'F', new ItemStack(Items.FLINT_AND_STEEL),
+                'M', new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta())
+        ));
+
+        //@formatter:on
     }
 
     @Override
@@ -50,13 +81,13 @@ public class FRGenerators implements IFeatureRegistry {
 
     @Override
     public void registerOreDict( ) {
-
+        OreDictionary.registerOre("sugar", new ItemStack(Items.SUGAR));
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerRenders( ) {
-        registerIEnumMeta(generators, BlockGenerator.Types.VARIANTS);
+        registerIEnumMeta(generators, Types.VARIANTS);
     }
 
     @SideOnly(Side.CLIENT)

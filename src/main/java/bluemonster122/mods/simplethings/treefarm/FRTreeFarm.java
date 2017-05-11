@@ -1,5 +1,7 @@
 package bluemonster122.mods.simplethings.treefarm;
 
+import bluemonster122.mods.simplethings.core.FRCore;
+import bluemonster122.mods.simplethings.core.ItemMisc;
 import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names;
@@ -42,7 +44,7 @@ public class FRTreeFarm implements IFeatureRegistry {
                 "SAS",
                 'S', Names.OreDict.SAPLING,
                 'A', new ItemStack(Items.IRON_AXE),
-                'I', Names.OreDict.IRON_BLOCK, /* TODO: change this to be a machine block */
+                'I', new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
                 'O', Names.OreDict.OBSIDIAN
         ));
 

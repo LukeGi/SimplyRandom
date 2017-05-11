@@ -20,6 +20,11 @@
         "textures": {
           "layer0": "simplethings:item/misc/stone_gear"
         }
+      },
+      "machine_base": {
+        "textures": {
+          "layer0": "simplethings:item/misc/machine_base"
+        }
       }
     }
   }

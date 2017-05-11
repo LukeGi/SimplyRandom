@@ -2,11 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "transform": "forge:default-block",
-    "model": "cube_bottom_top",
+    "model": "cube_column",
     "textures": {
-      "top": "simplethings:block/pump/pump_top",
-      "bottom": "simplethings:block/pump/pump_bottom",
-      "side": "simplethings:block/pump/pump"
+      "end": "simplethings:block/floodgate/bottom",
+      "side": "simplethings:block/floodgate/side"
     }
   },
   "variants": {

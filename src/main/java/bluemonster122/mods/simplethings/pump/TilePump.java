@@ -238,11 +238,13 @@ public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, IT
             if (pipe != null) pipe.cleanUp();
             return;
         } else {
-            if (pipe != null) pipe.cleanUp();
-            if (canWork && hitFluid) {
-                createPipe(getPos().getY() - probe + 14/16f);
-            } else {
-                createPipe(getPos().getY() - probe + 30/16f - ((1 / 100f) * (getWorld().getTotalWorldTime() % 100)));
+            if (probe > 0) {
+                if (pipe != null) pipe.cleanUp();
+                if (canWork && hitFluid) {
+                    createPipe(getPos().getY() - probe + 14 / 16f);
+                } else {
+                    createPipe(getPos().getY() - probe + 30 / 16f - ((1 / 100f) * (getWorld().getTotalWorldTime() % 100)));
+                }
             }
         }
     }

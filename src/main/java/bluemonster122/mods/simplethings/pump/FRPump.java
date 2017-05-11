@@ -1,18 +1,21 @@
 package bluemonster122.mods.simplethings.pump;
 
 import bluemonster122.mods.simplethings.core.FRCore;
+import bluemonster122.mods.simplethings.core.ItemMisc;
 import bluemonster122.mods.simplethings.core.block.BlockST;
 import bluemonster122.mods.simplethings.reference.ModInfo;
 import bluemonster122.mods.simplethings.reference.Names.OreDict;
 import bluemonster122.mods.simplethings.tanks.BlockTank;
 import bluemonster122.mods.simplethings.tanks.FRTank;
 import bluemonster122.mods.simplethings.util.IFeatureRegistry;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import static bluemonster122.mods.simplethings.util.ModelHelpers.registerBlockModelAsItem;
@@ -46,18 +49,25 @@ public class FRPump implements IFeatureRegistry {
                 "SWS",
                 "T|T",
                 "RBR",
-                'S', OreDict.STICK,
-                'W', new ItemStack(FRCore.wrench),
+                'S', new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.IRON_ROD.getMeta()),
                 'T', new ItemStack(FRTank.tank, 1, BlockTank.Types.IRON.getMeta()),
-                '|', OreDict.STRING,
+                '|', new ItemStack(FRCore.wrench),
                 'R', OreDict.REDSTONE,
                 'B', new ItemStack(Items.BUCKET)
         ));
 
-//        GameRegistry.addRecipe(new ShapedOreRecipe(
-//                new ItemStack(floodgate, 1),
-//                "","",""
-//        ));
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(pump, 1),
+                "SWS",
+                "T|T",
+                "RSR",
+                'S', new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
+                'W', new ItemStack(FRCore.misc, 1, ItemMisc.Types.IRON_ROD.getMeta()),
+                'T', OreDict.IRON_BARS,
+                '|', new ItemStack(FRTank.tank, 1, BlockTank.Types.IRON.getMeta()),
+                'R', OreDict.REDSTONE
+        ));
 
         //@formatter:on
     }
@@ -81,7 +91,7 @@ public class FRPump implements IFeatureRegistry {
 
     @Override
     public void registerOreDict( ) {
-        /* NO OPERATION */
+        OreDictionary.registerOre(OreDict.IRON_BARS, new ItemStack(Blocks.IRON_BARS));
     }
 
     @SideOnly(Side.CLIENT)
