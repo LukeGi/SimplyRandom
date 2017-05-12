@@ -1,12 +1,12 @@
 [
   {
-    "modid": "simplethings",
-    "name": "SimpleThings",
-    "description": "A Simple mod that adds a few simple things.",
+    "modid": "simplerandomstuff",
+    "name": "Simple Random Stuff",
+    "description": "A Simple mod that adds a few simple random stuffs.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://minecraft.curseforge.com/projects/simple-things",
-    "updateUrl": "https://minecraft.curseforge.com/projects/simple-things/files",
+    "url": "https://minecraft.curseforge.com/projects/simple-random-stuff",
+    "updateUrl": "https://minecraft.curseforge.com/projects/simple-random-stuff/files",
     "authorList": [
       "Blue_Monster122"
     ],

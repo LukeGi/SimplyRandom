@@ -1,0 +1,36 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "builtin/generated",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "variant": {
+      "base": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/tank_upgrade/base"
+        }
+      },
+      "glass_to_iron": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/tank_upgrade/glass_to_iron"
+        }
+      },
+      "iron_to_gold": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/tank_upgrade/iron_to_gold"
+        }
+      },
+      "gold_to_obsidian": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/tank_upgrade/gold_to_obsidian"
+        }
+      },
+      "obsidian_to_diamond": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/tank_upgrade/obsidian_to_diamond"
+        }
+      }
+    }
+  }
+}

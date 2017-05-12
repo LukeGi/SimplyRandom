@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "cube_column",
+    "textures": {
+      "end": "simplerandomstuff:block/floodgate/bottom",
+      "side": "simplerandomstuff:block/floodgate/side"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {}
+    ],
+    "normal": [
+      {}
+    ]
+  }
+}
