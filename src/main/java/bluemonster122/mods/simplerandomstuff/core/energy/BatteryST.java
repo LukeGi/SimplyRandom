@@ -15,4 +15,8 @@ public class BatteryST extends EnergyStorage implements IEnergyStorage {
     public BatteryST(int capacity, int maxReceive, int maxExtract) {
         super(capacity, maxReceive, maxExtract);
     }
+
+    public void setEnergy(int power) {
+        this.energy = power;
+    }
 }

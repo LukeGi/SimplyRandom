@@ -1,7 +1,6 @@
 package bluemonster122.mods.simplerandomstuff.treefarm;
 
 import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
-import bluemonster122.mods.simplerandomstuff.core.block.TileST;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -25,11 +24,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TreeChoppa {
-    private TileST farmNew;
+    private TileTreeFarm farmNew;
     private World world;
     private long startTime;
 
-    public TreeChoppa(TileST farmNew) {
+    public TreeChoppa(TileTreeFarm farmNew) {
         this.farmNew = farmNew;
         startTime = System.nanoTime();
     }

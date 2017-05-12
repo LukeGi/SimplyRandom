@@ -109,6 +109,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             }
 
             if (placed) {
+                tank.drain(Fluid.BUCKET_VOLUME, true);
                 addAdjacentToQueues(fillPos);
                 populateQueues();
             }

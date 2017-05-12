@@ -3,12 +3,10 @@ package bluemonster122.mods.simplerandomstuff.treefarm;
 import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRender;
 import bluemonster122.mods.simplerandomstuff.core.IHaveGui;
-import bluemonster122.mods.simplerandomstuff.core.block.IHaveInventory;
-import bluemonster122.mods.simplerandomstuff.core.block.TileST;
 import bluemonster122.mods.simplerandomstuff.core.energy.BatteryST;
 import bluemonster122.mods.simplerandomstuff.core.energy.IEnergyRecieverST;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -16,6 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -24,22 +26,20 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static bluemonster122.mods.simplerandomstuff.treefarm.FRTreeFarm.INSTANCE;
 
-public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST, IHaveInventory, IHaveGui {
+public class TileTreeFarm extends TileEntity implements ITickable, IEnergyRecieverST, IHaveGui {
     private static final Vec3i[] farmedPositions = new Vec3i[]{new Vec3i(-3, 0, -3), new Vec3i(-3, 0, -2), new Vec3i(-2, 0, -3), new Vec3i(-2, 0, -2), new Vec3i(-3, 0, 3), new Vec3i(-3, 0, 2), new Vec3i(-2, 0, 3), new Vec3i(-2, 0, 2), new Vec3i(3, 0, -3), new Vec3i(3, 0, -2), new Vec3i(2, 0, -3), new Vec3i(2, 0, -2), new Vec3i(3, 0, 3), new Vec3i(3, 0, 2), new Vec3i(2, 0, 3), new Vec3i(2, 0, 2)};
     static NonNullList<ItemStack> sapling = OreDictionary.getOres("sapling");
     static List<Item> validItems = new ArrayList<>();
@@ -50,41 +50,13 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
         }
     }
 
-    /**
-     * Inventory
-     */
-    public ItemStackHandler inventory = createInventory();
-    /**
-     * Battery
-     */
-    public BatteryST battery = createBattery();
+    public ItemStackHandler inventory = new ItemStackHandler(72);
+    public BatteryST battery = new BatteryST(1000000);
     public BoxRender render;
     private int currentPos = -1;
     private int nextTime = 0;
     private TreeChoppa farmer = new TreeChoppa(this);
 
-    @Override
-    public Map<Capability, Capability> getCaps( ) {
-        return ImmutableMap.of(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast((IItemHandler) inventory), CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery));
-    }
-
-    @Override
-    public NBTTagCompound writeChild(NBTTagCompound tag) {
-        tag.setInteger("scanner", currentPos);
-        tag.setInteger("timer", nextTime);
-        return tag;
-    }
-
-    @Override
-    public NBTTagCompound readChild(NBTTagCompound tag) {
-        currentPos = tag.getInteger("scanner");
-        nextTime = tag.getInteger("timer");
-        return tag;
-    }
-
-    /**
-     * Like the old updateEntity(), except more generic.
-     */
     @Override
     public void update( ) {
         if (getWorld().isRemote) {
@@ -96,7 +68,15 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     }
 
     public void updateServer( ) {
-        sendUpdate();
+        // TODO: REMOVE
+        battery.receiveEnergy(1000, false);
+
+        // Mark for updates
+        IBlockState state = getWorld().getBlockState(getPos());
+        getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+        markDirty();
+
+        // Work
         nextTime--;
         if (nextTime > 0) return;
         currentPos++;
@@ -137,69 +117,19 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
         render.show();
     }
 
-    /**
-     * Gets the battery of the Block
-     *
-     * @return The battery object.
-     */
     @Override
     public BatteryST getBattery( ) {
         return battery;
     }
 
-    /**
-     * Sets the given BatteryST to be the Tile's Battery.
-     *
-     * @param battery new Battery.
-     */
     @Override
     public void setBattery(BatteryST battery) {
         this.battery = battery;
     }
 
-    /**
-     * Creates a new Battery for the Tile.
-     *
-     * @return a new Battery for the Tile.
-     */
     @Override
     public BatteryST createBattery( ) {
         return new BatteryST(1000000);
-    }
-
-    /**
-     * Gets the Tile's current Inventory.
-     *
-     * @return The Tile's current Inventory.
-     */
-    @Override
-    public ItemStackHandler getInventory( ) {
-        return inventory;
-    }
-
-    /**
-     * Sets the given ItemStackHandler to be the Tile's Inventory.
-     *
-     * @param inventory new Inventory.
-     */
-    @Override
-    public void setInventory(ItemStackHandler inventory) {
-        this.inventory = inventory;
-    }
-
-    /**
-     * Creates a new Inventory for the Tile.
-     *
-     * @return a new Inventory for the Tile.
-     */
-    @Override
-    public ItemStackHandler createInventory( ) {
-        return new ItemStackHandler(72);
-    }
-
-    @Override
-    public String getName( ) {
-        return "simplerandomstuff:tree_farm";
     }
 
     @Override
@@ -213,8 +143,71 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     }
 
     @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        currentPos = tag.getInteger("scanner");
+        nextTime = tag.getInteger("timer");
+        battery.setEnergy(tag.getInteger("energyStored"));
+        inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+        super.readFromNBT(tag);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag.setInteger("scanner", currentPos);
+        tag.setInteger("timer", nextTime);
+        tag.setInteger("energyStored", getBattery().getEnergyStored());
+        tag.setTag("inventory", inventory.serializeNBT());
+        return super.writeToNBT(tag);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket( ) {
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag( ) {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
     public void invalidate( ) {
         if (render != null) render.cleanUp();
         super.invalidate();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity nbt) {
+        handleUpdateTag(nbt.getNbtCompound());
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+        readFromNBT(tag);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
+            return true;
+        } else if (capability.equals(CapabilityEnergy.ENERGY)) {
+            return true;
+        } else {
+            return super.hasCapability(capability, facing);
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+        } else if (capability.equals(CapabilityEnergy.ENERGY)) {
+            return CapabilityEnergy.ENERGY.cast(getBattery());
+        } else {
+            return super.getCapability(capability, facing);
+        }
     }
 }

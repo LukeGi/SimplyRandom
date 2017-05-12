@@ -139,6 +139,7 @@ public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, IT
     }
 
     private void updateServer( ) {
+        battery.setEnergy(100);
         canWork = battery.getEnergyStored() >= INSTANCE.getPumpEnergy();
         if (!canWork) return;
 
