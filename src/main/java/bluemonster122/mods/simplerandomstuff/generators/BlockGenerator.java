@@ -34,6 +34,11 @@ public class BlockGenerator extends BlockEnum implements ITileEntityProvider, IP
     }
 
     @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(VARIANT).getMeta();
+    }
+
+    @Override
     @Deprecated
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(VARIANT, Types.byMeta(meta));
