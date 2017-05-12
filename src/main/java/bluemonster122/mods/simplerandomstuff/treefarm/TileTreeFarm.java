@@ -58,10 +58,10 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
      * Battery
      */
     public BatteryST battery = createBattery();
+    public BoxRender render;
     private int currentPos = -1;
     private int nextTime = 0;
     private TreeChoppa farmer = new TreeChoppa(this);
-    private BoxRender render;
 
     @Override
     public Map<Capability, Capability> getCaps( ) {
@@ -178,16 +178,6 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     }
 
     /**
-     * Creates a new Inventory for the Tile.
-     *
-     * @return a new Inventory for the Tile.
-     */
-    @Override
-    public ItemStackHandler createInventory( ) {
-        return new ItemStackHandler(72);
-    }
-
-    /**
      * Sets the given ItemStackHandler to be the Tile's Inventory.
      *
      * @param inventory new Inventory.
@@ -195,6 +185,16 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     @Override
     public void setInventory(ItemStackHandler inventory) {
         this.inventory = inventory;
+    }
+
+    /**
+     * Creates a new Inventory for the Tile.
+     *
+     * @return a new Inventory for the Tile.
+     */
+    @Override
+    public ItemStackHandler createInventory( ) {
+        return new ItemStackHandler(72);
     }
 
     @Override
@@ -210,5 +210,11 @@ public class TileTreeFarm extends TileST implements ITickable, IEnergyRecieverST
     @Override
     public Container createContainer(InventoryPlayer player, World world, BlockPos pos) {
         return new ContainerTreeFarm(player, this);
+    }
+
+    @Override
+    public void invalidate( ) {
+        if (render != null) render.cleanUp();
+        super.invalidate();
     }
 }
