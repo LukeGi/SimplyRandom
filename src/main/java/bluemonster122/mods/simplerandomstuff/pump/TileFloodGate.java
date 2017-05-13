@@ -2,8 +2,10 @@ package bluemonster122.mods.simplerandomstuff.pump;
 
 import bluemonster122.mods.simplerandomstuff.core.block.IHaveTank;
 import bluemonster122.mods.simplerandomstuff.core.block.TileST;
+import bluemonster122.mods.simplerandomstuff.util.Ticker;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.wrappers.FluidBlockWrapper;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -24,8 +27,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
     private TreeMap<Integer, Deque<BlockPos>> layersToFill = new TreeMap<>();
     private Set<BlockPos> visited = new HashSet<>();
     private Deque<BlockPos> fluidBlocks = new LinkedList<>();
-    private EnumSet<EnumFacing> blockedFaces;
-    private int ticks = 0;
+    private Ticker ticker = new Ticker((new Random()).nextInt(200));
 
     @Override
     public Map<Capability, Capability> getCaps( ) {
@@ -34,13 +36,13 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
 
     @Override
     public NBTTagCompound writeChild(NBTTagCompound tag) {
-        tag.setInteger("ticks", ticks);
+        ticker.writeToNBT(tag);
         return tag;
     }
 
     @Override
     public NBTTagCompound readChild(NBTTagCompound tag) {
-        ticks = tag.getInteger("ticks");
+        ticker.readFromNBT(tag);
         return tag;
     }
 
@@ -64,48 +66,47 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         if (getWorld().isRemote) {
             updateClient();
         } else {
-            updateServer();
+            ticker.tick();
+            if (ticker.time_up()) {
+                updateServer();
+                ticker.reset(200);
+            }
         }
     }
 
     private void updateServer( ) {
-        if (blockedFaces == null) {
-            blockedFaces = EnumSet.noneOf(EnumFacing.class);
-            for (EnumFacing value : EnumFacing.VALUES) {
-                BlockPos offset = getPos().offset(value);
-                if (!getWorld().isAirBlock(offset) && !getWorld().getBlockState(offset).getMaterial().isLiquid()) {
-                    blockedFaces.add(value);
-                }
-            }
-        }
         FluidStack fluidOut = tank.drain(Fluid.BUCKET_VOLUME, false);
         if (fluidOut != null) {
             if (getWorld().provider.getDimension() == -1) {
                 tank.drain(Fluid.BUCKET_VOLUME, true);
                 return;
             }
-            if (ticks == 0) {
-                ticks = 200;
-                if (layersToFill.isEmpty()) refreshQueues();
+            if (ticker.time_up()) {
+                if (layersToFill.isEmpty()) {
+                    refreshQueues();
+                }
+                BlockPos posToFill = getNextSpot(true);
+                if (posToFill != null && placeFluidAt(posToFill)) {
+                    ticker.reset(200);
+                }
             }
-            BlockPos posToFill = getNextSpot(true);
-            if (posToFill != null && !placeFluidAt(posToFill)) {
-                return;
-            }
-            if (layersToFill.isEmpty()) ticks--;
+
         }
     }
 
     private boolean placeFluidAt(BlockPos fillPos) {
         if (isValidBlock(fillPos) || isFlowing(fillPos)) {
-            boolean placed;
+            boolean placed = false;
             Block b = tank.getFluid().getFluid().getBlock();
 
             if (b instanceof BlockFluidBase) {
-                BlockFluidBase blockFluid = (BlockFluidBase) b;
-                placed = getWorld().setBlockState(fillPos, blockFluid.getDefaultState(), 3);
-            } else {
-                placed = getWorld().setBlockState(fillPos, b.getDefaultState());
+                IFluidHandler handler = new FluidBlockWrapper((BlockFluidBase) b, getWorld(), fillPos);
+                handler.fill(tank.getFluid(), true);
+                placed = true;
+            } else if (b instanceof BlockLiquid) {
+                BlockDynamicLiquid block = BlockLiquid.getFlowingBlock(b.getDefaultState().getMaterial());
+                world.setBlockState(fillPos, block.getDefaultState(), 3);
+                placed = true;
             }
 
             if (placed) {
@@ -193,7 +194,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
                     }
                 }
             }
-            if (isFlowing(pos)){
+            if (isFlowing(pos)) {
                 addToFill(pos);
                 fluidBlocks.add(pos);
             }
@@ -207,7 +208,6 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
         IBlockState state = getWorld().getBlockState(pos);
         Block block = state.getBlock();
         if (block instanceof BlockLiquid) {
-            System.out.println(pos.toString() + ":" + state.getValue(BlockLiquid.LEVEL));
             return state.getValue(BlockLiquid.LEVEL) != 0;
         } else if (block instanceof BlockFluidBase) {
             return state.getValue(BlockFluidBase.LEVEL) != 0;

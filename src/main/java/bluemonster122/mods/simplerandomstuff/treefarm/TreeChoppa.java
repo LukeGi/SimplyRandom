@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplerandomstuff.treefarm;
 
-import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -39,7 +39,6 @@ public class TreeChoppa {
         scanBlock(pos, tree, pos);
         if (!cut) return tree.size();
         if (tree.isEmpty()) return 0;
-        SimpleRandomStuff.INSTANCE.logger.info(String.format("Scanning has taken %s nano seconds", System.nanoTime() - startTime));
         cutTree(tree);
         return tree.size();
     }
@@ -53,11 +52,13 @@ public class TreeChoppa {
         int leaves;
         if (state.getMaterial().equals(Material.LEAVES)) leaves = 1;
         else if (state.getBlock() instanceof BlockLog) leaves = 2;
+        else if (state.getBlock() instanceof BlockVine) leaves = 3;
         else leaves = 0;
         switch (leaves) {
             case 0:
                 break;
             case 1:
+            case 3:
                 tree.add(pos);
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     scanBlock(origin, tree, pos.offset(facing));
@@ -65,6 +66,7 @@ public class TreeChoppa {
                         for (EnumFacing facing1 : EnumFacing.HORIZONTALS)
                             scanBlock(origin, tree, pos.offset(facing).offset(facing1));
                 }
+                break;
             case 2:
                 tree.add(pos);
                 for (EnumFacing facing : EnumFacing.VALUES) {
@@ -75,6 +77,7 @@ public class TreeChoppa {
                                 scanBlock(origin, tree, pos.offset(facing).offset(facing1));
                     }
                 }
+                break;
         }
 
     }
@@ -133,6 +136,5 @@ public class TreeChoppa {
                 world.spawnEntity(entityIn);
             }
         }
-        SimpleRandomStuff.INSTANCE.logger.info(String.format("Cutting has taken %s nano seconds", System.nanoTime() - startTime));
     }
 }

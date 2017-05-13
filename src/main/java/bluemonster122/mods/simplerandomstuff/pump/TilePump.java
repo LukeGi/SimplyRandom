@@ -1,16 +1,17 @@
 package bluemonster122.mods.simplerandomstuff.pump;
 
+import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRender;
 import bluemonster122.mods.simplerandomstuff.core.block.IHaveTank;
-import bluemonster122.mods.simplerandomstuff.core.block.TileST;
 import bluemonster122.mods.simplerandomstuff.core.energy.BatteryST;
 import bluemonster122.mods.simplerandomstuff.core.energy.IEnergyRecieverST;
-import com.google.common.collect.ImmutableMap;
+import bluemonster122.mods.simplerandomstuff.util.Ticker;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -18,252 +19,320 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.wrappers.BlockLiquidWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
-import java.util.function.Predicate;
 
-import static bluemonster122.mods.simplerandomstuff.pump.FRPump.INSTANCE;
-
-public class TilePump extends TileST implements IEnergyRecieverST, IHaveTank, ITickable {
-    private static final Predicate<IBlockState> isFluid = state -> state.getBlock() instanceof IFluidBlock || state.getBlock() instanceof BlockLiquid;
-    private static final Predicate<IBlockState> isValid = state -> isFluid.or(s -> s.getMaterial().equals(Material.AIR)).test(state);
-    public FluidTank tank = createTank();
-    public BatteryST battery = createBattery();
-    Deque<BlockPos> fluids = new ArrayDeque<>();
-    private int probe = 0;
-    private boolean hitFluid = false;
+public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST, IHaveTank {
+    private FluidTank tank = createTank();
+    private BatteryST battery = createBattery();
+    private TreeMap<Integer, Deque<BlockPos>> layersToPump = new TreeMap<>();
+    private Set<BlockPos> visited = new HashSet<>();
+    private Deque<BlockPos> transitionBlocks = new LinkedList<>();
     private boolean canWork = false;
+    private boolean hitFluid = false;
+    private boolean restartFlag = false;
+    private int currentLayer = -1;
+    private Ticker ticker = new Ticker((new Random()).nextInt(200));
     private BoxRender pipe;
 
-    @Override
-    public Map<Capability, Capability> getCaps( ) {
-        return ImmutableMap.of(CapabilityEnergy.ENERGY, CapabilityEnergy.ENERGY.cast((IEnergyStorage) battery), CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast((IFluidHandler) tank));
-    }
-
-    @Override
-    public NBTTagCompound writeChild(NBTTagCompound tag) {
-        tag.setInteger("probe", probe);
-        tag.setBoolean("hit", hitFluid);
-        tag.setBoolean("canWork", canWork);
-        return tag;
-    }
-
-    @Override
-    public NBTTagCompound readChild(NBTTagCompound tag) {
-        probe = tag.getInteger("probe");
-        hitFluid = tag.getBoolean("hit");
-        canWork = tag.getBoolean("canWork");
-        return tag;
-    }
-
-    /**
-     * Gets the Tile's current battery.
-     *
-     * @return The Tile's current battery.
-     */
     @Override
     public BatteryST getBattery( ) {
         return battery;
     }
 
-    /**
-     * Sets the given BatteryST to be the Tile's Battery.
-     *
-     * @param battery new Battery.
-     */
     @Override
     public void setBattery(BatteryST battery) {
         this.battery = battery;
     }
 
-    /**
-     * Creates a new Battery for the Tile.
-     *
-     * @return a new Battery for the Tile.
-     */
     @Override
     public BatteryST createBattery( ) {
         return new BatteryST(100);
     }
 
-    /**
-     * Gets the Tile's current Tank.
-     *
-     * @return The Tile's current Tank.
-     */
     @Override
     public FluidTank getTank( ) {
         return tank;
     }
 
-    /**
-     * Sets the given ItemStackHandler to be the Tile's Tank.
-     *
-     * @param tank new Inventory.
-     */
     @Override
     public void setTank(FluidTank tank) {
         this.tank = tank;
     }
 
-    /**
-     * Creates a new Tank for the Tile.
-     *
-     * @return a new Tank for the Tile.
-     */
     @Override
     public FluidTank createTank( ) {
-        return new FluidTank(1000);
+        return new FluidTank(Fluid.BUCKET_VOLUME) {
+            @Override
+            public boolean canFill( ) {
+                return false;
+            }
+        };
     }
 
     @Override
     public void update( ) {
-        if (getWorld().isRemote) {
-            //noinspection MethodCallSideOnly
-            updateClient();
-        } else {
-            if (getWorld().getTotalWorldTime() % (hitFluid && canWork ? 10 : 100) == 0) updateServer();
-            sendUpdate();
+        if (getWorld().isRemote) updateClient();
+        else {
+            ticker.tick();
+            if (ticker.time_up()) updateServer();
+            IBlockState state = getWorld().getBlockState(getPos());
+            getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+            markDirty();
         }
     }
 
     private void updateServer( ) {
         battery.setEnergy(100);
-        canWork = battery.getEnergyStored() >= INSTANCE.getPumpEnergy();
-        if (!canWork) return;
 
-        if (tank.getFluid() != null) {
-            attemptPushFluid();
+        canWork = battery.getEnergyStored() > FRPump.INSTANCE.getPumpEnergy();
+        if (currentLayer == -1) currentLayer = getPos().getY();
+
+        if (restartFlag) {
+            currentLayer = getPos().getY();
+            hitFluid = false;
+            restartFlag = false;
+        }
+
+        if (canWork) {
+            if (tank.getFluidAmount() == 0) {
+                // Scan
+                if (layersToPump.isEmpty()) {
+                    currentLayer--;
+                    hitFluid = false;
+                    BlockPos currentScanPos = new BlockPos(getPos().getX(), currentLayer, getPos().getZ());
+                    IBlockState state = getWorld().getBlockState(currentScanPos);
+                    Block block = state.getBlock();
+
+                    SimpleRandomStuff.INSTANCE.logger.info(currentScanPos);
+                    if (isPumpable(currentScanPos)) {
+                        hitFluid = true;
+                        refreshQueues(currentScanPos, state, block);
+                        addToPump(currentScanPos);
+                        ticker.reset(10);
+                        return;
+                    }
+                    if (getWorld().isAirBlock(currentScanPos)) ticker.reset(200);
+                    else {
+                        ticker.reset(150);
+                        hitFluid = true;
+                        restartFlag = true;
+                    }
+                } else {
+                    //Pump
+                    hitFluid = true;
+                    currentLayer = layersToPump.firstKey();
+                    BlockPos currentScanPos = getNextSpot(true);
+                    if (currentScanPos != null) {
+                        addAdjacentToQueues(currentScanPos);
+                        if (isPumpable(currentScanPos)) {
+                            IFluidHandler block = FluidUtil.getFluidHandler(getWorld(), currentScanPos, EnumFacing.UP);
+                            tank.fillInternal(block.drain(Fluid.BUCKET_VOLUME, true), true);
+                        }
+                        ticker.reset(100);
+                    }
+                }
+            } else {
+                BlockPos up = getPos().up();
+                TileEntity tileEntity = getWorld().getTileEntity(up);
+                if (tileEntity != null && tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN)) {
+                    IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
+                    if (fluidHandler != null) {
+                        FluidUtil.tryFluidTransfer(fluidHandler, tank, Fluid.BUCKET_VOLUME, true);
+                        IBlockState state = getWorld().getBlockState(up);
+                        getWorld().notifyBlockUpdate(up, state, state, 11);
+                        tileEntity.markDirty();
+                    }
+                }
+            }
         } else {
-            if (probe == 0) {
-                probe++;
+            ticker.reset(500);
+        }
+    }
+
+    @Nullable
+    private BlockPos getNextSpot(boolean remove_value) {
+        if (layersToPump.isEmpty()) {
+            return null;
+        }
+
+        Deque<BlockPos> top_layer = layersToPump.lastEntry().getValue();
+
+        if (top_layer == null) {
+            return null;
+        }
+
+        if (top_layer.isEmpty()) {
+            layersToPump.pollLastEntry();
+            return getNextSpot(remove_value);
+        }
+        return remove_value ? top_layer.pollFirst() : top_layer.peekFirst();
+    }
+
+    private void refreshQueues(BlockPos currentScanPos, IBlockState state, Block block) {
+        visited.clear();
+        layersToPump.clear();
+        transitionBlocks.clear();
+
+        addAdjacentToQueues(currentScanPos);
+
+        populateQueues();
+    }
+
+    private void populateQueues( ) {
+        if (tank.getFluid() == null) {
+            return;
+        }
+        while (!transitionBlocks.isEmpty()) {
+            Deque<BlockPos> fluidsToExpand = transitionBlocks;
+            transitionBlocks = new LinkedList<>();
+
+            for (BlockPos index : fluidsToExpand) {
+                addAdjacentToQueues(index);
+            }
+        }
+    }
+
+    private void addAdjacentToQueues(BlockPos currentScanPos) {
+        if (tank.getFluid() != null) {
+            return;
+        }
+        for (EnumFacing face : EnumFacing.VALUES) {
+            queueForPumping(currentScanPos.offset(face));
+        }
+    }
+
+    private void queueForPumping(BlockPos pos) {
+        if (pos.getY() < 0 || pos.getY() > 255) {
+            return;
+        }
+        if (visited.add(pos)) {
+            if (pos.getDistance(getPos().getX(), pos.getY(), getPos().getZ()) > 4096) {
                 return;
             }
-            BlockPos down = getPos().down(probe);
-            IBlockState state = getWorld().getBlockState(down);
-            Block block = state.getBlock();
-            if (!fluids.isEmpty()) {
-                attemptPump();
-            } else if (block instanceof IFluidBlock) {
-                hitFluid = true;
-                scanForBlock(down);
-                // Pump fluid
-            } else if (block instanceof BlockLiquid) {
-                hitFluid = true;
-                if (state.getMaterial().equals(Material.WATER) && hasInfinate(down)) {
-                    fluids.add(down);
-                    return;
-                }
-                scanForBlock(down);
-            } else {
-                hitFluid = !isValid.test(state);
-                probe = isValid.test(state) ? probe + 1 : -1;
+            IFluidHandler handler = FluidUtil.getFluidHandler(getWorld(), pos, null);
+            if (handler != null) transitionBlocks.add(pos);
+            if (isFlowing(pos)) {
+                transitionBlocks.add(pos);
+            }
+            if (isPumpable(pos)) {
+                addToPump(pos);
             }
         }
     }
 
-    private boolean hasInfinate(BlockPos pos) {
-        int count = 0;
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            if (world.getBlockState(pos.offset(facing)).getMaterial().equals(Material.WATER)) {
-                count++;
-            }
-        }
-        return count > 1;
+    private void addToPump(BlockPos pos) {
+        layersToPump.computeIfAbsent(pos.getY(), k -> new LinkedList<>()).addLast(pos);
     }
 
-    private void attemptPump( ) {
-        BlockPos current = fluids.pop();
-        IBlockState state = getWorld().getBlockState(current);
+    private boolean isFlowing(BlockPos pos) {
+        IBlockState state = getWorld().getBlockState(pos);
         Block block = state.getBlock();
-        battery.extractEnergy(INSTANCE.getPumpEnergy(), false);
-        if (block instanceof IFluidBlock) {
-            IFluidBlock fluid = (IFluidBlock) block;
-            if (fluid.canDrain(world, current)) {
-                FluidStack fluidStack = fluid.drain(getWorld(), current, true);
-                tank.fill(fluidStack, true);
-            }
-        } else if (block instanceof BlockLiquid) {
-            BlockLiquidWrapper liquid = new BlockLiquidWrapper((BlockLiquid) block, getWorld(), current);
-            tank.fill(liquid.drain(1000, true), true);
+        if (block instanceof BlockLiquid) {
+            return state.getValue(BlockLiquid.LEVEL) != 0;
+        } else if (block instanceof BlockFluidBase) {
+            return state.getValue(BlockFluidBase.LEVEL) != 0;
         }
+        return false;
     }
 
-    private void attemptPushFluid( ) {
-        BlockPos up = getPos().up();
-        TileEntity tileEntity = getWorld().getTileEntity(up);
-        if (tileEntity != null && tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN)) {
-            IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
-            if (fluidHandler != null) {
-                FluidUtil.tryFluidTransfer(fluidHandler, tank, 1000, true);
-                IBlockState state = getWorld().getBlockState(up);
-                getWorld().notifyBlockUpdate(up, state, state, 11);
-            }
-        }
-    }
-
-    private void scanForBlock(BlockPos start) {
-        ArrayList<BlockPos> visited = new ArrayList<>();
-        Deque<BlockPos> toScan = new LinkedList<>();
-        Block block = getWorld().getBlockState(start).getBlock();
-        Predicate<Block> isValid = b -> b.equals(block);
-        toScan.add(start);
-
-        while (!toScan.isEmpty()) {
-            BlockPos pos = toScan.pop();
-            visited.add(pos);
-            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-                BlockPos element = pos.offset(facing);
-                if (!visited.contains(element) && !toScan.contains(element) && !fluids.contains(element) && isValid.test(getWorld().getBlockState(element).getBlock()))
-                    toScan.push(element);
-            }
-            fluids.push(pos);
-        }
+    private boolean isPumpable(BlockPos currentScanPos) {
+        IBlockState state = getWorld().getBlockState(currentScanPos);
+        return state.getBlock() instanceof BlockFluidBase || state.getBlock() instanceof BlockLiquid;
     }
 
     @SideOnly(Side.CLIENT)
     private void updateClient( ) {
-        if (probe == -1) {
-            if (pipe != null) pipe.cleanUp();
-            return;
-        } else {
-            if (probe > 0) {
-                if (pipe != null) pipe.cleanUp();
-                if (canWork && hitFluid) {
-                    createPipe(getPos().getY() - probe + 14 / 16f);
-                } else {
-                    createPipe(getPos().getY() - probe + 30 / 16f - ((1 / 100f) * (getWorld().getTotalWorldTime() % 100)));
-                }
-            }
+        if (pipe != null) pipe.cleanUp();
+        if (currentLayer != getPos().getY() && currentLayer != -1 && !hitFluid) {
+            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, currentLayer + .5f - ticker.percent_gone(), getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
+            pipe.show();
+        } else if (hitFluid) {
+            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, currentLayer + .5f, getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
+            pipe.show();
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    private void createPipe(double y) {
-        pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35, getPos().getY() + 0.01, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65, y, getPos().getZ() + 0.65), BoxRender.BoxMode.ENDLESS);
-        pipe.show();
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        currentLayer = tag.getInteger("currentLayer");
+        canWork = tag.getBoolean("canWork");
+        hitFluid = tag.getBoolean("hitFluid");
+        battery.setEnergy(tag.getInteger("energy"));
+        ticker.readFromNBT(tag);
+        tank.readFromNBT(tag);
+        super.readFromNBT(tag);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag.setInteger("currentLayer", currentLayer);
+        tag.setBoolean("canWork", canWork);
+        tag.setBoolean("hitFluid", hitFluid);
+        tag.setInteger("energy", battery.getEnergyStored());
+        tank.writeToNBT(tag);
+        ticker.writeToNBT(tag);
+        return super.writeToNBT(tag);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket( ) {
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag( ) {
+        return writeToNBT(new NBTTagCompound());
     }
 
     @Override
     public void invalidate( ) {
-        if (getWorld().isRemote) //noinspection MethodCallSideOnly
-            cleanup();
+        if (pipe != null) pipe.cleanUp();
         super.invalidate();
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public void cleanup( ) {
-        if (pipe != null) pipe.cleanUp();
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity nbt) {
+        handleUpdateTag(nbt.getNbtCompound());
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+        readFromNBT(tag);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+            return true;
+        } else if (capability.equals(CapabilityEnergy.ENERGY)) {
+            return true;
+        } else {
+            return super.hasCapability(capability, facing);
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTank());
+        } else if (capability.equals(CapabilityEnergy.ENERGY)) {
+            return CapabilityEnergy.ENERGY.cast(getBattery());
+        } else {
+            return super.getCapability(capability, facing);
+        }
     }
 }

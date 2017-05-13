@@ -68,9 +68,6 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     }
 
     public void updateServer( ) {
-        // TODO: REMOVE
-        battery.receiveEnergy(1000, false);
-
         // Mark for updates
         IBlockState state = getWorld().getBlockState(getPos());
         getWorld().notifyBlockUpdate(getPos(), state, state, 3);
@@ -101,7 +98,6 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
             Item item = stack.getItem();
             if (validItems.contains(item) && item instanceof ItemBlock) {
                 Block block = ((ItemBlock) item).getBlock();
-                SimpleRandomStuff.INSTANCE.logger.info(block.getStateFromMeta(stack.getMetadata()));
                 if (world.setBlockState(getPos().add(farmedPositions[currentPos]), block.getStateFromMeta(stack.getMetadata()), 3))
                     stack.shrink(1);
             }
@@ -172,12 +168,6 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     }
 
     @Override
-    public void invalidate( ) {
-        if (render != null) render.cleanUp();
-        super.invalidate();
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity nbt) {
         handleUpdateTag(nbt.getNbtCompound());
@@ -186,6 +176,12 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
+    }
+
+    @Override
+    public void invalidate( ) {
+        if (render != null) render.cleanUp();
+        super.invalidate();
     }
 
     @Override

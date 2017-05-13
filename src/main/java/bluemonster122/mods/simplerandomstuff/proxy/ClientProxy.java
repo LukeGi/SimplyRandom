@@ -10,8 +10,8 @@ import static bluemonster122.mods.simplerandomstuff.SimpleRandomStuff.featureReg
 public class ClientProxy implements IProxy {
     @Override
     public void preInit( ) {
-        featureRegistries.forEach(IFeatureRegistry::registerClientEvents);
-        featureRegistries.forEach(IFeatureRegistry::registerRenders);
+        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerClientEvents);
+        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerRenders);
     }
 
     @Override

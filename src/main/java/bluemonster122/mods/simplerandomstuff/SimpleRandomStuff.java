@@ -55,10 +55,12 @@ public class SimpleRandomStuff {
         logger = event.getModLog();
         ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
         for (IFeatureRegistry registry : featureRegistries) {
-            if (registry.shouldLoad()) registry.registerBlocks();
-            registry.registerItems();
-            registry.registerEvents();
-            registry.registerOreDict();
+            if (registry.shouldLoad()) {
+                registry.registerBlocks();
+                registry.registerItems();
+                registry.registerEvents();
+                registry.registerOreDict();
+            }
         }
         INSTANCE.setupNetwork();
         proxy.preInit();
@@ -76,12 +78,12 @@ public class SimpleRandomStuff {
     public void init(FMLInitializationEvent event) {
         proxy.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(SimpleRandomStuff.INSTANCE, new GuiHandler());
-        featureRegistries.forEach(IFeatureRegistry::registerTileEntities);
+        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerTileEntities);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        featureRegistries.forEach(IFeatureRegistry::registerRecipes);
+        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerRecipes);
     }
 
     public static CreativeTabs theTab;
