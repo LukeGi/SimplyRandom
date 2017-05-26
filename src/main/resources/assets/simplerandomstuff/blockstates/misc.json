@@ -25,6 +25,11 @@
         "textures": {
           "layer0": "simplerandomstuff:item/misc/machine_base"
         }
+      },
+      "complex_machine_base": {
+        "textures": {
+          "layer0": "simplerandomstuff:item/misc/complex_machine_base"
+        }
       }
     }
   }

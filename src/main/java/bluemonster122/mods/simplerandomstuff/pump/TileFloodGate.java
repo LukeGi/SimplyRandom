@@ -69,7 +69,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             ticker.tick();
             if (ticker.time_up()) {
                 updateServer();
-                ticker.reset(200);
+                ticker.reset(10);
             }
         }
     }
@@ -83,6 +83,7 @@ public class TileFloodGate extends TileST implements IHaveTank, ITickable {
             }
             if (ticker.time_up()) {
                 if (layersToFill.isEmpty()) {
+                    if (!visited.isEmpty()) ticker.reset(400);
                     refreshQueues();
                 }
                 BlockPos posToFill = getNextSpot(true);

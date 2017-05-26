@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
+// TODO: Make custom inventory, which you can getStoredStacks() from, as to make dropping inventory easier.
 public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
     public BlockTreeFarm( ) {
         super(Names.Blocks.TREE_FARM, Material.IRON);
@@ -54,6 +55,15 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
         playerIn.openGui(SimpleRandomStuff.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof TileTreeFarm) {
+            ((TileTreeFarm) tileEntity).dropContents();
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

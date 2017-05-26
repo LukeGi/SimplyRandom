@@ -38,6 +38,7 @@ public class TileGeneratorSugar extends TileGenerator implements ITickable {
      */
     @Override
     public void update( ) {
+        super.update();
         if (!getWorld().isRemote) {
             if (burntime > 0) {
                 if (battery.receiveEnergy(FRGenerators.Sugar_RF, true) == FRGenerators.Sugar_RF) {

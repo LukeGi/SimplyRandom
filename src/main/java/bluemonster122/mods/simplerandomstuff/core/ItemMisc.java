@@ -26,7 +26,7 @@ public class ItemMisc extends ItemST {
     }
 
     public enum Types implements IEnumMeta, Comparable<Types> {
-        IRON_ROD, WOODEN_GEAR, STONE_GEAR, MACHINE_BASE;
+        IRON_ROD, WOODEN_GEAR, STONE_GEAR, MACHINE_BASE, COMPLEX_MACHINE_BASE;
 
         protected static final Types[] VARIANTS = values();
         private int meta;

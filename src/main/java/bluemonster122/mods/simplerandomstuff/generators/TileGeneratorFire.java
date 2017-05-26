@@ -32,6 +32,7 @@ public class TileGeneratorFire extends TileGenerator implements ITickable {
      */
     @Override
     public void update( ) {
+        super.update();
         if (!getWorld().isRemote) {
             if (getWorld().getBlockState(getPos().up(2)).getBlock().equals(Blocks.FIRE)) {
                 if (battery.receiveEnergy(FRGenerators.Fire_RF, true) > 0) {

@@ -41,12 +41,10 @@ public class GuiTreeFarm extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(TREE_FARM_GUI);
-        int left = (width - xSize) / 2;
-        int top = (height - ySize) / 2;
-        drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
+        drawTexturedModalRect(getGuiLeft(), getGuiTop(), 0, 0, xSize, ySize);
         IEnergyStorage battery = tile.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
         int energyPercent = (int) ((float) battery.getEnergyStored() / (float) battery.getMaxEnergyStored() * 106);
-        drawTexturedModalRect(left + 226 - energyPercent, top + 5, 136 - energyPercent, 214, energyPercent, 10);
+        drawTexturedModalRect(getGuiLeft() + 107, getGuiTop() + 5, 17, 214, energyPercent, 10);
     }
 
     @Override

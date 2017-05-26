@@ -1,6 +1,5 @@
 package bluemonster122.mods.simplerandomstuff.treefarm;
 
-import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRender;
 import bluemonster122.mods.simplerandomstuff.core.IHaveGui;
 import bluemonster122.mods.simplerandomstuff.core.energy.BatteryST;
@@ -8,6 +7,7 @@ import bluemonster122.mods.simplerandomstuff.core.energy.IEnergyRecieverST;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
@@ -94,12 +95,16 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     private void plantSapling( ) {
         sapling.forEach(i -> validItems.add(i.getItem()));
         for (int i = 0; i < inventory.getSlots(); i++) {
+            BlockPos thisPos = getPos().add(farmedPositions[currentPos]);
             ItemStack stack = inventory.getStackInSlot(i);
             Item item = stack.getItem();
             if (validItems.contains(item) && item instanceof ItemBlock) {
                 Block block = ((ItemBlock) item).getBlock();
-                if (world.setBlockState(getPos().add(farmedPositions[currentPos]), block.getStateFromMeta(stack.getMetadata()), 3))
-                    stack.shrink(1);
+                if (block instanceof IPlantable) {
+                    IBlockState dirt = getWorld().getBlockState(thisPos.down());
+                    if (dirt.getBlock().canSustainPlant(dirt, getWorld(), thisPos.down(), EnumFacing.UP, (IPlantable) block) && world.setBlockState(thisPos, block.getStateFromMeta(stack.getMetadata()), 3))
+                        stack.shrink(1);
+                }
             }
         }
     }
@@ -130,6 +135,7 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
 
     @Override
     public Gui createGui(InventoryPlayer player, World world, BlockPos pos) {
+        //noinspection NewExpressionSideOnly
         return new GuiTreeFarm(player, this);
     }
 
@@ -168,6 +174,13 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     }
 
     @Override
+    public void invalidate( ) {
+        if (render != null) //noinspection MethodCallSideOnly
+            render.cleanUp();
+        super.invalidate();
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity nbt) {
         handleUpdateTag(nbt.getNbtCompound());
@@ -176,12 +189,6 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-    }
-
-    @Override
-    public void invalidate( ) {
-        if (render != null) render.cleanUp();
-        super.invalidate();
     }
 
     @Override
@@ -204,6 +211,12 @@ public class TileTreeFarm extends TileEntity implements ITickable, IEnergyReciev
             return CapabilityEnergy.ENERGY.cast(getBattery());
         } else {
             return super.getCapability(capability, facing);
+        }
+    }
+
+    public void dropContents( ) {
+        for (int slot = inventory.getSlots() - 1; slot >= 0; slot--) {
+            getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, inventory.getStackInSlot(slot)));
         }
     }
 }

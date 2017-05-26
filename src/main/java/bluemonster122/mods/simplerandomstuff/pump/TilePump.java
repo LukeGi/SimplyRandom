@@ -1,6 +1,5 @@
 package bluemonster122.mods.simplerandomstuff.pump;
 
-import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRender;
 import bluemonster122.mods.simplerandomstuff.core.block.IHaveTank;
 import bluemonster122.mods.simplerandomstuff.core.energy.BatteryST;
@@ -42,6 +41,7 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     private boolean hitFluid = false;
     private boolean restartFlag = false;
     private int currentLayer = -1;
+    private int scanLayer = -1;
     private Ticker ticker = new Ticker((new Random()).nextInt(200));
     private BoxRender pipe;
 
@@ -82,7 +82,8 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
 
     @Override
     public void update( ) {
-        if (getWorld().isRemote) updateClient();
+        if (getWorld().isRemote) //noinspection MethodCallSideOnly
+            updateClient();
         else {
             ticker.tick();
             if (ticker.time_up()) updateServer();
@@ -93,14 +94,12 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     }
 
     private void updateServer( ) {
-        battery.setEnergy(100);
-
         canWork = battery.getEnergyStored() > FRPump.INSTANCE.getPumpEnergy();
         if (currentLayer == -1) currentLayer = getPos().getY();
+        if (scanLayer == -1) scanLayer = currentLayer;
 
         if (restartFlag) {
             currentLayer = getPos().getY();
-            hitFluid = false;
             restartFlag = false;
         }
 
@@ -109,12 +108,10 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
                 // Scan
                 if (layersToPump.isEmpty()) {
                     currentLayer--;
-                    hitFluid = false;
                     BlockPos currentScanPos = new BlockPos(getPos().getX(), currentLayer, getPos().getZ());
                     IBlockState state = getWorld().getBlockState(currentScanPos);
                     Block block = state.getBlock();
 
-                    SimpleRandomStuff.INSTANCE.logger.info(currentScanPos);
                     if (isPumpable(currentScanPos)) {
                         hitFluid = true;
                         refreshQueues(currentScanPos, state, block);
@@ -122,15 +119,17 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
                         ticker.reset(10);
                         return;
                     }
-                    if (getWorld().isAirBlock(currentScanPos)) ticker.reset(200);
-                    else {
+                    if (getWorld().isAirBlock(currentScanPos)) {
                         ticker.reset(150);
+                        if (scanLayer > currentLayer ) scanLayer = currentLayer;
+                    } else {
+                        ticker.reset(150);
+                        if (scanLayer > currentLayer) scanLayer = currentLayer;
                         hitFluid = true;
                         restartFlag = true;
                     }
                 } else {
                     //Pump
-                    hitFluid = true;
                     currentLayer = layersToPump.firstKey();
                     BlockPos currentScanPos = getNextSpot(true);
                     if (currentScanPos != null) {
@@ -138,25 +137,30 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
                         if (isPumpable(currentScanPos)) {
                             IFluidHandler block = FluidUtil.getFluidHandler(getWorld(), currentScanPos, EnumFacing.UP);
                             tank.fillInternal(block.drain(Fluid.BUCKET_VOLUME, true), true);
+                            attemptPush();
                         }
-                        ticker.reset(100);
+                        ticker.reset(10);
                     }
                 }
             } else {
-                BlockPos up = getPos().up();
-                TileEntity tileEntity = getWorld().getTileEntity(up);
-                if (tileEntity != null && tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN)) {
-                    IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
-                    if (fluidHandler != null) {
-                        FluidUtil.tryFluidTransfer(fluidHandler, tank, Fluid.BUCKET_VOLUME, true);
-                        IBlockState state = getWorld().getBlockState(up);
-                        getWorld().notifyBlockUpdate(up, state, state, 11);
-                        tileEntity.markDirty();
-                    }
-                }
+                attemptPush();
             }
         } else {
             ticker.reset(500);
+        }
+    }
+
+    private void attemptPush( ) {
+        BlockPos up = getPos().up();
+        TileEntity tileEntity = getWorld().getTileEntity(up);
+        if (tileEntity != null && tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN)) {
+            IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
+            if (fluidHandler != null) {
+                FluidUtil.tryFluidTransfer(fluidHandler, tank, Fluid.BUCKET_VOLUME, true);
+                IBlockState state = getWorld().getBlockState(up);
+                getWorld().notifyBlockUpdate(up, state, state, 11);
+                tileEntity.markDirty();
+            }
         }
     }
 
@@ -254,11 +258,11 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     @SideOnly(Side.CLIENT)
     private void updateClient( ) {
         if (pipe != null) pipe.cleanUp();
-        if (currentLayer != getPos().getY() && currentLayer != -1 && !hitFluid) {
-            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, currentLayer + .5f - ticker.percent_gone(), getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
+        if (scanLayer != -1 && !hitFluid) {
+            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, scanLayer - .5f - ticker.percent_gone(), getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
             pipe.show();
         } else if (hitFluid) {
-            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, currentLayer + .5f, getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
+            pipe = BoxRender.create(new Color(40, 40, 40, 150), new Vec3d(getPos().getX() + 0.35f, getPos().getY() + 0.01f, getPos().getZ() + 0.35f), new Vec3d(getPos().getX() + 0.65f, scanLayer - .5f, getPos().getZ() + 0.65f), BoxRender.BoxMode.ENDLESS);
             pipe.show();
         }
     }
@@ -266,6 +270,7 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         currentLayer = tag.getInteger("currentLayer");
+        scanLayer = tag.getInteger("scanLayer");
         canWork = tag.getBoolean("canWork");
         hitFluid = tag.getBoolean("hitFluid");
         battery.setEnergy(tag.getInteger("energy"));
@@ -277,6 +282,7 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag.setInteger("currentLayer", currentLayer);
+        tag.setInteger("scanLayer", scanLayer);
         tag.setBoolean("canWork", canWork);
         tag.setBoolean("hitFluid", hitFluid);
         tag.setInteger("energy", battery.getEnergyStored());
@@ -298,7 +304,8 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
 
     @Override
     public void invalidate( ) {
-        if (pipe != null) pipe.cleanUp();
+        if (pipe != null) //noinspection MethodCallSideOnly
+            pipe.cleanUp();
         super.invalidate();
     }
 
@@ -317,9 +324,11 @@ public class TilePump extends TileEntity implements ITickable, IEnergyRecieverST
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         if (capability.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
             return true;
-        } else if (capability.equals(CapabilityEnergy.ENERGY)) {
+        }
+        else if (capability.equals(CapabilityEnergy.ENERGY)) {
             return true;
-        } else {
+        }
+        else {
             return super.hasCapability(capability, facing);
         }
     }

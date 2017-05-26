@@ -79,6 +79,15 @@ public class FRCore implements IFeatureRegistry {
                 'I', OreDict.IRON_BLOCK
         ));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(
+                new ItemStack(misc, 1, COMPLEX_MACHINE_BASE.getMeta()),
+                "MMM",
+                "MWM",
+                "MMM",
+                'M', new ItemStack(misc, 1, MACHINE_BASE.getMeta()),
+                'W', "wrench"
+        ));
+
         //@formatter:on
     }
 
