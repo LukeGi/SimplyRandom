@@ -17,35 +17,31 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class BlockMiner
-  extends BlockSRS
-  implements ITileEntityProvider
-{
-  public BlockMiner()
-  {
-    super(Names.Blocks.MINER, Material.IRON);
-  }
-  
-  @Override
-  public boolean onBlockActivated(
-    World worldIn,
-    BlockPos pos,
-    IBlockState state,
-    EntityPlayer playerIn,
-    EnumHand hand,
-    EnumFacing heldItem,
-    float side,
-    float hitX,
-    float hitY
-  )
-  {
-    playerIn.openGui(SRS.INSTANCE, GuiHandler.ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
-    return true;
-  }
-  
-  @Nullable
-  @Override
-  public TileEntity createNewTileEntity(World worldIn, int meta)
-  {
-    return new TileMiner();
-  }
+        extends BlockSRS
+        implements ITileEntityProvider {
+    public BlockMiner() {
+        super(Names.Blocks.MINER, Material.IRON);
+    }
+
+    @Override
+    public boolean onBlockActivated(
+            World worldIn,
+            BlockPos pos,
+            IBlockState state,
+            EntityPlayer playerIn,
+            EnumHand hand,
+            EnumFacing heldItem,
+            float side,
+            float hitX,
+            float hitY
+    ) {
+        playerIn.openGui(SRS.INSTANCE, GuiHandler.ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileMiner();
+    }
 }

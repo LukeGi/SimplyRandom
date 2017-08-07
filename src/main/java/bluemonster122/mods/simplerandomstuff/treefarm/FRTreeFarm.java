@@ -3,7 +3,6 @@ package bluemonster122.mods.simplerandomstuff.treefarm;
 import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
-import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBlockModelAsItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
@@ -17,119 +16,90 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBlockModelAsItem;
+
 public class FRTreeFarm
-  implements IFeatureRegistry
-{
-  public static final FRTreeFarm INSTANCE = new FRTreeFarm();
-  
-  public static final BlockSRS tree_farm = new BlockTreeFarm();
-  
-  private int tree_farm_break_energy = 50;
-  
-  private FRTreeFarm()
-  {
-  }
-  
-  @Override
-  public void registerBlocks(IForgeRegistry<Block> registry)
-  {
-    registry.registerAll(tree_farm);
-  }
-  
-  @Override
-  public void registerItems(IForgeRegistry<Item> registry)
-  {
-    registry.registerAll(tree_farm.createItemBlock());
-  }
-  
-  @Override
-  public void registerRecipes(IForgeRegistry<IRecipe> registry)
-  {
-    //@formatter:off
-    
-    //    registry.registerAll(new ShapedOreRecipe(new ResourceLocation(ModInfo.MOD_ID, "blah"),
-    //                                             new ItemStack(tree_farm, 1),
-    //                                             "SAS",
-    //                                             "IOI",
-    //                                             "SAS",
-    //                                             'S',
-    //                                             Names.OreDict.SAPLING,
-    //                                             'A',
-    //                                             new ItemStack(Items.IRON_AXE),
-    //                                             'I',
-    //                                             new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
-    //                                             'O',
-    //                                             Names.OreDict.OBSIDIAN
-    //    ).setRegistryName("treefarm"));
-    
-    //@formatter:on
-  }
-  
-  @Override
-  public void registerTileEntities()
-  {
-    GameRegistry.registerTileEntity(TileTreeFarm.class, "simplerandomstuff:tree_farm");
-  }
-  
-  @Override
-  public void loadConfigs(Configuration configuration)
-  {
-    setBreakEnergy(configuration.getInt(Names.Features.Configs.TREE_FARM_BREAK_ENERGY,
-                                        Names.Features.TREE_FARM,
-                                        50,
-                                        0,
-                                        1000,
-                                        "Set to 0 to make the farm cost no power."
-    ));
-  }
-  
-  @Override
-  public void registerEvents()
-  {
-        /* NO OPERATION */
-  }
-  
-  @Override
-  public void registerOreDict()
-  {
-    for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values())
-    {
-      String name = type.getName();
-      OreDictionary.registerOre("sapling", new ItemStack(Blocks.SAPLING, 1, type.getMetadata()));
-      OreDictionary.registerOre("sapling" + name.substring(0, 1)
-                                                .toUpperCase() + name.substring(1),
-                                new ItemStack(Blocks.SAPLING, 1, type.getMetadata())
-      );
+        implements IFeatureRegistry {
+    public static final FRTreeFarm INSTANCE = new FRTreeFarm();
+
+    public static final BlockSRS tree_farm = new BlockTreeFarm();
+
+    private int tree_farm_break_energy = 50;
+
+    private FRTreeFarm() {
     }
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Override
-  public void registerRenders()
-  {
-    registerBlockModelAsItem(tree_farm);
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Override
-  public void registerClientEvents()
-  {
+
+    @Override
+    public void registerBlocks(IForgeRegistry<Block> registry) {
+        registry.registerAll(tree_farm);
+    }
+
+    @Override
+    public void registerItems(IForgeRegistry<Item> registry) {
+        registry.registerAll(tree_farm.createItemBlock());
+    }
+
+    @Override
+    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
         /* NO OPERATION */
-  }
-  
-  @Override
-  public String getName()
-  {
-    return Names.Features.TREE_FARM;
-  }
-  
-  public int getBreakEnergy()
-  {
-    return tree_farm_break_energy;
-  }
-  
-  public void setBreakEnergy(int energy)
-  {
-    this.tree_farm_break_energy = energy;
-  }
+        // Recipes have been moved to JSONs.
+    }
+
+    @Override
+    public void registerTileEntities() {
+        GameRegistry.registerTileEntity(TileTreeFarm.class, "simplerandomstuff:tree_farm");
+    }
+
+    @Override
+    public void loadConfigs(Configuration configuration) {
+        setBreakEnergy(configuration.getInt(Names.Features.Configs.TREE_FARM_BREAK_ENERGY,
+                Names.Features.TREE_FARM,
+                50,
+                0,
+                1000,
+                "Set to 0 to make the farm cost no power."
+        ));
+    }
+
+    @Override
+    public void registerEvents() {
+        /* NO OPERATION */
+    }
+
+    @Override
+    public void registerOreDict() {
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            String name = type.getName();
+            OreDictionary.registerOre("sapling", new ItemStack(Blocks.SAPLING, 1, type.getMetadata()));
+            OreDictionary.registerOre("sapling" + name.substring(0, 1)
+                            .toUpperCase() + name.substring(1),
+                    new ItemStack(Blocks.SAPLING, 1, type.getMetadata())
+            );
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerRenders() {
+        registerBlockModelAsItem(tree_farm);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerClientEvents() {
+        /* NO OPERATION */
+    }
+
+    @Override
+    public String getName() {
+        return Names.Features.TREE_FARM;
+    }
+
+    public int getBreakEnergy() {
+        return tree_farm_break_energy;
+    }
+
+    public void setBreakEnergy(int energy) {
+        this.tree_farm_break_energy = energy;
+    }
 }

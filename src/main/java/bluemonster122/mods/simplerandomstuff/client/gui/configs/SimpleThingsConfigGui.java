@@ -14,38 +14,35 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class SimpleThingsConfigGui
-  extends GuiConfig
-{
-  public SimpleThingsConfigGui(GuiScreen parentScreen)
-  {
-    super(
-      parentScreen,
-      getConfigElements(),
-      ModInfo.MOD_ID,
-      false,
-      false,
-      I18n.format("simplerandomstuff.guiconfig.title")
-    );
-  }
+        extends GuiConfig {
+    public SimpleThingsConfigGui(GuiScreen parentScreen) {
+        super(
+                parentScreen,
+                getConfigElements(),
+                ModInfo.MOD_ID,
+                false,
+                false,
+                I18n.format("simplerandomstuff.guiconfig.title")
+        );
+    }
 
-  private static List<IConfigElement> getConfigElements()
-  {
-    List<IConfigElement> list = new ArrayList<IConfigElement>();
-    list.add(new DummyConfigElement.DummyCategoryElement(
-      "Tree Farm Configs",
-      "simplerandomstuff.guiconfig.treefarmcategory",
-      ElementTreeFarm.class
-    ));
-    list.add(new DummyConfigElement.DummyCategoryElement(
-      "Cobblestone Generator Configs",
-      "simplerandomstuff.guiconfig.cobblestonegeneratorcategory",
-      ElementCobblestoneGenerator.class
-    ));
-    list.add(new DummyConfigElement.DummyCategoryElement(
-      "Energy Generator Configs",
-      "simplerandomstuff.guiconfig.energygeneratorcategory",
-      ElementEnergyGenerator.class
-    ));
-    return list;
-  }
+    private static List<IConfigElement> getConfigElements() {
+        List<IConfigElement> list = new ArrayList<IConfigElement>();
+        list.add(new DummyConfigElement.DummyCategoryElement(
+                "Tree Farm Configs",
+                "simplerandomstuff.guiconfig.treefarmcategory",
+                ElementTreeFarm.class
+        ));
+        list.add(new DummyConfigElement.DummyCategoryElement(
+                "Cobblestone Generator Configs",
+                "simplerandomstuff.guiconfig.cobblestonegeneratorcategory",
+                ElementCobblestoneGenerator.class
+        ));
+        list.add(new DummyConfigElement.DummyCategoryElement(
+                "Energy Generator Configs",
+                "simplerandomstuff.guiconfig.energygeneratorcategory",
+                ElementEnergyGenerator.class
+        ));
+        return list;
+    }
 }

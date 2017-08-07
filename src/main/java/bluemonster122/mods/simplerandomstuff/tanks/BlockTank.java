@@ -37,200 +37,174 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockTank
-  extends BlockEnum
-  implements ITileEntityProvider, IPickup
-{
-  public static final  PropertyEnum<Types> VARIANT = PropertyEnum.create("variant", Types.class);
-  
-  private static final AxisAlignedBB       AABB    = new AxisAlignedBB(1 / 16F, 0, 1 / 16F, 15 / 16f, 1, 15 / 16f);
-  
-  public BlockTank()
-  {
-    super("tank", Material.GLASS, Types.VARIANTS);
-    setHardness(5000f);
-    setResistance(1f);
-    setDefaultState(getDefaultState().withProperty(VARIANT, Types.GLASS));
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public boolean isTranslucent(IBlockState state)
-  {
-    return true;
-  }
-  
-  @Override
-  @Deprecated
-  public IBlockState getStateFromMeta(int meta)
-  {
-    return this.getDefaultState()
-               .withProperty(VARIANT, Types.byMeta(meta));
-  }
-  
-  @Override
-  public int getMetaFromState(IBlockState blockState)
-  {
-    return blockState.getValue(VARIANT)
-                     .getMeta();
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public boolean isFullCube(IBlockState state)
-  {
-    return false;
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-  {
-    return AABB;
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Nullable
-  @Override
-  public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
-  {
-    return AABB;
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public boolean isOpaqueCube(IBlockState state)
-  {
-    return false;
-  }
-  
-  @Override
-  public int damageDropped(IBlockState blockState)
-  {
-    return blockState.getValue(VARIANT)
-                     .getMeta();
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Nonnull
-  @Override
-  public BlockRenderLayer getBlockLayer()
-  {
-    return BlockRenderLayer.CUTOUT;
-  }
-  
-  @Override
-  public boolean onBlockActivated(
-    World worldIn,
-    BlockPos pos,
-    IBlockState state,
-    EntityPlayer playerIn,
-    EnumHand hand,
-    EnumFacing facing,
-    float hitX,
-    float hitY,
-    float hitZ
-  )
-  {
-    ItemStack heldItem = playerIn.getHeldItem(hand);
-    if (heldItem.getItem() == FRTank.upgrade) return false;
-    if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-    TileEntity te = worldIn.getTileEntity(pos);
-    if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing))
-    {
-      return false;
+        extends BlockEnum
+        implements ITileEntityProvider, IPickup {
+    public static final PropertyEnum<Types> VARIANT = PropertyEnum.create("variant", Types.class);
+
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(1 / 16F, 0, 1 / 16F, 15 / 16f, 1, 15 / 16f);
+
+    public BlockTank() {
+        super("tank", Material.GLASS, Types.VARIANTS);
+        setHardness(5000f);
+        setResistance(1f);
+        setDefaultState(getDefaultState().withProperty(VARIANT, Types.GLASS));
     }
-    IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-    FluidUtil.interactWithFluidHandler(playerIn, EnumHand.MAIN_HAND, fluidHandler);
-    // prevent interaction so stuff like buckets and other things don't place the liquid block
-    te.markDirty();
-    IBlockState blockState = worldIn.getBlockState(pos);
-    worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
-    return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-  }
-  
-  @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-  {
-    TileEntity te = world.getTileEntity(pos);
-    if (te instanceof TileTank && stack != null && stack.hasTagCompound())
-    {
-      ((TileTank) te).readTank(stack.getTagCompound());
-    }
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Override
-  public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
-  {
-    for (Types type : Types.VARIANTS)
-    {
-      items.add(new ItemStack(this, 1, type.getMeta()));
-    }
-  }
-  
-  @Override
-  protected BlockStateContainer createBlockState()
-  {
-    return new BlockStateContainer(this, VARIANT);
-  }
-  
-  @Nonnull
-  @Override
-  public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune)
-  {
-    List<ItemStack> ret  = Lists.newArrayList();
-    Random          rand = world instanceof World ? ((World) world).rand : RANDOM;
-    Item            item = this.getItemDropped(state, rand, fortune);
-    ItemStack       stack;
-    stack = new ItemStack(item, 1, this.damageDropped(state));
-    TileEntity te = world.getTileEntity(pos);
-    if (te instanceof TileTank && stack != ItemStack.EMPTY && ((TileTank) te).tank.getFluid() != null)
-    {
-      NBTTagCompound tag = new NBTTagCompound();
-      ((TileTank) te).writeTank(tag);
-      stack.setTagCompound(tag);
-    }
-    ret.add(stack);
-    
-    return ret;
-  }
-  
-  @Override
-  public ItemBlock createItemBlock()
-  {
-    return new ItemBlockTank(this);
-  }
-  
-  @Nullable
-  @Override
-  public TileEntity createNewTileEntity(World worldIn, int meta)
-  {
-    return new TileTank();
-  }
-  
-  public enum Types
-    implements IEnumMeta, Comparable<Types>
-  {
-    GLASS, IRON, GOLD, OBSIDIAN, DIAMOND;
-    
-    protected static final Types[] VARIANTS = values();
-    
-    private int meta;
-    
-    Types()
-    {
-      meta = ordinal();
-    }
-    
-    public static Types byMeta(int meta)
-    {
-      return VARIANTS[Math.abs(meta) % VARIANTS.length];
-    }
-    
+
+    @SuppressWarnings("deprecation")
     @Override
-    public int getMeta()
-    {
-      return meta;
+    public boolean isTranslucent(IBlockState state) {
+        return true;
     }
-  }
+
+    @Override
+    @Deprecated
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState()
+                .withProperty(VARIANT, Types.byMeta(meta));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState blockState) {
+        return blockState.getValue(VARIANT)
+                .getMeta();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return AABB;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public int damageDropped(IBlockState blockState) {
+        return blockState.getValue(VARIANT)
+                .getMeta();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Nonnull
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean onBlockActivated(
+            World worldIn,
+            BlockPos pos,
+            IBlockState state,
+            EntityPlayer playerIn,
+            EnumHand hand,
+            EnumFacing facing,
+            float hitX,
+            float hitY,
+            float hitZ
+    ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if (heldItem.getItem() == FRTank.upgrade) return false;
+        if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
+            return false;
+        }
+        IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+        FluidUtil.interactWithFluidHandler(playerIn, EnumHand.MAIN_HAND, fluidHandler);
+        // prevent interaction so stuff like buckets and other things don't place the liquid block
+        te.markDirty();
+        IBlockState blockState = worldIn.getBlockState(pos);
+        worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
+        return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileTank && stack != null && stack.hasTagCompound()) {
+            ((TileTank) te).readTank(stack.getTagCompound());
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+        for (Types type : Types.VARIANTS) {
+            items.add(new ItemStack(this, 1, type.getMeta()));
+        }
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
+    }
+
+    @Nonnull
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+        List<ItemStack> ret = Lists.newArrayList();
+        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
+        Item item = this.getItemDropped(state, rand, fortune);
+        ItemStack stack;
+        stack = new ItemStack(item, 1, this.damageDropped(state));
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileTank && stack != ItemStack.EMPTY && ((TileTank) te).tank.getFluid() != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            ((TileTank) te).writeTank(tag);
+            stack.setTagCompound(tag);
+        }
+        ret.add(stack);
+
+        return ret;
+    }
+
+    @Override
+    public ItemBlock createItemBlock() {
+        return new ItemBlockTank(this);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileTank();
+    }
+
+    public enum Types
+            implements IEnumMeta, Comparable<Types> {
+        GLASS, IRON, GOLD, OBSIDIAN, DIAMOND;
+
+        protected static final Types[] VARIANTS = values();
+
+        private int meta;
+
+        Types() {
+            meta = ordinal();
+        }
+
+        public static Types byMeta(int meta) {
+            return VARIANTS[Math.abs(meta) % VARIANTS.length];
+        }
+
+        @Override
+        public int getMeta() {
+            return meta;
+        }
+    }
 }

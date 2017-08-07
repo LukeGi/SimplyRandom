@@ -1,21 +1,22 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    " I ",
-    " SI",
-    "S  "
+    "MMM",
+    "MSM",
+    "MMM"
   ],
   "key": {
     "S": {
       "type": "forge:ore_dict",
       "ore": "stickIron"
     },
-    "I": {
+    "M": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "ore": "stickWood"
     }
   },
   "result": {
-    "item": "simplerandomstuff:wrench"
+    "item": "simplerandomstuff:misc",
+    "data": 1
   }
 }

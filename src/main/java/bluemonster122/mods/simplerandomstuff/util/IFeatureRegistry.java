@@ -8,27 +8,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public interface IFeatureRegistry
-{
-  void registerBlocks(IForgeRegistry<Block> registry);
-  
-  void registerItems(IForgeRegistry<Item> registry);
-  
-  void registerRecipes(IForgeRegistry<IRecipe> registry);
-  
-  void registerTileEntities();
-  
-  void loadConfigs(Configuration configuration);
-  
-  void registerEvents();
-  
-  void registerOreDict();
-  
-  @SideOnly(Side.CLIENT)
-  void registerRenders();
-  
-  @SideOnly(Side.CLIENT)
-  void registerClientEvents();
-  
-  String getName();
+public interface IFeatureRegistry {
+    void registerBlocks(IForgeRegistry<Block> registry);
+
+    void registerItems(IForgeRegistry<Item> registry);
+
+    void registerRecipes(IForgeRegistry<IRecipe> registry);
+
+    void registerTileEntities();
+
+    void loadConfigs(Configuration configuration);
+
+    void registerEvents();
+
+    void registerOreDict();
+
+    @SideOnly(Side.CLIENT)
+    void registerRenders();
+
+    @SideOnly(Side.CLIENT)
+    void registerClientEvents();
+
+    String getName();
 }

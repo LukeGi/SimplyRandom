@@ -5,17 +5,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.SERVER)
 public class ServerProxy
-  implements IProxy
-{
-  @Override
-  public void preInit()
-  {
-  
-  }
-  
-  @Override
-  public void init()
-  {
-  
-  }
+        implements IProxy {
+    @Override
+    public void preInit() {
+
+    }
+
+    @Override
+    public void init() {
+
+    }
 }

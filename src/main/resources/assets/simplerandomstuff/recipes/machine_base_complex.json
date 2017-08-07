@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "MMM",
+    "MWM",
+    "MMM"
+  ],
+  "key": {
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "wrench"
+    },
+    "M": {
+      "item": "simplerandomstuff:misc",
+      "data": 3
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:misc",
+    "data": 4
+  }
+}

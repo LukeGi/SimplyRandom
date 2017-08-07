@@ -13,40 +13,33 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockSRS
-  extends Block
-{
-  public BlockSRS(String name, Material blockMaterialIn, MapColor blockMapColorIn)
-  {
-    super(blockMaterialIn, blockMapColorIn);
-    setup(name);
-  }
-  
-  public BlockSRS(String name, Material materialIn)
-  {
-    super(materialIn);
-    setup(name);
-  }
-  
-  @Override
-  public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-  {
-    TileEntity tileEntity = worldIn.getTileEntity(pos);
-    if (tileEntity instanceof IHaveInventory)
-    {
-      ((IHaveInventory) tileEntity).dropContents(worldIn, pos);
+        extends Block {
+    public BlockSRS(String name, Material blockMaterialIn, MapColor blockMapColorIn) {
+        super(blockMaterialIn, blockMapColorIn);
+        setup(name);
     }
-    super.breakBlock(worldIn, pos, state);
-  }
-  
-  private void setup(String name)
-  {
-    setRegistryName(ModInfo.MOD_ID, name);
-    setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
-    setCreativeTab(SRS.theTab);
-  }
-  
-  public ItemBlock createItemBlock()
-  {
-    return new ItemBlockST(this);
-  }
+
+    public BlockSRS(String name, Material materialIn) {
+        super(materialIn);
+        setup(name);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof IHaveInventory) {
+            ((IHaveInventory) tileEntity).dropContents(worldIn, pos);
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    private void setup(String name) {
+        setRegistryName(ModInfo.MOD_ID, name);
+        setUnlocalizedName(getRegistryName().getResourceDomain() + "." + name);
+        setCreativeTab(SRS.theTab);
+    }
+
+    public ItemBlock createItemBlock() {
+        return new ItemBlockST(this);
+    }
 }

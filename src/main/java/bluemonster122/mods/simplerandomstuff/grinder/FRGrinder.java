@@ -12,75 +12,62 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class FRGrinder
-  implements IFeatureRegistry
-{
-  public static final FRGrinder INSTNACE = new FRGrinder();
-  
-  private FRGrinder()
-  {
-  }
-  
-  @Override
-  public void registerBlocks(IForgeRegistry<Block> registry)
-  {
-    registry.registerAll(grinder);
-  }
-  
-  @Override
-  public void registerItems(IForgeRegistry<Item> registry)
-  {
-  
-  }
-  
-  @Override
-  public void registerRecipes(IForgeRegistry<IRecipe> registry)
-  {
-  
-  }
-  
-  @Override
-  public void registerTileEntities()
-  {
-  
-  }
-  
-  @Override
-  public void loadConfigs(Configuration configuration)
-  {
-  
-  }
-  
-  @Override
-  public void registerEvents()
-  {
-  
-  }
-  
-  @Override
-  public void registerOreDict()
-  {
-  
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Override
-  public void registerRenders()
-  {
-  
-  }
-  
-  @SideOnly(Side.CLIENT)
-  @Override
-  public void registerClientEvents()
-  {
-  
-  }
-  
-  @Override
-  public String getName()
-  {
-    return Names.Features.GRINDER;
-  }
-  
-  public static BlockSRS grinder = new BlockGrinder();
+        implements IFeatureRegistry {
+    public static final FRGrinder INSTNACE = new FRGrinder();
+    public static BlockSRS grinder = new BlockGrinder();
+
+    private FRGrinder() {
+    }
+
+    @Override
+    public void registerBlocks(IForgeRegistry<Block> registry) {
+        registry.registerAll(grinder);
+    }
+
+    @Override
+    public void registerItems(IForgeRegistry<Item> registry) {
+
+    }
+
+    @Override
+    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
+
+    }
+
+    @Override
+    public void registerTileEntities() {
+
+    }
+
+    @Override
+    public void loadConfigs(Configuration configuration) {
+
+    }
+
+    @Override
+    public void registerEvents() {
+
+    }
+
+    @Override
+    public void registerOreDict() {
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerRenders() {
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerClientEvents() {
+
+    }
+
+    @Override
+    public String getName() {
+        return Names.Features.GRINDER;
+    }
 }

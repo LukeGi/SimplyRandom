@@ -5,10 +5,8 @@ import bluemonster122.mods.simplerandomstuff.reference.Names;
 import net.minecraft.block.material.Material;
 
 public class BlockGrinder
-  extends BlockSRS
-{
-  public BlockGrinder()
-  {
-    super(Names.Blocks.GRINDER, Material.ROCK);
-  }
+        extends BlockSRS {
+    public BlockGrinder() {
+        super(Names.Blocks.GRINDER, Material.ROCK);
+    }
 }

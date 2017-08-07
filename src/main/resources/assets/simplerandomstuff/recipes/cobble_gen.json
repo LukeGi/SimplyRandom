@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "PPP",
+    "WCL",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "W": {
+      "item": "minecraft:water_bucket"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:cobblestone_generator"
+  }
+}

@@ -19,59 +19,52 @@ import java.util.List;
  * and is the class that handles the rendering of all the cuboids each tick.
  */
 @SideOnly(Side.CLIENT)
-public class BoxRendererManager
-{
-  public static final BoxRendererManager INSTANCE = new BoxRendererManager();
-  
-  private static      List<BoxRender>    renders  = new ArrayList<>();
-  
-  private BoxRendererManager()
-  {
-  }
-  
-  public void addBox(BoxRender r)
-  {
-    renders.add(r);
-  }
-  
-  public void removeBox(BoxRender r)
-  {
-    renders.remove(r);
-  }
-  
-  @SubscribeEvent
-  public void unloadHook(WorldEvent.Unload e)
-  {
-    for (int i = renders.size() - 1; i >= 0; i--)
-    {
-      renders.get(i)
-             .cleanUp();
+public class BoxRendererManager {
+    public static final BoxRendererManager INSTANCE = new BoxRendererManager();
+
+    private static List<BoxRender> renders = new ArrayList<>();
+
+    private BoxRendererManager() {
     }
-  }
-  
-  @SubscribeEvent
-  public void renderHook(RenderWorldLastEvent e)
-  {
-    Minecraft    mc      = FMLClientHandler.instance()
-                                           .getClient();
-    EntityPlayer player  = mc.player;
-    double       playerX = player.prevPosX + (player.posX - player.prevPosX) * e.getPartialTicks();
-    double       playerY = player.prevPosY + (player.posY - player.prevPosY) * e.getPartialTicks();
-    double       playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * e.getPartialTicks();
-    
-    GL11.glPushMatrix();
-    GL11.glTranslated(-playerX, -playerY, -playerZ);
-    
-    GL11.glDisable(GL11.GL_TEXTURE_2D);
-    GL11.glEnable(GL11.GL_BLEND);
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-    
-    GlStateManager.disableDepth();
-    renders.forEach(BoxRender::render);
-    GlStateManager.enableDepth();
-    
-    GL11.glEnable(GL11.GL_TEXTURE_2D);
-    GL11.glDisable(GL11.GL_BLEND);
-    GL11.glPopMatrix();
-  }
+
+    public void addBox(BoxRender r) {
+        renders.add(r);
+    }
+
+    public void removeBox(BoxRender r) {
+        renders.remove(r);
+    }
+
+    @SubscribeEvent
+    public void unloadHook(WorldEvent.Unload e) {
+        for (int i = renders.size() - 1; i >= 0; i--) {
+            renders.get(i)
+                    .cleanUp();
+        }
+    }
+
+    @SubscribeEvent
+    public void renderHook(RenderWorldLastEvent e) {
+        Minecraft mc = FMLClientHandler.instance()
+                .getClient();
+        EntityPlayer player = mc.player;
+        double playerX = player.prevPosX + (player.posX - player.prevPosX) * e.getPartialTicks();
+        double playerY = player.prevPosY + (player.posY - player.prevPosY) * e.getPartialTicks();
+        double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * e.getPartialTicks();
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(-playerX, -playerY, -playerZ);
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GlStateManager.disableDepth();
+        renders.forEach(BoxRender::render);
+        GlStateManager.enableDepth();
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
+    }
 }

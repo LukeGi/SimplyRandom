@@ -1,21 +1,26 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    " I ",
-    " SI",
-    "S  "
+    "SWS",
+    "WIW",
+    "SWS"
   ],
   "key": {
-    "S": {
+    "W": {
       "type": "forge:ore_dict",
       "ore": "stickIron"
     },
+    "S": {
+      "item": "simplerandomstuff:misc",
+      "data": 2
+    },
     "I": {
       "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "ore": "blockIron"
     }
   },
   "result": {
-    "item": "simplerandomstuff:wrench"
+    "item": "simplerandomstuff:misc",
+    "data": 3
   }
 }

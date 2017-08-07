@@ -39,139 +39,116 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = ModInfo.MOD_ID,
-     version = ModInfo.VERSION,
-     guiFactory = ModInfo.GUI_FACTORY_CLASS,
-     updateJSON = ModInfo.UPDATE_JSON)
-public class SRS
-{
-  
-  public static final CreativeTabs theTab;
-  
-  public static final IFeatureRegistry[] featureRegistries;
-  
-  static
-  {
-    theTab = new CreativeTabST();
-    featureRegistries = new IFeatureRegistry[] {
-      FRCore.INSTANCE,
-      FRTank.INSTANCE,
-      FRPump.INSTANCE,
-      FRTreeFarm.INSTANCE,
-      FRCobbleGen.INSTANCE,
-      FRGenerators.INSTANCE,
-      FRCrafters.INSTANCE,
-      FROverlays.INSTANCE,
-      FRMiner.INSTANCE,
-      FRGrinder.INSTNACE
-    };
-  }
-  
-  public SimpleNetworkWrapper channel;
-  
-  public static boolean shouldLoad(IFeatureRegistry registry)
-  {
-    if (!ConfigurationHandler.FeatureLoad.containsKey(registry))
-    {
-      INSTANCE.logger.warn("attempted to load a registry before it's load logic was figured out");
-      return false;
+        version = ModInfo.VERSION,
+        guiFactory = ModInfo.GUI_FACTORY_CLASS,
+        updateJSON = ModInfo.UPDATE_JSON)
+public class SRS {
+
+    public static final CreativeTabs theTab;
+
+    public static final IFeatureRegistry[] featureRegistries;
+
+    public static final boolean isDev;
+    public static Logger logger;
+    @Instance(value = ModInfo.MOD_ID)
+    public static SRS INSTANCE = new SRS();
+    @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
+    public static IProxy proxy;
+
+    static {
+        isDev = Boolean.parseBoolean(System.getProperty("indev"));
+        theTab = new CreativeTabST();
+        featureRegistries = new IFeatureRegistry[]{
+                FRCore.INSTANCE,
+                FRTank.INSTANCE,
+                FRPump.INSTANCE,
+                FRTreeFarm.INSTANCE,
+                FRCobbleGen.INSTANCE,
+                FRGenerators.INSTANCE,
+                FRCrafters.INSTANCE,
+                FROverlays.INSTANCE,
+                FRMiner.INSTANCE,
+                FRGrinder.INSTNACE
+        };
     }
-    else
-    {
-      return ConfigurationHandler.FeatureLoad.get(registry);
+
+    public SimpleNetworkWrapper channel;
+
+    public static boolean shouldLoad(IFeatureRegistry registry) {
+        if (!ConfigurationHandler.FeatureLoad.containsKey(registry)) {
+            INSTANCE.logger.warn("attempted to load a registry before it's load logic was figured out");
+            return false;
+        } else {
+            return ConfigurationHandler.FeatureLoad.get(registry);
+        }
     }
-  }
-  
-  @EventHandler
-  public void preInit(FMLPreInitializationEvent event)
-  {
-    logger = event.getModLog();
-    ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
-    for (IFeatureRegistry registry : featureRegistries)
-    {
-      if (shouldLoad(registry))
-      {
-        registry.registerEvents();
-        registry.registerOreDict();
-      }
+
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        logger = event.getModLog();
+        ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
+        for (IFeatureRegistry registry : featureRegistries) {
+            if (shouldLoad(registry)) {
+                registry.registerEvents();
+                registry.registerOreDict();
+            }
+        }
+        INSTANCE.setupNetwork();
+        proxy.preInit();
     }
-    INSTANCE.setupNetwork();
-    proxy.preInit();
-  }
-  
-  private void setupNetwork()
-  {
-    logger.info(">>> Registering network channel...");
-    
-    channel = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-    
-    channel.registerMessage(MessageCraftingSync.class, MessageCraftingSync.class, 0, Side.SERVER);
-  }
-  
-  @EventHandler
-  public void init(FMLInitializationEvent event)
-  {
-    proxy.init();
-    NetworkRegistry.INSTANCE.registerGuiHandler(SRS.INSTANCE, new GuiHandler());
-    for (IFeatureRegistry fr : featureRegistries)
-    {
-      if (shouldLoad(fr))
-      {
-        fr.registerTileEntities();
-      }
+
+    private void setupNetwork() {
+        logger.info(">>> Registering network channel...");
+
+        channel = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
+
+        channel.registerMessage(MessageCraftingSync.class, MessageCraftingSync.class, 0, Side.SERVER);
     }
-  }
-  
-  @EventHandler
-  public void postInit(FMLPostInitializationEvent event)
-  {
-  }
-  
-  @EventBusSubscriber
-  public static class RegistrationHandler
-  {
-    @SubscribeEvent
-    public static void registerBlocks(Register<Block> event)
-    {
-      for (IFeatureRegistry fr : SRS.featureRegistries)
-      {
-        if (SRS.shouldLoad(fr)) fr.registerBlocks(event.getRegistry());
-      }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.init();
+        NetworkRegistry.INSTANCE.registerGuiHandler(SRS.INSTANCE, new GuiHandler());
+        for (IFeatureRegistry fr : featureRegistries) {
+            if (shouldLoad(fr)) {
+                fr.registerTileEntities();
+            }
+        }
     }
-    
-    @SubscribeEvent
-    public static void registerItems(Register<Item> event)
-    {
-      for (IFeatureRegistry fr : SRS.featureRegistries)
-      {
-        if (SRS.shouldLoad(fr)) fr.registerItems(event.getRegistry());
-      }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
     }
-    
-    @SubscribeEvent
-    public static void registerRecipes(Register<IRecipe> event)
-    {
-      for (IFeatureRegistry fr : SRS.featureRegistries)
-      {
-        if (SRS.shouldLoad(fr)) fr.registerRecipes(event.getRegistry());
-      }
+
+    @EventBusSubscriber
+    public static class RegistrationHandler {
+        @SubscribeEvent
+        public static void registerBlocks(Register<Block> event) {
+            for (IFeatureRegistry fr : SRS.featureRegistries) {
+                if (SRS.shouldLoad(fr)) fr.registerBlocks(event.getRegistry());
+            }
+        }
+
+        @SubscribeEvent
+        public static void registerItems(Register<Item> event) {
+            for (IFeatureRegistry fr : SRS.featureRegistries) {
+                if (SRS.shouldLoad(fr)) fr.registerItems(event.getRegistry());
+            }
+        }
+
+        @SubscribeEvent
+        public static void registerRecipes(Register<IRecipe> event) {
+            for (IFeatureRegistry fr : SRS.featureRegistries) {
+                if (SRS.shouldLoad(fr)) fr.registerRecipes(event.getRegistry());
+            }
+        }
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public static void registerRenders(ModelRegistryEvent event) {
+            for (IFeatureRegistry fr : SRS.featureRegistries) {
+                if (SRS.shouldLoad(fr)) fr.registerRenders();
+            }
+        }
     }
-    
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public static void registerRenders(ModelRegistryEvent event)
-    {
-      for (IFeatureRegistry fr : SRS.featureRegistries)
-      {
-        if (SRS.shouldLoad(fr)) fr.registerRenders();
-      }
-    }
-  }
-  
-  public static Logger logger;
-  
-  @Instance(value = ModInfo.MOD_ID)
-  public static SRS INSTANCE = new SRS();
-  
-  @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
-  public static IProxy proxy;
 }

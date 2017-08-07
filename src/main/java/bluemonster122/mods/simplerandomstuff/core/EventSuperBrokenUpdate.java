@@ -5,12 +5,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 @Cancelable
 public class EventSuperBrokenUpdate
-  extends Event
-{
-  private TileEntitySRS brokenTile;
-  
-  public EventSuperBrokenUpdate(TileEntitySRS brokenTile)
-  {
-    this.brokenTile = brokenTile;
-  }
+        extends Event {
+    private TileEntitySRS brokenTile;
+
+    public EventSuperBrokenUpdate(TileEntitySRS brokenTile) {
+        this.brokenTile = brokenTile;
+    }
 }

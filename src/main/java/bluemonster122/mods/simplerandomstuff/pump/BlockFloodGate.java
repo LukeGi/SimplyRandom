@@ -21,51 +21,46 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 
 public class BlockFloodGate
-  extends BlockSRS
-  implements ITileEntityProvider
-{
-  public BlockFloodGate()
-  {
-    super(Names.Blocks.FLOOD_GATE, Material.IRON);
-    setResistance(5);
-    setHardness(5);
-  }
-  
-  @Override
-  public boolean onBlockActivated(
-    World worldIn,
-    BlockPos pos,
-    IBlockState state,
-    EntityPlayer playerIn,
-    EnumHand hand,
-    EnumFacing facing,
-    float hitX,
-    float hitY,
-    float hitZ
-  )
-  {
-    ItemStack heldItem = playerIn.getHeldItem(hand);
-    if (heldItem.getItem() == FRTank.upgrade) return false;
-    if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-    TileEntity te = worldIn.getTileEntity(pos);
-    if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing))
-    {
-      return false;
+        extends BlockSRS
+        implements ITileEntityProvider {
+    public BlockFloodGate() {
+        super(Names.Blocks.FLOOD_GATE, Material.IRON);
+        setResistance(5);
+        setHardness(5);
     }
-    IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-    FluidUtil.interactWithFluidHandler(playerIn, EnumHand.MAIN_HAND, fluidHandler);
-    // prevent interaction so stuff like buckets and other things don't place the liquid block
-    te.markDirty();
-    IBlockState blockState = worldIn.getBlockState(pos);
-    worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
-    return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
-  }
-  
-  
-  @Nullable
-  @Override
-  public TileEntity createNewTileEntity(World worldIn, int meta)
-  {
-    return new TileFloodGate();
-  }
+
+    @Override
+    public boolean onBlockActivated(
+            World worldIn,
+            BlockPos pos,
+            IBlockState state,
+            EntityPlayer playerIn,
+            EnumHand hand,
+            EnumFacing facing,
+            float hitX,
+            float hitY,
+            float hitZ
+    ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if (heldItem.getItem() == FRTank.upgrade) return false;
+        if (worldIn.isRemote) return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te == null || !te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
+            return false;
+        }
+        IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+        FluidUtil.interactWithFluidHandler(playerIn, EnumHand.MAIN_HAND, fluidHandler);
+        // prevent interaction so stuff like buckets and other things don't place the liquid block
+        te.markDirty();
+        IBlockState blockState = worldIn.getBlockState(pos);
+        worldIn.notifyBlockUpdate(pos, blockState, blockState, 3);
+        return heldItem != ItemStack.EMPTY && !(heldItem.getItem() instanceof ItemBlock);
+    }
+
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileFloodGate();
+    }
 }
