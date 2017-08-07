@@ -9,8 +9,8 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0.5.2-b"
-group = "bluemonster122.mods.simplerandomstuff" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "1.12-2.0.0.1-beta"
+group = "bluemonster.mods.simplerandomstuff" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "simplerandomstuff"
 
 minecraft {
@@ -20,7 +20,7 @@ minecraft {
     mappings = "snapshot_20170624"
 
     replace "@VERSION@", project.version
-    replaceIn "SimpleRandomStuff.java"
+    replaceIn "SRS.java"
 }
 
 dependencies {

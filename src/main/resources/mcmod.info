@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "simplerandomstuff",
+    "name": "Simple Random Stuff",
+    "description": "A Simple mod that adds a few simple random stuffs.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://minecraft.curseforge.com/projects/simple-random-stuff",
+    "updateUrl": "https://minecraft.curseforge.com/projects/simple-random-stuff/files",
+    "authorList": [
+      "Blue_Monster122"
+    ],
+    "credits": "",
+    "logoFile": "assets/simplethings/textures/icon.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "transform": "forge:default-block",
+    "textures": {
+      "particle": "simplerandomstuff:block/crafting_table/front_auto",
+      "down": "simplerandomstuff:block/crafting_table/bottom_auto",
+      "up": "simplerandomstuff:block/crafting_table/top_auto",
+      "north": "simplerandomstuff:block/crafting_table/front_auto",
+      "east": "simplerandomstuff:block/crafting_table/side_auto",
+      "south": "simplerandomstuff:block/crafting_table/side_auto",
+      "west": "simplerandomstuff:block/crafting_table/front_auto"
+    }
+  },
+  "variants": {
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+@ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
+package bluemonster122.mods.simplerandomstuff;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
