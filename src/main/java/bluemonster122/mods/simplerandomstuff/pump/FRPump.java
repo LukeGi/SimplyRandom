@@ -2,8 +2,8 @@ package bluemonster122.mods.simplerandomstuff.pump;
 
 import bluemonster122.mods.simplerandomstuff.core.FRCore;
 import bluemonster122.mods.simplerandomstuff.core.ItemMisc;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
+import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.reference.Names.OreDict;
 import bluemonster122.mods.simplerandomstuff.tanks.BlockTank;
 import bluemonster122.mods.simplerandomstuff.tanks.FRTank;
@@ -23,9 +23,8 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBl
 public class FRPump implements IFeatureRegistry {
 
     public static final FRPump INSTANCE = new FRPump();
-    private final BlockST pump = new BlockPump();
-    private final BlockST floodgate = new BlockFloodGate();
-    private static boolean shouldLoad = false;
+    private final BlockSRS pump = new BlockPump();
+    private final BlockSRS floodgate = new BlockFloodGate();
 
     @Override
 
@@ -80,8 +79,7 @@ public class FRPump implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Pump", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the pump and floodgate");
-        setPumpEnergy(configuration.getInt("RF use per pump-ed block", "Pump", 2, 0, 100, "Set this to 0 for free pump."));
+        setPumpEnergy(configuration.getInt(Names.Features.Configs.PUMP_ENERGY, Names.Features.PUMP, 2, 0, 100, "Set this to 0 for free pump."));
     }
 
     @Override
@@ -108,8 +106,8 @@ public class FRPump implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.PUMP;
     }
 
     public int getPumpEnergy( ) {

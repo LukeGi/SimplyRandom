@@ -2,8 +2,7 @@ package bluemonster122.mods.simplerandomstuff.treefarm;
 
 import bluemonster122.mods.simplerandomstuff.core.FRCore;
 import bluemonster122.mods.simplerandomstuff.core.ItemMisc;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.block.BlockPlanks;
@@ -21,7 +20,6 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBl
 
 public class FRTreeFarm implements IFeatureRegistry {
     public static final FRTreeFarm INSTANCE = new FRTreeFarm();
-    public static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -58,8 +56,7 @@ public class FRTreeFarm implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Tree Farm", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the tree farm");
-        setBreakEnergy(configuration.getInt("Energy Consumed On Block Break", "tree_farm", 50, 0, 1000, "Set to 0 to make the farm cost no power."));
+        setBreakEnergy(configuration.getInt(Names.Features.Configs.TREE_FARM_BREAK_ENERGY, Names.Features.TREE_FARM, 50, 0, 1000, "Set to 0 to make the farm cost no power."));
     }
 
     @Override
@@ -89,8 +86,8 @@ public class FRTreeFarm implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.TREE_FARM;
     }
 
     public int getBreakEnergy( ) {
@@ -104,5 +101,5 @@ public class FRTreeFarm implements IFeatureRegistry {
     private FRTreeFarm( ) {
     }
     private int tree_farm_break_energy = 50;
-    public static final BlockST tree_farm = new BlockTreeFarm();
+    public static final BlockSRS tree_farm = new BlockTreeFarm();
 }

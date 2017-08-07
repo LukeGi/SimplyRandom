@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplerandomstuff.cobblegen;
 
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
+import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,8 +15,6 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBl
 
 public class FRCobbleGen implements IFeatureRegistry {
     public static final FRCobbleGen INSTANCE = new FRCobbleGen();
-
-    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -53,8 +51,7 @@ public class FRCobbleGen implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Cobblestone Generator", ModInfo.CONFIG_FEATURES, true, "Set to false to disable the Cobblestone Generator");
-        Cobble_RF = configuration.getInt("RF Cost Per Cobble", "cobble_gen", 0, 0, 1000, "If set to 0, the cobblestone is free.");
+        Cobble_RF = configuration.getInt(Names.Features.Configs.COBBLE_GEN_RF_COST, Names.Features.COBBLESTONE_GENERATOR, 0, 0, 1000, "If set to 0, the cobblestone is free.");
     }
 
     @Override
@@ -80,12 +77,12 @@ public class FRCobbleGen implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.COBBLESTONE_GENERATOR;
     }
 
     private FRCobbleGen( ) {
     }
     public static int Cobble_RF = 0;
-    public static BlockST cobblestone_generator = new BlockCobblestoneGenerator();
+    public static BlockSRS cobblestone_generator = new BlockCobblestoneGenerator();
 }

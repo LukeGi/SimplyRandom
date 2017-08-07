@@ -1,11 +1,15 @@
 package bluemonster122.mods.simplerandomstuff.reference;
 
+import net.minecraftforge.common.config.ConfigCategory;
+
 public class Names {
     public static class Blocks {
         public static final String TREE_FARM = "tree_farm";
         public static final String COBBLESTONE_GENERATOR = "cobblestone_generator";
         public static final String GENERATOR = "generator";
         public static final String FLOOD_GATE = "flood_gate";
+        public static final String MINER = "miner";
+        public static final String GRINDER = "grinder";
 
         private Blocks( ) {
         }
@@ -36,6 +40,34 @@ public class Names {
         public static final String WRENCH = "wrench";
 
         private Items( ) {
+        }
+    }
+
+    public static class Features {
+        public static final String MINER = "Miner";
+        public static final String TREE_FARM = "Tree Farm";
+        public static final String TANK = "Tanks";
+        public static final String PUMP = "Pump";
+        public static final String OVERLAYS = "Overlay/HUD";
+        public static final String GRINDER = "Grinder";
+        public static final String GENERATORS = "Generators";
+        public static final String CRAFTERS = "Crafters";
+        public static final String CORE = "Core";
+        public static final String COBBLESTONE_GENERATOR = "Cobblestone Generator";
+        public static final ConfigCategory GENERATORS_CC = new ConfigCategory("Generators");
+
+
+        public static class Configs {
+            public static final String TREE_FARM_BREAK_ENERGY = "Energy Consumed On Block Break";
+            public static final String PUMP_ENERGY = "Energy Consumer Per Pump Operation";
+            public static final String OVERLAYS_USE_CUSTOM_OVERLAYS = "Use Custom in game UI";
+            public static final String OVERLAYS_SHOW_LVLUPMSG = "Show Level up message";
+            public static final String MINER_SCAN_POWER = "Energy Consumed On Scanning A Block";
+            public static final String MINER_BREAK_POWER = "Energy Consumed On Breaking A Block";
+            public static final String COBBLE_GEN_RF_COST = "Energy Consumed On Creating A Single Cobblestone";
+            public static final String GENERATORS_SUGAR_RFPERT = "SUGAR: Energy Created Per Tick";
+            public static final String GENERATORS_SUGAR_BURNTIME = "SUGAR: Sugar Burn Time (ticks)";
+            public static final String GENERATORS_FIRE_RFPERT = "FIRE: Energy Created Per Tick";
         }
     }
 

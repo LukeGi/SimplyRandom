@@ -1,20 +1,21 @@
-package bluemonster122.mods.simplerandomstuff.overlayoverhaul;
+package bluemonster122.mods.simplerandomstuff.grinder;
 
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class FROverlays implements IFeatureRegistry {
-    public static final FROverlays INSTANCE = new FROverlays();
-    public static boolean useCustom = false;
-    public static boolean showLevelUp = false;
+public class FRGrinder implements IFeatureRegistry {
+    public static final FRGrinder INSTNACE = new FRGrinder();
+
+    public static BlockSRS grinder = new BlockGrinder();
 
     @Override
     public void registerBlocks( ) {
-
+        GameRegistry.register(grinder);
     }
 
     @Override
@@ -34,12 +35,12 @@ public class FROverlays implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        useCustom = configuration.getBoolean(Names.Features.Configs.OVERLAYS_USE_CUSTOM_OVERLAYS, Names.Features.OVERLAYS, true, "Set to false to disable custom overlay.");
-        showLevelUp = configuration.getBoolean(Names.Features.Configs.OVERLAYS_SHOW_LVLUPMSG, Names.Features.OVERLAYS, true, "Set to false to disable level up message.");
+
     }
 
     @Override
     public void registerEvents( ) {
+
     }
 
     @Override
@@ -56,14 +57,14 @@ public class FROverlays implements IFeatureRegistry {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerClientEvents( ) {
-        MinecraftForge.EVENT_BUS.register(new OverlayOverriders());
+
     }
 
     @Override
     public String getName( ) {
-        return Names.Features.OVERLAYS;
+        return Names.Features.GRINDER;
     }
 
-    private FROverlays( ) {
+    private FRGrinder( ) {
     }
 }

@@ -14,7 +14,7 @@ group = "bluemonster122.mods.simplerandomstuff" // http://maven.apache.org/guide
 archivesBaseName = "simplerandomstuff"
 
 minecraft {
-    version = "1.11.2-13.20.0.2228"
+    version = "1.11.2-latest"
     runDir = "run"
 
     mappings = "snapshot_20161220"

@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplerandomstuff.treefarm;
 
 import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.handler.GuiHandler;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.tanks.TileTank;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 // TODO: Make custom inventory, which you can getStoredStacks() from, as to make dropping inventory easier.
-public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
+public class BlockTreeFarm extends BlockSRS implements ITileEntityProvider {
     public BlockTreeFarm( ) {
         super(Names.Blocks.TREE_FARM, Material.IRON);
         setLightOpacity(0);
@@ -53,7 +53,7 @@ public class BlockTreeFarm extends BlockST implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
-        playerIn.openGui(SimpleRandomStuff.INSTANCE, GuiHandler.tree_farm_gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        playerIn.openGui(SimpleRandomStuff.INSTANCE, GuiHandler.ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 

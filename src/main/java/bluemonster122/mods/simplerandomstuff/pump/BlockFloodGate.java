@@ -1,6 +1,6 @@
 package bluemonster122.mods.simplerandomstuff.pump;
 
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.tanks.FRTank;
 import net.minecraft.block.ITileEntityProvider;
@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 
-public class BlockFloodGate extends BlockST implements ITileEntityProvider {
+public class BlockFloodGate extends BlockSRS implements ITileEntityProvider {
     public BlockFloodGate( ) {
         super(Names.Blocks.FLOOD_GATE, Material.IRON);
         setResistance(5);

@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public abstract class BlockEnum extends BlockST {
+public abstract class BlockEnum extends BlockSRS {
     private final IEnumMeta[] VARIANTS;
 
     public BlockEnum(String name, IEnumMeta[] variants) {
@@ -23,7 +23,7 @@ public abstract class BlockEnum extends BlockST {
     }
 
     public String getUnlocalizedName(ItemStack itemStack) {
-        if (itemStack != ItemStack.EMPTY && Block.getBlockFromItem(itemStack.getItem()) instanceof BlockST && VARIANTS.length > 0) {
+        if (itemStack != ItemStack.EMPTY && Block.getBlockFromItem(itemStack.getItem()) instanceof BlockSRS && VARIANTS.length > 0) {
             return String.format("tile.%s:%s", ModInfo.MOD_ID, VARIANTS[Math.abs(itemStack.getMetadata() % VARIANTS.length)].getName());
         }
         return super.getUnlocalizedName();

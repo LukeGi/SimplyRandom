@@ -2,9 +2,8 @@ package bluemonster122.mods.simplerandomstuff.generators;
 
 import bluemonster122.mods.simplerandomstuff.core.FRCore;
 import bluemonster122.mods.simplerandomstuff.core.ItemMisc;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import bluemonster122.mods.simplerandomstuff.generators.BlockGenerator.Types;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.init.Items;
@@ -20,7 +19,6 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerIE
 
 public class FRGenerators implements IFeatureRegistry {
     public static final FRGenerators INSTANCE = new FRGenerators();
-    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -68,10 +66,9 @@ public class FRGenerators implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Generators", ModInfo.CONFIG_FEATURES, true, "Set to false to disable all the generators");
-        Sugar_RF = configuration.getInt("Sugar Generator's rate (RF/t)", "generators", 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
-        Sugar_Burntime = configuration.getInt("Sugar Generator's burntime per sugar", "generators", 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
-        Fire_RF = configuration.getInt("Fire Generator's rate (RF/t)", "generators", 1, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+        Sugar_RF = configuration.getInt(Names.Features.Configs.GENERATORS_SUGAR_RFPERT, Names.Features.GENERATORS, 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+        Sugar_Burntime = configuration.getInt(Names.Features.Configs.GENERATORS_SUGAR_BURNTIME, Names.Features.GENERATORS, 10, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
+        Fire_RF = configuration.getInt(Names.Features.Configs.GENERATORS_FIRE_RFPERT, Names.Features.GENERATORS, 1, 1, Integer.MAX_VALUE, "Set to any number larger than 0.");
     }
 
     @Override
@@ -97,8 +94,8 @@ public class FRGenerators implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.GENERATORS;
     }
 
     private FRGenerators( ) {
@@ -107,5 +104,5 @@ public class FRGenerators implements IFeatureRegistry {
     public static int Fire_RF = 1;
     public static int Sugar_Burntime = 10;
     public static int Sugar_RF = 10;
-    public static BlockST generators = new BlockGenerator();
+    public static BlockSRS generators = new BlockGenerator();
 }

@@ -25,5 +25,5 @@ public interface IFeatureRegistry {
     @SideOnly(Side.CLIENT)
     void registerClientEvents( );
 
-    boolean shouldLoad( );
+    String getName( );
 }

@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplerandomstuff.workbench;
 
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
+import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -17,10 +17,9 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBl
 
 public class FRCrafters implements IFeatureRegistry {
     public static final FRCrafters INSTANCE = new FRCrafters();
-    private static boolean shouldLoad = false;
 
-    public BlockST crafting_table = new BlockCraftingTable();
-    public BlockST crafting_table_auto = new BlockCraftingTable.BlockCraftingTableAuto();
+    public BlockSRS crafting_table = new BlockCraftingTable();
+    public BlockSRS crafting_table_auto = new BlockCraftingTable.BlockCraftingTableAuto();
 
     @Override
     public void registerBlocks( ) {
@@ -65,7 +64,6 @@ public class FRCrafters implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Crafting tables", ModInfo.CONFIG_FEATURES, true, "Set to false to disable all the simple crafting tables");
     }
 
     @Override
@@ -93,8 +91,8 @@ public class FRCrafters implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.CRAFTERS;
     }
 
     private FRCrafters( ) {

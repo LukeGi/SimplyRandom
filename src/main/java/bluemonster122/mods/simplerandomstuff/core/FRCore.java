@@ -1,8 +1,17 @@
 package bluemonster122.mods.simplerandomstuff.core;
 
+import static bluemonster122.mods.simplerandomstuff.core.ItemMisc.Types.*;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
+import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.reference.Names.OreDict;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
+import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerIEnumMeta;
+import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerItemModel;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,18 +19,34 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import static bluemonster122.mods.simplerandomstuff.core.ItemMisc.Types.*;
-import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerIEnumMeta;
-import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerItemModel;
+import javax.annotation.Nullable;
 
 public class FRCore implements IFeatureRegistry {
 
     public static final FRCore INSTANCE = new FRCore();
     public static final ItemST misc = new ItemMisc();
     public static final ItemWrench wrench = new ItemWrench();
+    
+    public static final BlockSRS test = new BlockSRS("test", Material.CLOTH){
+        @Override
+        public boolean hasTileEntity(IBlockState state)
+        {
+            return true;
+        }
+    
+        @Nullable
+        @Override
+        public TileEntity createTileEntity(
+          World world, IBlockState state
+        )
+        {
+            return new TileEntityTickingSRS();
+        }
+    };
 
     @Override
     public void registerBlocks( ) {
+        GameRegistry.register(test);
         /* NO OPERATION */
     }
 
@@ -29,6 +54,7 @@ public class FRCore implements IFeatureRegistry {
     public void registerItems( ) {
         GameRegistry.register(wrench);
         GameRegistry.register(misc);
+        GameRegistry.register(test.createItemBlock());
     }
 
     @Override
@@ -93,6 +119,7 @@ public class FRCore implements IFeatureRegistry {
 
     @Override
     public void registerTileEntities( ) {
+        GameRegistry.registerTileEntity(TileEntityTickingSRS.class, "test");
         /* NO OPERATION */
     }
 
@@ -129,8 +156,8 @@ public class FRCore implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return true;
+    public String getName( ) {
+        return Names.Features.CORE;
     }
 
     private FRCore( ) {

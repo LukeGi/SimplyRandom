@@ -11,13 +11,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockST extends Block {
-    public BlockST(String name, Material blockMaterialIn, MapColor blockMapColorIn) {
+public class BlockSRS extends Block {
+    public BlockSRS(String name, Material blockMaterialIn, MapColor blockMapColorIn) {
         super(blockMaterialIn, blockMapColorIn);
         setup(name);
     }
 
-    public BlockST(String name, Material materialIn) {
+    public BlockSRS(String name, Material materialIn) {
         super(materialIn);
         setup(name);
     }

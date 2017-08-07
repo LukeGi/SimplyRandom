@@ -3,8 +3,8 @@ package bluemonster122.mods.simplerandomstuff.tanks;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRendererManager;
 import bluemonster122.mods.simplerandomstuff.client.renderer.TESRTank;
 import bluemonster122.mods.simplerandomstuff.core.FRCore;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
+import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.reference.Names.OreDict;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.inventory.InventoryCrafting;
@@ -25,8 +25,6 @@ import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerIE
 
 public class FRTank implements IFeatureRegistry {
     public static final IFeatureRegistry INSTANCE = new FRTank();
-
-    private static boolean shouldLoad = false;
 
     @Override
     public void registerBlocks( ) {
@@ -148,7 +146,6 @@ public class FRTank implements IFeatureRegistry {
 
     @Override
     public void loadConfigs(Configuration configuration) {
-        shouldLoad = configuration.getBoolean("Tanks", ModInfo.CONFIG_FEATURES, true, "Set to false to disable all the tanks");
     }
 
     @Override
@@ -176,8 +173,8 @@ public class FRTank implements IFeatureRegistry {
     }
 
     @Override
-    public boolean shouldLoad( ) {
-        return shouldLoad;
+    public String getName( ) {
+        return Names.Features.TANK;
     }
 
     private class UpgradeRecipe extends ShapedOreRecipe {
@@ -197,7 +194,7 @@ public class FRTank implements IFeatureRegistry {
     private FRTank( ) {
     }
 
-    public static final BlockST tank = new BlockTank();
+    public static final BlockSRS tank = new BlockTank();
     public static final Item upgrade = new ItemTankUpgrade();
     private ItemStack glass_tank;
     private ItemStack iron_tank;

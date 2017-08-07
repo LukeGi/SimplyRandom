@@ -4,8 +4,10 @@ import bluemonster122.mods.simplerandomstuff.cobblegen.FRCobbleGen;
 import bluemonster122.mods.simplerandomstuff.core.FRCore;
 import bluemonster122.mods.simplerandomstuff.core.network.MessageCraftingSync;
 import bluemonster122.mods.simplerandomstuff.generators.FRGenerators;
+import bluemonster122.mods.simplerandomstuff.grinder.FRGrinder;
 import bluemonster122.mods.simplerandomstuff.handler.ConfigurationHandler;
 import bluemonster122.mods.simplerandomstuff.handler.GuiHandler;
+import bluemonster122.mods.simplerandomstuff.miner.FRMiner;
 import bluemonster122.mods.simplerandomstuff.overlayoverhaul.FROverlays;
 import bluemonster122.mods.simplerandomstuff.proxy.IProxy;
 import bluemonster122.mods.simplerandomstuff.pump.FRPump;
@@ -31,64 +33,97 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod(modid = ModInfo.MOD_ID, version = ModInfo.VERSION, guiFactory = ModInfo.GUI_FACTORY_CLASS, updateJSON = ModInfo.UPDATE_JSON)
-public class SimpleRandomStuff {
-    public static final List<IFeatureRegistry> featureRegistries = new ArrayList<>();
-
-    static {
-        theTab = new CreativeTabST();
-        featureRegistries.add(FRCore.INSTANCE);
-        featureRegistries.add(FRTank.INSTANCE);
-        featureRegistries.add(FRPump.INSTANCE);
-        featureRegistries.add(FRTreeFarm.INSTANCE);
-        featureRegistries.add(FRCobbleGen.INSTANCE);
-        featureRegistries.add(FRGenerators.INSTANCE);
-        featureRegistries.add(FRCrafters.INSTANCE);
-        featureRegistries.add(FROverlays.INSTANCE);
+@Mod(modid = ModInfo.MOD_ID,
+     version = ModInfo.VERSION,
+     guiFactory = ModInfo.GUI_FACTORY_CLASS,
+     updateJSON = ModInfo.UPDATE_JSON)
+public class SimpleRandomStuff
+{
+  public static final List<IFeatureRegistry> featureRegistries = new ArrayList<>();
+  
+  static
+  {
+    theTab = new CreativeTabST();
+    featureRegistries.add(FRCore.INSTANCE);
+    featureRegistries.add(FRTank.INSTANCE);
+    featureRegistries.add(FRPump.INSTANCE);
+    featureRegistries.add(FRTreeFarm.INSTANCE);
+    featureRegistries.add(FRCobbleGen.INSTANCE);
+    featureRegistries.add(FRGenerators.INSTANCE);
+    featureRegistries.add(FRCrafters.INSTANCE);
+    featureRegistries.add(FROverlays.INSTANCE);
+    featureRegistries.add(FRMiner.INSTANCE);
+    featureRegistries.add(FRGrinder.INSTNACE);
+  }
+  
+  public SimpleNetworkWrapper channel;
+  
+  public static boolean shouldLoad(IFeatureRegistry registry)
+  {
+    if (!ConfigurationHandler.FeatureLoad.containsKey(registry))
+    {
+      INSTANCE.logger.warn("attempted to load a registry before it's load logic was gotten");
+      return false;
     }
-
-    public Logger logger;
-    public SimpleNetworkWrapper channel;
-
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
-        ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
-        for (IFeatureRegistry registry : featureRegistries) {
-            if (registry.shouldLoad()) {
-                registry.registerBlocks();
-                registry.registerItems();
-                registry.registerEvents();
-                registry.registerOreDict();
-            }
-        }
-        INSTANCE.setupNetwork();
-        proxy.preInit();
+    else
+    {
+      return ConfigurationHandler.FeatureLoad.get(registry);
     }
-
-    private void setupNetwork( ) {
-        logger.info(">>> Registering network channel...");
-
-        channel = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-
-        channel.registerMessage(MessageCraftingSync.class, MessageCraftingSync.class, 0, Side.SERVER);
+  }
+  
+  @EventHandler
+  public void preInit(FMLPreInitializationEvent event)
+  {
+    logger = event.getModLog();
+    ConfigurationHandler.INSTANCE.init(event.getSuggestedConfigurationFile());
+    for (IFeatureRegistry registry : featureRegistries)
+    {
+      if (shouldLoad(registry))
+      {
+        registry.registerBlocks();
+        registry.registerItems();
+        registry.registerEvents();
+        registry.registerOreDict();
+      }
     }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init();
-        NetworkRegistry.INSTANCE.registerGuiHandler(SimpleRandomStuff.INSTANCE, new GuiHandler());
-        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerTileEntities);
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        featureRegistries.stream().filter(IFeatureRegistry::shouldLoad).forEach(IFeatureRegistry::registerRecipes);
-    }
-
-    public static CreativeTabs theTab;
-    @Instance(value = ModInfo.MOD_ID)
-    public static SimpleRandomStuff INSTANCE;
-    @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    INSTANCE.setupNetwork();
+    proxy.preInit();
+  }
+  
+  private void setupNetwork()
+  {
+    logger.info(">>> Registering network channel...");
+    
+    channel = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
+    
+    channel.registerMessage(MessageCraftingSync.class, MessageCraftingSync.class, 0, Side.SERVER);
+  }
+  
+  @EventHandler
+  public void init(FMLInitializationEvent event)
+  {
+    proxy.init();
+    NetworkRegistry.INSTANCE.registerGuiHandler(SimpleRandomStuff.INSTANCE, new GuiHandler());
+    featureRegistries.stream()
+                     .filter(SimpleRandomStuff::shouldLoad)
+                     .forEach(IFeatureRegistry::registerTileEntities);
+  }
+  
+  @EventHandler
+  public void postInit(FMLPostInitializationEvent event)
+  {
+    featureRegistries.stream()
+                     .filter(SimpleRandomStuff::shouldLoad)
+                     .forEach(IFeatureRegistry::registerRecipes);
+  }
+  
+  public static Logger logger;
+  
+  public static CreativeTabs theTab;
+  
+  @Instance(value = ModInfo.MOD_ID)
+  public static SimpleRandomStuff INSTANCE;
+  
+  @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
+  public static IProxy proxy;
 }

@@ -1,7 +1,7 @@
 package bluemonster122.mods.simplerandomstuff.workbench;
 
 import bluemonster122.mods.simplerandomstuff.SimpleRandomStuff;
-import bluemonster122.mods.simplerandomstuff.core.block.BlockST;
+import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockCraftingTable extends BlockST implements ITileEntityProvider {
+public class BlockCraftingTable extends BlockSRS implements ITileEntityProvider {
     public BlockCraftingTable( ) {
         this("crafting_table");
     }
