@@ -4,7 +4,7 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -14,10 +14,10 @@ group = "bluemonster122.mods.simplerandomstuff" // http://maven.apache.org/guide
 archivesBaseName = "simplerandomstuff"
 
 minecraft {
-    version = "1.11.2-latest"
+    version = "1.12-latest"
     runDir = "run"
 
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20170624"
 
     replace "@VERSION@", project.version
     replaceIn "SimpleRandomStuff.java"
