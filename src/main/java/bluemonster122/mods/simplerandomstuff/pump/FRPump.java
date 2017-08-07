@@ -78,20 +78,20 @@ public class FRPump
                                              'B',
                                              new ItemStack(Items.BUCKET)
     ).setRegistryName("pump"), new ShapedOreRecipe(blah,
-                           new ItemStack(floodgate, 1),
-                           "SWS",
-                           "T|T",
-                           "RSR",
-                           'S',
-                           new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
-                           'W',
-                           new ItemStack(FRCore.misc, 1, ItemMisc.Types.IRON_ROD.getMeta()),
-                           'T',
-                           OreDict.IRON_BARS,
-                           '|',
-                           new ItemStack(FRTank.tank, 1, BlockTank.Types.IRON.getMeta()),
-                           'R',
-                           OreDict.REDSTONE
+                                                   new ItemStack(floodgate, 1),
+                                                   "SWS",
+                                                   "T|T",
+                                                   "RSR",
+                                                   'S',
+                                                   new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
+                                                   'W',
+                                                   new ItemStack(FRCore.misc, 1, ItemMisc.Types.IRON_ROD.getMeta()),
+                                                   'T',
+                                                   OreDict.IRON_BARS,
+                                                   '|',
+                                                   new ItemStack(FRTank.tank, 1, BlockTank.Types.IRON.getMeta()),
+                                                   'R',
+                                                   OreDict.REDSTONE
     ).setRegistryName("floodgate"));
     
     //@formatter:on

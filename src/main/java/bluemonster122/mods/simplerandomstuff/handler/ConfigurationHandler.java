@@ -13,39 +13,58 @@ import java.io.File;
 import java.util.HashMap;
 
 @Mod.EventBusSubscriber
-public class ConfigurationHandler {
-    public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
-    public Configuration configuration;
-
-    public void init(File configFile) {
-        if (configuration == null) {
-            configuration = new Configuration(configFile);
-            loadConfiguration();
-        }
+public class ConfigurationHandler
+{
+  public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
+  
+  public Configuration configuration;
+  
+  private ConfigurationHandler()
+  {
+  }
+  
+  public void init(File configFile)
+  {
+    if (configuration == null)
+    {
+      configuration = new Configuration(configFile);
+      loadConfiguration();
     }
-
-    private void loadConfiguration( ) {
-        for (IFeatureRegistry fr : SRS.featureRegistries) {
-            if (fr instanceof FRCore) FeatureLoad.put(fr, true);
-            FeatureLoad.put(fr, configuration.getBoolean("Enable", fr.getName(), true, "Set to false to disable this part of the mod."));
-            if (FeatureLoad.get(fr)) {
-                fr.loadConfigs(configuration);
-            }
-        }
-        if (configuration.hasChanged()) {
-            configuration.save();
-        }
+  }
+  
+  private void loadConfiguration()
+  {
+    for (IFeatureRegistry fr : SRS.featureRegistries)
+    {
+      if (fr instanceof FRCore) FeatureLoad.put(fr, true);
+      FeatureLoad.put(
+        fr,
+        configuration.getBoolean("Enable",
+                                 fr.getName(),
+                                 true,
+                                 "Set to false to disable this part of the mod."
+        )
+      );
+      if (FeatureLoad.get(fr))
+      {
+        fr.loadConfigs(configuration);
+      }
     }
-
-    @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equalsIgnoreCase(ModInfo.MOD_ID)) {
-            loadConfiguration();
-        }
+    if (configuration.hasChanged())
+    {
+      configuration.save();
     }
-
-    private ConfigurationHandler( ) {
+  }
+  
+  @SubscribeEvent
+  public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
+  {
+    if (event.getModID()
+             .equalsIgnoreCase(ModInfo.MOD_ID))
+    {
+      loadConfiguration();
     }
-
-    public static HashMap<IFeatureRegistry, Boolean> FeatureLoad = new HashMap<>();
+  }
+  
+  public static HashMap<IFeatureRegistry, Boolean> FeatureLoad = new HashMap<>();
 }

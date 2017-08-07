@@ -6,23 +6,29 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageCraftingSync implements IMessage, IMessageHandler<MessageCraftingSync, IMessage> {
-    @Override
-    public void fromBytes(ByteBuf buf) {
-
+public class MessageCraftingSync
+  implements IMessage, IMessageHandler<MessageCraftingSync, IMessage>
+{
+  @Override
+  public void fromBytes(ByteBuf buf)
+  {
+  
+  }
+  
+  @Override
+  public void toBytes(ByteBuf buf)
+  {
+  
+  }
+  
+  @Override
+  public IMessage onMessage(MessageCraftingSync message, MessageContext ctx)
+  {
+    Container container = ctx.getServerHandler().player.openContainer;
+    if (container != null)
+    {
+      container.onCraftMatrixChanged(null);
     }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-
-    }
-
-    @Override
-    public IMessage onMessage(MessageCraftingSync message, MessageContext ctx) {
-        Container container = ctx.getServerHandler().player.openContainer;
-        if (container != null) {
-            container.onCraftMatrixChanged(null);
-        }
-        return null;
-    }
+    return null;
+  }
 }

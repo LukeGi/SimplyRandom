@@ -11,13 +11,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ElementEnergyGenerator extends GuiConfigEntries.CategoryEntry {
-    public ElementEnergyGenerator(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
-        super(owningScreen, owningEntryList, configElement);
-    }
+public class ElementEnergyGenerator
+  extends GuiConfigEntries.CategoryEntry
+{
+  public ElementEnergyGenerator(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
+  {
+    super(owningScreen, owningEntryList, configElement);
+  }
 
-    @Override
-    protected GuiScreen buildChildScreen( ) {
-        return new GuiConfig(this.owningScreen, (new ConfigElement(ConfigurationHandler.INSTANCE.configuration.getCategory("power_generators"))).getChildElements(), this.owningScreen.modID, "power_generators", this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart, this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart, GuiConfig.getAbridgedConfigPath(ForgeModContainer.getConfig().toString()));
-    }
+  @Override
+  protected GuiScreen buildChildScreen()
+  {
+    return new GuiConfig(
+      this.owningScreen,
+      (new ConfigElement(ConfigurationHandler.INSTANCE.configuration.getCategory("power_generators"))).getChildElements(),
+      this.owningScreen.modID,
+      "power_generators",
+      this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
+      this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
+      GuiConfig.getAbridgedConfigPath(ForgeModContainer.getConfig()
+                                                       .toString())
+    );
+  }
 }

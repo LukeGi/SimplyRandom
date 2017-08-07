@@ -53,7 +53,8 @@ public class FRCrafters
     ResourceLocation blah = new ResourceLocation(ModInfo.MOD_ID, "blah");
     
     registry.registerAll(
-      new ShapelessOreRecipe(blah, new ItemStack(crafting_table), "pressurePlateWood", "workbench").setRegistryName("workbench"),
+      new ShapelessOreRecipe(blah, new ItemStack(crafting_table), "pressurePlateWood", "workbench").setRegistryName(
+        "workbench"),
       
       new ShapedOreRecipe(blah,
                           new ItemStack(crafting_table_auto),

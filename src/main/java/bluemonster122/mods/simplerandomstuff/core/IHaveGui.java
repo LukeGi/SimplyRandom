@@ -6,8 +6,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IHaveGui {
-    Gui createGui(InventoryPlayer player, World world, BlockPos pos);
-
-    Container createContainer(InventoryPlayer player, World world, BlockPos pos);
+public interface IHaveGui
+{
+  Gui createGui(InventoryPlayer player, World world, BlockPos pos);
+  
+  Container createContainer(InventoryPlayer player, World world, BlockPos pos);
 }

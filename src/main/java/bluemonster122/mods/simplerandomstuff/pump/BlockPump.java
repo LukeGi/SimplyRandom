@@ -9,16 +9,21 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockPump extends BlockSRS implements IPickup, ITileEntityProvider {
-    public BlockPump( ) {
-        super("pump", Material.IRON);
-        setHardness(5000f);
-        setResistance(1f);
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TilePump();
-    }
+public class BlockPump
+  extends BlockSRS
+  implements IPickup, ITileEntityProvider
+{
+  public BlockPump()
+  {
+    super("pump", Material.IRON);
+    setHardness(5000f);
+    setResistance(1f);
+  }
+  
+  @Nullable
+  @Override
+  public TileEntity createNewTileEntity(World worldIn, int meta)
+  {
+    return new TilePump();
+  }
 }

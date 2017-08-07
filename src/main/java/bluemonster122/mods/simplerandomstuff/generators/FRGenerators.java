@@ -50,30 +50,32 @@ public class FRGenerators
     
     ResourceLocation blah = new ResourceLocation(ModInfo.MOD_ID, "blah");
     
-    registry.registerAll(new ShapedOreRecipe(blah,
-                                             new ItemStack(generators, 1, Types.SUGAR.getMeta()),
-                                             "WSW",
-                                             "SMS",
-                                             "WSW",
-                                             'W',
-                                             new ItemStack(FRCore.misc, 1, ItemMisc.Types.WOODEN_GEAR.getMeta()),
-                                             'M',
-                                             new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
-                                             'S',
-                                             Names.OreDict.SUGAR
-    ).setRegistryName("sugar_generator"), new ShapedOreRecipe(blah,
-                           new ItemStack(generators, 1, Types.FIRE.getMeta()),
-                           "ISI",
-                           "FMF",
-                           "ISI",
-                           'I',
-                           Names.OreDict.IRON_STICK,
-                           'S',
-                           new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
-                           'F',
-                           new ItemStack(Items.FLINT_AND_STEEL),
-                           'M',
-                           new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta())
+    registry.registerAll(new ShapedOreRecipe(
+      blah,
+      new ItemStack(generators, 1, Types.SUGAR.getMeta()),
+      "WSW",
+      "SMS",
+      "WSW",
+      'W',
+      new ItemStack(FRCore.misc, 1, ItemMisc.Types.WOODEN_GEAR.getMeta()),
+      'M',
+      new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
+      'S',
+      Names.OreDict.SUGAR
+    ).setRegistryName("sugar_generator"), new ShapedOreRecipe(
+      blah,
+      new ItemStack(generators, 1, Types.FIRE.getMeta()),
+      "ISI",
+      "FMF",
+      "ISI",
+      'I',
+      Names.OreDict.IRON_STICK,
+      'S',
+      new ItemStack(FRCore.misc, 1, ItemMisc.Types.STONE_GEAR.getMeta()),
+      'F',
+      new ItemStack(Items.FLINT_AND_STEEL),
+      'M',
+      new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta())
     ).setRegistryName("fire_generator"));
     
     //@formatter:on
@@ -147,11 +149,11 @@ public class FRGenerators
     return Names.Features.GENERATORS;
   }
   
-  public static int      Fire_RF = 1;
+  public static int Fire_RF = 1;
   
-  public static int      Sugar_Burntime = 10;
+  public static int Sugar_Burntime = 10;
   
-  public static int      Sugar_RF = 10;
+  public static int Sugar_RF = 10;
   
   public static BlockSRS generators = new BlockGenerator();
 }

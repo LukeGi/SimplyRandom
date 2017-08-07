@@ -70,7 +70,7 @@ public class FRTank
     // RecipeSorter.register("tank_upgrade_recipe", UpgradeRecipe.class, RecipeSorter.Category.SHAPED, "");
     
     //@formatter:off
-  
+    
     ResourceLocation blah = new ResourceLocation(ModInfo.MOD_ID, "blah");
     registry.registerAll(/*new UpgradeRecipe(glass_tank,
                                            "GPG",
@@ -125,7 +125,8 @@ public class FRTank
                                            'T',
                                            obsidian_tank
                          ),*/
-                         new ShapedOreRecipe(blah, new ItemStack(upgrade, 1, ItemTankUpgrade.Types.GLASS_TO_IRON.getMeta()),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(upgrade, 1, ItemTankUpgrade.Types.GLASS_TO_IRON.getMeta()),
                                              "UPU",
                                              "PWP",
                                              "UPU",
@@ -135,47 +136,49 @@ public class FRTank
                                              OreDict.IRON_INGOT,
                                              'W',
                                              new ItemStack(FRCore.wrench)
-                         ).setRegistryName("glass_to_iron_upgrade"),
-                         new ShapedOreRecipe(blah, new ItemStack(upgrade, 1, ItemTankUpgrade.Types.IRON_TO_GOLD.getMeta()),
-                                             "UPU",
-                                             "PWP",
-                                             "UPU",
-                                             'P',
-                                             OreDict.GLASS_PANES,
-                                             'U',
-                                             OreDict.GOLD_INGOT,
-                                             'W',
-                                             new ItemStack(FRCore.wrench)
-                         ).setRegistryName("iron_to_gold_upgrade"),
-                         new ShapedOreRecipe(blah, new ItemStack(upgrade,
-                                                           1,
-                                                           ItemTankUpgrade.Types.GOLD_TO_OBSIDIAN.getMeta()
-                         ),
-                                             "UPU",
-                                             "PWP",
-                                             "UPU",
-                                             'P',
-                                             OreDict.GLASS_PANES,
-                                             'U',
-                                             OreDict.OBSIDIAN,
-                                             'W',
-                                             new ItemStack(FRCore.wrench)
-                         ).setRegistryName("gold_to_obsidian_upgrade"),
-                         new ShapedOreRecipe(blah, new ItemStack(upgrade,
-                                                           1,
-                                                           ItemTankUpgrade.Types.OBSIDIAN_TO_DIAMOND.getMeta()
-                         ),
-                                             "UPU",
-                                             "PWP",
-                                             "UPU",
-                                             'P',
-                                             OreDict.GLASS_PANES,
-                                             'U',
-                                             OreDict.DIAMOND,
-                                             'W',
-                                             new ItemStack(FRCore.wrench)
-                         ).setRegistryName("obsidian_to_diamond_upgrade")
-    );
+                         ).setRegistryName("glass_to_iron_upgrade"), new ShapedOreRecipe(blah,
+                                                                                         new ItemStack(upgrade,
+                                                                                                       1,
+                                                                                                       ItemTankUpgrade.Types.IRON_TO_GOLD.getMeta()
+                                                                                         ),
+                                                                                         "UPU",
+                                                                                         "PWP",
+                                                                                         "UPU",
+                                                                                         'P',
+                                                                                         OreDict.GLASS_PANES,
+                                                                                         'U',
+                                                                                         OreDict.GOLD_INGOT,
+                                                                                         'W',
+                                                                                         new ItemStack(FRCore.wrench)
+      ).setRegistryName("iron_to_gold_upgrade"), new ShapedOreRecipe(blah,
+                                                                     new ItemStack(upgrade,
+                                                                                   1,
+                                                                                   ItemTankUpgrade.Types.GOLD_TO_OBSIDIAN.getMeta()
+                                                                     ),
+                                                                     "UPU",
+                                                                     "PWP",
+                                                                     "UPU",
+                                                                     'P',
+                                                                     OreDict.GLASS_PANES,
+                                                                     'U',
+                                                                     OreDict.OBSIDIAN,
+                                                                     'W',
+                                                                     new ItemStack(FRCore.wrench)
+      ).setRegistryName("gold_to_obsidian_upgrade"), new ShapedOreRecipe(blah,
+                                                                         new ItemStack(upgrade,
+                                                                                       1,
+                                                                                       ItemTankUpgrade.Types.OBSIDIAN_TO_DIAMOND.getMeta()
+                                                                         ),
+                                                                         "UPU",
+                                                                         "PWP",
+                                                                         "UPU",
+                                                                         'P',
+                                                                         OreDict.GLASS_PANES,
+                                                                         'U',
+                                                                         OreDict.DIAMOND,
+                                                                         'W',
+                                                                         new ItemStack(FRCore.wrench)
+      ).setRegistryName("obsidian_to_diamond_upgrade"));
     
     //@formatter:on
   }
@@ -225,23 +228,23 @@ public class FRTank
     return Names.Features.TANK;
   }
   
-//  private class UpgradeRecipe
-//    extends ShapedOreRecipe
-//  {
-//
-//    public UpgradeRecipe(@Nonnull ItemStack result, Object... recipes)
-//    {
-//      super(result, recipes);
-//    }
-//
-//    @Override
-//    public ItemStack getCraftingResult(InventoryCrafting inv)
-//    {
-//      ItemStack output = super.getCraftingResult(inv)
-//                              .copy();
-//      output.setTagCompound(inv.getStackInRowAndColumn(1, 1)
-//                               .getTagCompound());
-//      return output;
-//    }
-//  }
+  //  private class UpgradeRecipe
+  //    extends ShapedOreRecipe
+  //  {
+  //
+  //    public UpgradeRecipe(@Nonnull ItemStack result, Object... recipes)
+  //    {
+  //      super(result, recipes);
+  //    }
+  //
+  //    @Override
+  //    public ItemStack getCraftingResult(InventoryCrafting inv)
+  //    {
+  //      ItemStack output = super.getCraftingResult(inv)
+  //                              .copy();
+  //      output.setTagCompound(inv.getStackInRowAndColumn(1, 1)
+  //                               .getTagCompound());
+  //      return output;
+  //    }
+  //  }
 }

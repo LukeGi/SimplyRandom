@@ -44,19 +44,20 @@ public class FRCobbleGen
   {
     //@formatter:off
     
-    registry.registerAll(new ShapedOreRecipe(new ResourceLocation(ModInfo.MOD_ID, "blah"),
-                                             new ItemStack(cobblestone_generator),
-                                             "PPP",
-                                             "WCL",
-                                             "PPP",
-                                             'W',
-                                             new ItemStack(Items.WATER_BUCKET, 1),
-                                             'C',
-                                             "cobblestone",
-                                             'L',
-                                             new ItemStack(Items.LAVA_BUCKET, 1),
-                                             'P',
-                                             new ItemStack(Items.IRON_PICKAXE, 1)
+    registry.registerAll(new ShapedOreRecipe(
+      new ResourceLocation(ModInfo.MOD_ID, "blah"),
+      new ItemStack(cobblestone_generator),
+      "PPP",
+      "WCL",
+      "PPP",
+      'W',
+      new ItemStack(Items.WATER_BUCKET, 1),
+      'C',
+      "cobblestone",
+      'L',
+      new ItemStack(Items.LAVA_BUCKET, 1),
+      'P',
+      new ItemStack(Items.IRON_PICKAXE, 1)
     ).setRegistryName("cobblegen"));
     
     //@formatter:on
@@ -113,7 +114,7 @@ public class FRCobbleGen
     return Names.Features.COBBLESTONE_GENERATOR;
   }
   
-  public static int      Cobble_RF             = 0;
+  public static int Cobble_RF = 0;
   
   public static BlockSRS cobblestone_generator = new BlockCobblestoneGenerator();
 }

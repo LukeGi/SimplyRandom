@@ -77,7 +77,8 @@ public class FRCore
   {
     //@formatter:off
     ResourceLocation blah = new ResourceLocation(ModInfo.MOD_ID, "blah");
-    registry.registerAll(new ShapedOreRecipe(blah, new ItemStack(wrench, 1),
+    registry.registerAll(new ShapedOreRecipe(blah,
+                                             new ItemStack(wrench, 1),
                                              " I ",
                                              " SI",
                                              "S  ",
@@ -85,9 +86,17 @@ public class FRCore
                                              OreDict.IRON_STICK,
                                              'I',
                                              "ingotIron"
-                         ).setMirrored(true).setRegistryName("wrench"),
-                         new ShapedOreRecipe(blah, new ItemStack(misc, 8, IRON_ROD.getMeta()), "I", "I", 'I', "ingotIron").setRegistryName("iron_rod"),
-                         new ShapedOreRecipe(blah, new ItemStack(misc, 1, WOODEN_GEAR.getMeta()),
+                         ).setMirrored(true)
+                          .setRegistryName("wrench"),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(misc, 8, IRON_ROD.getMeta()),
+                                             "I",
+                                             "I",
+                                             'I',
+                                             "ingotIron"
+                         ).setRegistryName("iron_rod"),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(misc, 1, WOODEN_GEAR.getMeta()),
                                              "MMM",
                                              "MSM",
                                              "MMM",
@@ -96,7 +105,8 @@ public class FRCore
                                              'S',
                                              OreDict.IRON_STICK
                          ).setRegistryName("wooden_gear"),
-                         new ShapedOreRecipe(blah, new ItemStack(misc, 1, STONE_GEAR.getMeta()),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(misc, 1, STONE_GEAR.getMeta()),
                                              " M ",
                                              "MSM",
                                              " M ",
@@ -105,7 +115,8 @@ public class FRCore
                                              'S',
                                              OreDict.IRON_STICK
                          ).setRegistryName("stone_gear"),
-                         new ShapedOreRecipe(blah, new ItemStack(misc, 1, MACHINE_BASE.getMeta()),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(misc, 1, MACHINE_BASE.getMeta()),
                                              "SWS",
                                              "WIW",
                                              "SWS",
@@ -116,7 +127,8 @@ public class FRCore
                                              'I',
                                              OreDict.IRON_BLOCK
                          ).setRegistryName("machine_base"),
-                         new ShapedOreRecipe(blah, new ItemStack(misc, 1, COMPLEX_MACHINE_BASE.getMeta()),
+                         new ShapedOreRecipe(blah,
+                                             new ItemStack(misc, 1, COMPLEX_MACHINE_BASE.getMeta()),
                                              "MMM",
                                              "MWM",
                                              "MMM",

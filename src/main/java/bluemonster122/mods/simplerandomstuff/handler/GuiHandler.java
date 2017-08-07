@@ -9,25 +9,31 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class GuiHandler implements IGuiHandler {
-    public static final int ID = 0;
-
-    @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-        if (tile instanceof IHaveGui) {
-            return ((IHaveGui) tile).createContainer(player.inventory, world, new BlockPos(x, y, z));
-        }
-        return null;
+public class GuiHandler
+  implements IGuiHandler
+{
+  public static final int ID = 0;
+  
+  @Override
+  public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+  {
+    TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+    if (tile instanceof IHaveGui)
+    {
+      return ((IHaveGui) tile).createContainer(player.inventory, world, new BlockPos(x, y, z));
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-        if (tile instanceof IHaveGui) {
-            return ((IHaveGui) tile).createGui(player.inventory, world, new BlockPos(x, y, z));
-        }
-        return null;
+    return null;
+  }
+  
+  @Override
+  @SideOnly(Side.CLIENT)
+  public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+  {
+    TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+    if (tile instanceof IHaveGui)
+    {
+      return ((IHaveGui) tile).createGui(player.inventory, world, new BlockPos(x, y, z));
     }
+    return null;
+  }
 }

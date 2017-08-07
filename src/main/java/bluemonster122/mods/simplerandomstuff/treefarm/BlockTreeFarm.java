@@ -23,61 +23,87 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 // TODO: Make custom inventory, which you can getStoredStacks() from, as to make dropping inventory easier.
-public class BlockTreeFarm extends BlockSRS implements ITileEntityProvider {
-    public BlockTreeFarm( ) {
-        super(Names.Blocks.TREE_FARM, Material.IRON);
-        setLightOpacity(0);
-        setHarvestLevel("pickaxe", 3);
-        setHardness(7);
-        setResistance(500);
+public class BlockTreeFarm
+  extends BlockSRS
+  implements ITileEntityProvider
+{
+  public BlockTreeFarm()
+  {
+    super(Names.Blocks.TREE_FARM, Material.IRON);
+    setLightOpacity(0);
+    setHarvestLevel("pickaxe", 3);
+    setHardness(7);
+    setResistance(500);
+  }
+  
+  @SuppressWarnings("deprecation")
+  @Override
+  public boolean isFullCube(IBlockState state)
+  {
+    return false;
+  }
+  
+  @SuppressWarnings("deprecation")
+  @Override
+  public boolean isOpaqueCube(IBlockState state)
+  {
+    return false;
+  }
+  
+  @SideOnly(Side.CLIENT)
+  @Nonnull
+  @Override
+  public BlockRenderLayer getBlockLayer()
+  {
+    return BlockRenderLayer.CUTOUT;
+  }
+  
+  @Override
+  public boolean onBlockActivated(
+    World worldIn,
+    BlockPos pos,
+    IBlockState state,
+    EntityPlayer playerIn,
+    EnumHand hand,
+    EnumFacing heldItem,
+    float side,
+    float hitX,
+    float hitY
+  )
+  {
+    playerIn.openGui(SRS.INSTANCE, GuiHandler.ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+    return true;
+  }
+  
+  @Override
+  public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+  {
+    TileEntity tile = world.getTileEntity(pos);
+    if (tile instanceof TileTank)
+    {
+      FluidStack stack = ((TileTank) tile).tank.getFluid();
+      return stack == null || stack.amount <= 0
+             ? 0
+             : stack.getFluid()
+                    .getLuminosity(stack);
     }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
+    return super.getLightValue(state, world, pos);
+  }
+  
+  @Override
+  public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+  {
+    TileEntity tileEntity = worldIn.getTileEntity(pos);
+    if (tileEntity instanceof TileTreeFarm)
+    {
+      ((TileTreeFarm) tileEntity).dropContents();
     }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Nonnull
-    @Override
-    public BlockRenderLayer getBlockLayer( ) {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
-        playerIn.openGui(SRS.INSTANCE, GuiHandler.ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
-        return true;
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof TileTreeFarm) {
-            ((TileTreeFarm) tileEntity).dropContents();
-        }
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileTank) {
-            FluidStack stack = ((TileTank) tile).tank.getFluid();
-            return stack == null || stack.amount <= 0 ? 0 : stack.getFluid().getLuminosity(stack);
-        }
-        return super.getLightValue(state, world, pos);
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileTreeFarm();
-    }
+    super.breakBlock(worldIn, pos, state);
+  }
+  
+  @Override
+  public TileEntity createNewTileEntity(World worldIn, int meta)
+  {
+    return new TileTreeFarm();
+  }
 }

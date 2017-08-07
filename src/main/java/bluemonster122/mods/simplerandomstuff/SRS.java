@@ -17,17 +17,25 @@ import bluemonster122.mods.simplerandomstuff.tanks.FRTank;
 import bluemonster122.mods.simplerandomstuff.treefarm.FRTreeFarm;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import bluemonster122.mods.simplerandomstuff.workbench.FRCrafters;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = ModInfo.MOD_ID,
@@ -36,20 +44,27 @@ import org.apache.logging.log4j.Logger;
      updateJSON = ModInfo.UPDATE_JSON)
 public class SRS
 {
-  public static final IFeatureRegistry[] featureRegistries = new IFeatureRegistry[] {
-    FRCore.INSTANCE,
-    FRTank.INSTANCE,
-    FRPump.INSTANCE,
-    FRTreeFarm.INSTANCE,
-    FRCobbleGen.INSTANCE,
-    FRGenerators.INSTANCE,
-    FRCrafters.INSTANCE,
-    FROverlays.INSTANCE,
-    FRMiner.INSTANCE,
-    FRGrinder.INSTNACE
-  };
   
-  public static final CreativeTabs theTab = new CreativeTabST();
+  public static final CreativeTabs theTab;
+  
+  public static final IFeatureRegistry[] featureRegistries;
+  
+  static
+  {
+    theTab = new CreativeTabST();
+    featureRegistries = new IFeatureRegistry[] {
+      FRCore.INSTANCE,
+      FRTank.INSTANCE,
+      FRPump.INSTANCE,
+      FRTreeFarm.INSTANCE,
+      FRCobbleGen.INSTANCE,
+      FRGenerators.INSTANCE,
+      FRCrafters.INSTANCE,
+      FROverlays.INSTANCE,
+      FRMiner.INSTANCE,
+      FRGrinder.INSTNACE
+    };
+  }
   
   public SimpleNetworkWrapper channel;
   
@@ -111,10 +126,51 @@ public class SRS
   {
   }
   
+  @EventBusSubscriber
+  public static class RegistrationHandler
+  {
+    @SubscribeEvent
+    public static void registerBlocks(Register<Block> event)
+    {
+      for (IFeatureRegistry fr : SRS.featureRegistries)
+      {
+        if (SRS.shouldLoad(fr)) fr.registerBlocks(event.getRegistry());
+      }
+    }
+    
+    @SubscribeEvent
+    public static void registerItems(Register<Item> event)
+    {
+      for (IFeatureRegistry fr : SRS.featureRegistries)
+      {
+        if (SRS.shouldLoad(fr)) fr.registerItems(event.getRegistry());
+      }
+    }
+    
+    @SubscribeEvent
+    public static void registerRecipes(Register<IRecipe> event)
+    {
+      for (IFeatureRegistry fr : SRS.featureRegistries)
+      {
+        if (SRS.shouldLoad(fr)) fr.registerRecipes(event.getRegistry());
+      }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void registerRenders(ModelRegistryEvent event)
+    {
+      for (IFeatureRegistry fr : SRS.featureRegistries)
+      {
+        if (SRS.shouldLoad(fr)) fr.registerRenders();
+      }
+    }
+  }
+  
   public static Logger logger;
   
   @Instance(value = ModInfo.MOD_ID)
-  public static SRS INSTANCE;
+  public static SRS INSTANCE = new SRS();
   
   @SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.SERVER_PROXY_CLASS)
   public static IProxy proxy;

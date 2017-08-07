@@ -5,35 +5,35 @@
     "model": "simplerandomstuff:tank"
   },
   "variants": {
-    "variant":{
+    "variant": {
       "glass": {
         "textures": {
-          "0":"simplerandomstuff:block/tank/glass_side",
-          "1":"simplerandomstuff:block/tank/glass_top"
+          "0": "simplerandomstuff:block/tank/glass_side",
+          "1": "simplerandomstuff:block/tank/glass_top"
         }
       },
       "iron": {
         "textures": {
-          "0":"simplerandomstuff:block/tank/iron_side",
-          "1":"simplerandomstuff:block/tank/iron_top"
+          "0": "simplerandomstuff:block/tank/iron_side",
+          "1": "simplerandomstuff:block/tank/iron_top"
         }
       },
       "gold": {
         "textures": {
-          "0":"simplerandomstuff:block/tank/gold_side",
-          "1":"simplerandomstuff:block/tank/gold_top"
+          "0": "simplerandomstuff:block/tank/gold_side",
+          "1": "simplerandomstuff:block/tank/gold_top"
         }
       },
-      "diamond":{
+      "diamond": {
         "textures": {
-          "0":"simplerandomstuff:block/tank/diamond_side",
-          "1":"simplerandomstuff:block/tank/diamond_top"
+          "0": "simplerandomstuff:block/tank/diamond_side",
+          "1": "simplerandomstuff:block/tank/diamond_top"
         }
       },
       "obsidian": {
         "textures": {
-          "0":"simplerandomstuff:block/tank/obsidian_side",
-          "1":"simplerandomstuff:block/tank/obsidian_top"
+          "0": "simplerandomstuff:block/tank/obsidian_side",
+          "1": "simplerandomstuff:block/tank/obsidian_top"
         }
       }
     }

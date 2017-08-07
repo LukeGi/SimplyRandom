@@ -19,9 +19,9 @@ public class TESRTank
   
   protected static Minecraft mc = Minecraft.getMinecraft();
   
-  private static   float     d  = 0.005f;
+  private static float d = 0.005f;
   
-  private static   float     l  = 0.0625f;
+  private static float l = 0.0625f;
   
   @Override
   public void render(TileTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
@@ -34,12 +34,13 @@ public class TESRTank
     float height = ((float) liquid.amount - d) / (float) tank.getCapacity();
     
     
-    int brightness = mc.world.getCombinedLight(te.getPos(),
-                                               liquid.getFluid()
-                                                     .getLuminosity(liquid)
+    int brightness = mc.world.getCombinedLight(
+      te.getPos(),
+      liquid.getFluid()
+            .getLuminosity(liquid)
     );
-    int color      = liquid.getFluid()
-                           .getColor(liquid);
+    int color = liquid.getFluid()
+                      .getColor(liquid);
     
     GlStateManager.pushMatrix();
     
@@ -62,10 +63,10 @@ public class TESRTank
     renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
     mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     
-    TextureAtlasSprite still   = mc.getTextureMapBlocks()
-                                   .getTextureExtry(liquid.getFluid()
-                                                          .getStill(liquid)
-                                                          .toString());
+    TextureAtlasSprite still = mc.getTextureMapBlocks()
+                                 .getTextureExtry(liquid.getFluid()
+                                                        .getStill(liquid)
+                                                        .toString());
     TextureAtlasSprite flowing = mc.getTextureMapBlocks()
                                    .getTextureExtry(liquid.getFluid()
                                                           .getFlowing(liquid)

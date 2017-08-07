@@ -47,20 +47,20 @@ public class FRTreeFarm
   {
     //@formatter:off
     
-//    registry.registerAll(new ShapedOreRecipe(new ResourceLocation(ModInfo.MOD_ID, "blah"),
-//                                             new ItemStack(tree_farm, 1),
-//                                             "SAS",
-//                                             "IOI",
-//                                             "SAS",
-//                                             'S',
-//                                             Names.OreDict.SAPLING,
-//                                             'A',
-//                                             new ItemStack(Items.IRON_AXE),
-//                                             'I',
-//                                             new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
-//                                             'O',
-//                                             Names.OreDict.OBSIDIAN
-//    ).setRegistryName("treefarm"));
+    //    registry.registerAll(new ShapedOreRecipe(new ResourceLocation(ModInfo.MOD_ID, "blah"),
+    //                                             new ItemStack(tree_farm, 1),
+    //                                             "SAS",
+    //                                             "IOI",
+    //                                             "SAS",
+    //                                             'S',
+    //                                             Names.OreDict.SAPLING,
+    //                                             'A',
+    //                                             new ItemStack(Items.IRON_AXE),
+    //                                             'I',
+    //                                             new ItemStack(FRCore.misc, 1, ItemMisc.Types.MACHINE_BASE.getMeta()),
+    //                                             'O',
+    //                                             Names.OreDict.OBSIDIAN
+    //    ).setRegistryName("treefarm"));
     
     //@formatter:on
   }
