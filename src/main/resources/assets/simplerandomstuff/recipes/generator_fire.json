@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ISI",
+    "FMF",
+    "ISI"
+  ],
+  "key": {
+    "S": {
+      "item": "simplerandomstuff:misc",
+      "data": 2
+    },
+    "M": {
+      "item": "simplerandomstuff:misc",
+      "data": 3
+    },
+    "F": {
+      "item": "minecraft:book"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "stickIron"
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:generator",
+    "data": 1
+  }
+}

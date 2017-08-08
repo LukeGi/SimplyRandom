@@ -1,5 +1,5 @@
 {
-  "type": "simplerandomstuff:tank_upgrade",
+  "type": "tank_upgrade",
   "pattern": [
     "UPU",
     "PTP",
@@ -8,7 +8,7 @@
   "key": {
     "U": {
       "type": "forge:ore_dict",
-      "ore": "obsidian"
+      "ore": "ingotIron"
     },
     "P": {
       "type": "forge:ore_dict",
@@ -16,11 +16,11 @@
     },
     "T": {
       "item": "simplerandomstuff:tank",
-      "data": 2
+      "data": 0
     }
   },
   "result": {
     "item": "simplerandomstuff:tank",
-    "data": 3
+    "data": 1
   }
 }

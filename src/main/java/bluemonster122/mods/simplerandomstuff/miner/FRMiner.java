@@ -1,22 +1,14 @@
 package bluemonster122.mods.simplerandomstuff.miner;
 
-import bluemonster122.mods.simplerandomstuff.core.FRCore;
-import bluemonster122.mods.simplerandomstuff.core.ItemMisc;
 import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class FRMiner
@@ -37,33 +29,6 @@ public class FRMiner
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
         registry.registerAll(miner.createItemBlock());
-    }
-
-    @Override
-    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        //@formatter:off
-
-        registry.registerAll(new ShapedOreRecipe(new ResourceLocation(ModInfo.MOD_ID, "blah"),
-                new ItemStack(miner, 1),
-                "RGR",
-                "GCG",
-                "IDI",
-                'R',
-                "dustGlowstone",
-                'G',
-                "gearStone",
-                'C',
-                new ItemStack(FRCore.misc,
-                        1,
-                        ItemMisc.Types.COMPLEX_MACHINE_BASE.getMeta()
-                ),
-                'I',
-                new ItemStack(Items.DIAMOND_PICKAXE),
-                'D',
-                new ItemStack(Items.GOLDEN_PICKAXE)
-        ).setRegistryName("miner"));
-
-        //@formatter:on
     }
 
     @Override

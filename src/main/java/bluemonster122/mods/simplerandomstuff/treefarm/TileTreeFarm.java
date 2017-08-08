@@ -1,5 +1,6 @@
 package bluemonster122.mods.simplerandomstuff.treefarm;
 
+import bluemonster122.mods.simplerandomstuff.SRS;
 import bluemonster122.mods.simplerandomstuff.client.renderer.BoxRender;
 import bluemonster122.mods.simplerandomstuff.core.IHaveGui;
 import bluemonster122.mods.simplerandomstuff.core.energy.BatteryST;
@@ -105,6 +106,7 @@ public class TileTreeFarm
         markDirty();
 
         // Work
+        if (SRS.isDev) battery.setEnergy(500000);
         nextTime--;
         if (nextTime > 0) return;
         currentPos++;

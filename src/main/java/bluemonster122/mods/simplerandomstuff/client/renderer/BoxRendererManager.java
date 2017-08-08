@@ -1,8 +1,10 @@
 package bluemonster122.mods.simplerandomstuff.client.renderer;
 
+import cofh.api.item.IToolHammer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -48,23 +50,26 @@ public class BoxRendererManager {
         Minecraft mc = FMLClientHandler.instance()
                 .getClient();
         EntityPlayer player = mc.player;
-        double playerX = player.prevPosX + (player.posX - player.prevPosX) * e.getPartialTicks();
-        double playerY = player.prevPosY + (player.posY - player.prevPosY) * e.getPartialTicks();
-        double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * e.getPartialTicks();
+        if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IToolHammer ||
+                player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IToolHammer) {
+            double playerX = player.prevPosX + (player.posX - player.prevPosX) * e.getPartialTicks();
+            double playerY = player.prevPosY + (player.posY - player.prevPosY) * e.getPartialTicks();
+            double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * e.getPartialTicks();
 
-        GL11.glPushMatrix();
-        GL11.glTranslated(-playerX, -playerY, -playerZ);
+            GL11.glPushMatrix();
+            GL11.glTranslated(-playerX, -playerY, -playerZ);
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.disableDepth();
-        renders.forEach(BoxRender::render);
-        GlStateManager.enableDepth();
+            GlStateManager.disableDepth();
+            renders.forEach(BoxRender::render);
+            GlStateManager.enableDepth();
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glPopMatrix();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
+        }
     }
 }

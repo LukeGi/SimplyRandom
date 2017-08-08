@@ -1,25 +1,20 @@
 package bluemonster122.mods.simplerandomstuff.core;
 
 import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
-import bluemonster122.mods.simplerandomstuff.reference.Names.OreDict;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
@@ -64,12 +59,6 @@ public class FRCore
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
         registry.registerAll(wrench, misc, test.createItemBlock());
-    }
-
-    @Override
-    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        /* NO OPERATION */
-        // Recipes are all in JSONs now.
     }
 
     @Override

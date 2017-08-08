@@ -1,22 +1,26 @@
 {
-  "type": "simplerandomstuff:tank_upgrade",
+  "type": "tank_upgrade",
   "pattern": [
-    "GPG",
-    "P P",
-    "GPG"
+    "UPU",
+    "PTP",
+    "UPU"
   ],
   "key": {
-    "G": {
+    "U": {
       "type": "forge:ore_dict",
-      "ore": "blockGlass"
+      "ore": "gemDiamond"
     },
     "P": {
       "type": "forge:ore_dict",
       "ore": "paneGlass"
+    },
+    "T": {
+      "item": "simplerandomstuff:tank",
+      "data": 3
     }
   },
   "result": {
     "item": "simplerandomstuff:tank",
-    "data": 0
+    "data": 4
   }
 }

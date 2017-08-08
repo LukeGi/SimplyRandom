@@ -8,7 +8,6 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,12 +36,6 @@ public class FRTreeFarm
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
         registry.registerAll(tree_farm.createItemBlock());
-    }
-
-    @Override
-    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        /* NO OPERATION */
-        // Recipes have been moved to JSONs.
     }
 
     @Override

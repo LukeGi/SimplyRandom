@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SWS",
+    "T|T",
+    "RBR"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "|": {
+      "type": "forge:ore_dict",
+      "ore": "wrench"
+    },
+    "T": {
+      "item": "simplerandomstuff:tank",
+      "data": 1
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "gearStone"
+    },
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "stickIron"
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:pump"
+  }
+}

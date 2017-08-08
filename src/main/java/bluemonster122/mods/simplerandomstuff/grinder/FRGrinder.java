@@ -5,7 +5,6 @@ import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,11 +25,6 @@ public class FRGrinder
 
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
-
-    }
-
-    @Override
-    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
 
     }
 

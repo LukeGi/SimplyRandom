@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "pressurePlateWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "workbench"
+    }
+  ],
+  "result": {
+    "item": "simplerandomstuff:crafting_table"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "type": "simplerandomstuff:tank_upgrade",
+  "type": "tank_upgrade",
   "pattern": [
     "UPU",
     "PTP",

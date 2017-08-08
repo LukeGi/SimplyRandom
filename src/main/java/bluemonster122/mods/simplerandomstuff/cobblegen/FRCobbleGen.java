@@ -1,20 +1,14 @@
 package bluemonster122.mods.simplerandomstuff.cobblegen;
 
 import bluemonster122.mods.simplerandomstuff.core.block.BlockSRS;
-import bluemonster122.mods.simplerandomstuff.reference.ModInfo;
 import bluemonster122.mods.simplerandomstuff.reference.Names;
 import bluemonster122.mods.simplerandomstuff.util.IFeatureRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static bluemonster122.mods.simplerandomstuff.util.ModelHelpers.registerBlockModelAsItem;
@@ -36,12 +30,6 @@ public class FRCobbleGen
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
         registry.registerAll(cobblestone_generator.createItemBlock());
-    }
-
-    @Override
-    public void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        /* NO OPERATION */
-        // Recipes moved to JSONs.
     }
 
     @Override

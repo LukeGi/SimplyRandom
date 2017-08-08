@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W",
+    "G",
+    "C"
+  ],
+  "key": {
+    "C": {
+      "item": "simplerandomstuff:crafting_table"
+    },
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "gearStone"
+    },
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "wrench"
+    }
+  },
+  "result": {
+    "item": "SimpleRandomStuff:crafting_table_auto"
+  }
+}

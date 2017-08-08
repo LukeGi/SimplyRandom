@@ -1,14 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "MMM",
-    "MWM",
-    "MMM"
+    "WSW",
+    "SMS",
+    "WSW"
   ],
   "key": {
     "W": {
+      "item": "simplerandomstuff:misc",
+      "data": 1
+    },
+    "S": {
       "type": "forge:ore_dict",
-      "ore": "wrench"
+      "ore": "sugar"
     },
     "M": {
       "item": "simplerandomstuff:misc",
@@ -16,7 +20,7 @@
     }
   },
   "result": {
-    "item": "simplerandomstuff:misc",
-    "data": 4
+    "item": "simplerandomstuff:generator",
+    "data": 0
   }
 }
