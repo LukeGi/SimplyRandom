@@ -21,7 +21,10 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -36,6 +39,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = ModInfo.MOD_ID,
@@ -90,7 +94,6 @@ public class SRS {
         for (IFeatureRegistry registry : featureRegistries) {
             if (shouldLoad(registry)) {
                 registry.registerEvents();
-                registry.registerOreDict();
             }
         }
         INSTANCE.setupNetwork();
@@ -111,6 +114,7 @@ public class SRS {
         NetworkRegistry.INSTANCE.registerGuiHandler(SRS.INSTANCE, new GuiHandler());
         for (IFeatureRegistry fr : featureRegistries) {
             if (shouldLoad(fr)) {
+                fr.registerOreDict();
                 fr.registerTileEntities();
             }
         }

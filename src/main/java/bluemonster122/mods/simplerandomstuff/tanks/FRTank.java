@@ -62,65 +62,10 @@ public class FRTank
 
     @Override
     public void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        // TODO: uncomment this line of code when the method is undepricated
-        // RecipeSorter.register("tank_upgrade_recipe", UpgradeRecipe.class, RecipeSorter.Category.SHAPED, "");
-
         //@formatter:off
 
         ResourceLocation blah = new ResourceLocation(ModInfo.MOD_ID, "blah");
-        registry.registerAll(/*new UpgradeRecipe(glass_tank,
-                                           "GPG",
-                                           "P P",
-                                           "GPG",
-                                           'G',
-                                           OreDict.GLASS_BLOCK,
-                                           'P',
-                                           OreDict.GLASS_PANES
-                         ),
-                         new UpgradeRecipe(iron_tank,
-                                           "UPU",
-                                           "PTP",
-                                           "UPU",
-                                           'P',
-                                           OreDict.GLASS_PANES,
-                                           'U',
-                                           OreDict.IRON_INGOT,
-                                           'T',
-                                           glass_tank
-                         ),
-                         new UpgradeRecipe(gold_tank,
-                                           "UPU",
-                                           "PTP",
-                                           "UPU",
-                                           'P',
-                                           OreDict.GLASS_PANES,
-                                           'U',
-                                           OreDict.GOLD_INGOT,
-                                           'T',
-                                           iron_tank
-                         ),
-                         new UpgradeRecipe(obsidian_tank,
-                                           "UPU",
-                                           "PTP",
-                                           "UPU",
-                                           'P',
-                                           OreDict.GLASS_PANES,
-                                           'U',
-                                           OreDict.OBSIDIAN,
-                                           'T',
-                                           gold_tank
-                         ),
-                         new UpgradeRecipe(diamond_tank,
-                                           "UPU",
-                                           "PTP",
-                                           "UPU",
-                                           'P',
-                                           OreDict.GLASS_PANES,
-                                           'U',
-                                           OreDict.DIAMOND,
-                                           'T',
-                                           obsidian_tank
-                         ),*/
+        registry.registerAll(
                 new ShapedOreRecipe(blah,
                         new ItemStack(upgrade, 1, ItemTankUpgrade.Types.GLASS_TO_IRON.getMeta()),
                         "UPU",
@@ -174,7 +119,8 @@ public class FRTank
                         OreDict.DIAMOND,
                         'W',
                         new ItemStack(FRCore.wrench)
-                ).setRegistryName("obsidian_to_diamond_upgrade"));
+                ).setRegistryName("obsidian_to_diamond_upgrade")
+        );
 
         //@formatter:on
     }

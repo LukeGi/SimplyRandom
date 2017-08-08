@@ -1,0 +1,26 @@
+{
+  "type": "simplerandomstuff:tank_upgrade",
+  "pattern": [
+    "UPU",
+    "PTP",
+    "UPU"
+  ],
+  "key": {
+    "U": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    },
+    "T": {
+      "item": "simplerandomstuff:tank",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:tank",
+    "data": 1
+  }
+}

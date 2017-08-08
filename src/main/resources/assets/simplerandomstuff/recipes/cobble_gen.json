@@ -1,5 +1,6 @@
 {
   "type": "forge:ore_shaped",
+  "mirrored": true,
   "pattern": [
     "PPP",
     "WCL",

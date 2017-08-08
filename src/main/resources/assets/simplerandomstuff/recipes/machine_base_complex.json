@@ -6,7 +6,7 @@
     "MMM"
   ],
   "key": {
-    "w": {
+    "W": {
       "type": "forge:ore_dict",
       "ore": "wrench"
     },

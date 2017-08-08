@@ -1,0 +1,22 @@
+{
+  "type": "simplerandomstuff:tank_upgrade",
+  "pattern": [
+    "GPG",
+    "P P",
+    "GPG"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    }
+  },
+  "result": {
+    "item": "simplerandomstuff:tank",
+    "data": 0
+  }
+}
