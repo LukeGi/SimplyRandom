@@ -19,27 +19,6 @@ public class ItemEnergyContainer
 
     protected int maxExtract;
 
-    public ItemEnergyContainer() {
-
-    }
-
-    public ItemEnergyContainer(int capacity) {
-
-        this(capacity, capacity, capacity);
-    }
-
-    public ItemEnergyContainer(int capacity, int maxTransfer) {
-
-        this(capacity, maxTransfer, maxTransfer);
-    }
-
-    public ItemEnergyContainer(int capacity, int maxReceive, int maxExtract) {
-
-        this.capacity = capacity;
-        this.maxReceive = maxReceive;
-        this.maxExtract = maxExtract;
-    }
-
     public ItemEnergyContainer setCapacity(int capacity) {
 
         this.capacity = capacity;
@@ -118,5 +97,26 @@ public class ItemEnergyContainer
     public int getMaxEnergyStored(ItemStack container) {
 
         return capacity;
+    }
+
+    public ItemEnergyContainer() {
+
+    }
+
+    public ItemEnergyContainer(int capacity) {
+
+        this(capacity, capacity, capacity);
+    }
+
+    public ItemEnergyContainer(int capacity, int maxTransfer) {
+
+        this(capacity, maxTransfer, maxTransfer);
+    }
+
+    public ItemEnergyContainer(int capacity, int maxReceive, int maxExtract) {
+
+        this.capacity = capacity;
+        this.maxReceive = maxReceive;
+        this.maxExtract = maxExtract;
     }
 }

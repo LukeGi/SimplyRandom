@@ -65,16 +65,6 @@ public interface IEnergyTransport
         BALANCE;
 
         /**
-         * Returns the opposite state to this InterfaceType.
-         * {@link #BALANCE} is considered its own opposite.<br>
-         * {@link #SEND} is the opposite of {@link #RECEIVE} and visa versa.
-         */
-        public InterfaceType getOpposite() {
-
-            return this == BALANCE ? BALANCE : this == SEND ? RECEIVE : SEND;
-        }
-
-        /**
          * Returns the next InterfaceType as described in {@link IEnergyTransport#getTransportState}
          */
         public InterfaceType rotate() {
@@ -94,6 +84,16 @@ public interface IEnergyTransport
             } else {
                 return this == BALANCE ? SEND : this == SEND ? RECEIVE : BALANCE;
             }
+        }
+
+        /**
+         * Returns the opposite state to this InterfaceType.
+         * {@link #BALANCE} is considered its own opposite.<br>
+         * {@link #SEND} is the opposite of {@link #RECEIVE} and visa versa.
+         */
+        public InterfaceType getOpposite() {
+
+            return this == BALANCE ? BALANCE : this == SEND ? RECEIVE : SEND;
         }
     }
 }

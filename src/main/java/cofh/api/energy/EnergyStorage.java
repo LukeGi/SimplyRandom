@@ -18,23 +18,6 @@ public class EnergyStorage
 
     protected int maxExtract;
 
-    public EnergyStorage(int capacity) {
-
-        this(capacity, capacity, capacity);
-    }
-
-    public EnergyStorage(int capacity, int maxTransfer) {
-
-        this(capacity, maxTransfer, maxTransfer);
-    }
-
-    public EnergyStorage(int capacity, int maxReceive, int maxExtract) {
-
-        this.capacity = capacity;
-        this.maxReceive = maxReceive;
-        this.maxExtract = maxExtract;
-    }
-
     public EnergyStorage readFromNBT(NBTTagCompound nbt) {
 
         this.energy = nbt.getInteger("Energy");
@@ -68,28 +51,6 @@ public class EnergyStorage
 
         setMaxReceive(maxTransfer);
         setMaxExtract(maxTransfer);
-        return this;
-    }
-
-    public int getMaxReceive() {
-
-        return maxReceive;
-    }
-
-    public EnergyStorage setMaxReceive(int maxReceive) {
-
-        this.maxReceive = maxReceive;
-        return this;
-    }
-
-    public int getMaxExtract() {
-
-        return maxExtract;
-    }
-
-    public EnergyStorage setMaxExtract(int maxExtract) {
-
-        this.maxExtract = maxExtract;
         return this;
     }
 
@@ -154,5 +115,44 @@ public class EnergyStorage
     public int getMaxEnergyStored() {
 
         return capacity;
+    }
+
+    public EnergyStorage(int capacity) {
+
+        this(capacity, capacity, capacity);
+    }
+
+    public EnergyStorage(int capacity, int maxTransfer) {
+
+        this(capacity, maxTransfer, maxTransfer);
+    }
+
+    public EnergyStorage(int capacity, int maxReceive, int maxExtract) {
+
+        this.capacity = capacity;
+        this.maxReceive = maxReceive;
+        this.maxExtract = maxExtract;
+    }
+
+    public int getMaxReceive() {
+
+        return maxReceive;
+    }
+
+    public EnergyStorage setMaxReceive(int maxReceive) {
+
+        this.maxReceive = maxReceive;
+        return this;
+    }
+
+    public int getMaxExtract() {
+
+        return maxExtract;
+    }
+
+    public EnergyStorage setMaxExtract(int maxExtract) {
+
+        this.maxExtract = maxExtract;
+        return this;
     }
 }
