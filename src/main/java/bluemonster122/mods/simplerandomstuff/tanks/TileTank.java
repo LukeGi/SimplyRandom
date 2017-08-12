@@ -19,6 +19,9 @@ import java.util.Map;
 
 public class TileTank extends TileST implements ITickable, IHaveTank {
     public int tier = 0;
+    public int delayer = 10;
+
+
     public FluidTank tank = createTank();
 
     /**
@@ -27,7 +30,7 @@ public class TileTank extends TileST implements ITickable, IHaveTank {
      * @return The Tile's current Tank.
      */
     @Override
-    public FluidTank getTank( ) {
+    public FluidTank getTank() {
         return tank;
     }
 
@@ -47,14 +50,14 @@ public class TileTank extends TileST implements ITickable, IHaveTank {
      * @return a new Tank for the Tile.
      */
     @Override
-    public FluidTank createTank( ) {
+    public FluidTank createTank() {
         try {
             tier = (byte) world.getBlockState(pos).getValue(BlockTank.VARIANT).getMeta();
         } catch (Exception ignore) {
         }
         return new FluidTank((8 << tier) * 1000) {
             @Override
-            protected void onContentsChanged( ) {
+            protected void onContentsChanged() {
                 IBlockState state = getWorld().getBlockState(getPos());
                 getWorld().notifyBlockUpdate(getPos(), state, state, 3);
                 markDirty();
@@ -63,7 +66,7 @@ public class TileTank extends TileST implements ITickable, IHaveTank {
         };
     }
 
-    public boolean attemptPushDown( ) {
+    public boolean attemptPushDown() {
         TileEntity tile = getWorld().getTileEntity(getPos().down());
         if (tile == null) return false;
         if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)) {
@@ -87,7 +90,7 @@ public class TileTank extends TileST implements ITickable, IHaveTank {
     }
 
     @Override
-    public Map<Capability, Capability> getCaps( ) {
+    public Map<Capability, Capability> getCaps() {
         return ImmutableMap.of(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast((IFluidHandler) tank));
     }
 
@@ -102,7 +105,11 @@ public class TileTank extends TileST implements ITickable, IHaveTank {
     }
 
     @Override
-    public void update( ) {
+    public void update() {
+        if (delayer > 0){
+            delayer--;
+            return;
+        }
         if (attemptPushDown()) {
 
         }
