@@ -1,5 +1,5 @@
 {
   "recipes": {
-    "tank_upgrade": "bluemonster122.mods.simplerandomstuff.tanks.UpgradeRecipeFactory"
+    "tank_upgrade": "bluemonster.simplerandomstuff.tanks.UpgradeRecipeFactory"
   }
 }

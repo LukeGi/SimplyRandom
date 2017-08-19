@@ -29,3 +29,9 @@ item.simplerandomstuff:tank_upgrade.obsidian_to_diamond.name=Obsidian to Diamond
 
 # Containers
 simplerandomstuff:crafting_table=Workstation
+
+# Config
+simplerandomstuff:configs=Simple Random Stuff Configs
+simplerandomstuff:configs.treeFarmConfigs=Tree Farm Configs
+simplerandomstuff:configs.shouldTreeFarmLoad=Should Tree Farm Load?
+simplerandomstuff:configs.treeFarmBreakEnergy=Block Break Energy Cost?

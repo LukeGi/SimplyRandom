@@ -1,4 +1,4 @@
 package bluemonster.simplerandomstuff.proxy;
 
-public class ClientProxy extends CommonProxy {
+public abstract class CommonProxy {
 }

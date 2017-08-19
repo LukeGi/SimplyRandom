@@ -1,7 +1,0 @@
-@ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-package bluemonster.simplerandomstuff.treefarm;
-
-import mcp.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
