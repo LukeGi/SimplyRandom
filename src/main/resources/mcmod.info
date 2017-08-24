@@ -13,6 +13,8 @@
     "credits": "",
     "logoFile": "assets/simplethings/textures/icon.png",
     "screenshots": [],
-    "dependencies": []
+    "dependencies": [
+      "forge"
+    ]
   }
 ]
