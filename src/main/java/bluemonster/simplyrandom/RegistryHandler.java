@@ -57,6 +57,22 @@ public class RegistryHandler {
                 new Ingot(Names.LEAD),
                 new Nugget(Names.LEAD)
         );
+        onRegisterOreDict();
+    }
+
+    private static void onRegisterOreDict() {
+        OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dustCopper", COPPER_DUST.getItemStack());
+        OreDictionary.registerOre("dustLead", LEAD_DUST.getItemStack());
+        OreDictionary.registerOre("dustTin", TIN_DUST.getItemStack());
+        OreDictionary.registerOre("ingotCopper", COPPER_INGOT.getItemStack());
+        OreDictionary.registerOre("ingotLead", LEAD_INGOT.getItemStack());
+        OreDictionary.registerOre("ingotTin", TIN_INGOT.getItemStack());
+        OreDictionary.registerOre("blockCopper", COPPER_BLOCK.getItemStack());
+        OreDictionary.registerOre("blockLead", LEAD_BLOCK.getItemStack());
+        OreDictionary.registerOre("blockTin", TIN_BLOCK.getItemStack());
     }
 
     @SubscribeEvent
