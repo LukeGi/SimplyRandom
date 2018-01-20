@@ -1,16 +1,10 @@
 package bluemonster.simplyrandom;
 
 import bluemonster.simplyrandom.proxy.IProxy;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.*;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.oredict.OreDictionary;
-import scala.util.parsing.json.JSONObject;
-
-import java.io.FileWriter;
 
 import static bluemonster.simplyrandom.ModInfo.*;
 import static bluemonster.simplyrandom.RegistryHandler.Objects.*;

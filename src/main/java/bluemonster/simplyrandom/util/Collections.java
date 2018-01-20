@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class Collections {
+
     public static <T> int indexOf(Collection<T> collection, T value) {
         if (collection.isEmpty() || value == null)
             return -1;
@@ -19,6 +20,6 @@ public class Collections {
     public static <T> T get(Collection<T> collection, int index) {
         if (index >= collection.size())
             return null;
-        return ((T[])collection.toArray())[index];
+        return ((T[]) collection.toArray())[index];
     }
 }

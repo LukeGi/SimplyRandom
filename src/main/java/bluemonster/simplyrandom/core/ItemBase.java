@@ -1,7 +1,6 @@
 package bluemonster.simplyrandom.core;
 
 import bluemonster.simplyrandom.RegistryHandler;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

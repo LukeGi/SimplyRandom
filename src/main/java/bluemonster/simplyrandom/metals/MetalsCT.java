@@ -3,9 +3,7 @@ package bluemonster.simplyrandom.metals;
 import bluemonster.simplyrandom.ModInfo;
 import bluemonster.simplyrandom.RegistryHandler;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class MetalsCT extends CreativeTabs {
 
