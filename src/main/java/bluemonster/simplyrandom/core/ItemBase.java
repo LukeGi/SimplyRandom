@@ -28,13 +28,6 @@ public class ItemBase extends Item {
         registerModels();
     }
 
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (Arrays.asList(getCreativeTabs()).contains(tab)) {
-            items.add(getItemStack());
-        }
-    }
-
     public void registerModels() {
         RegistryHandler.MODELS_TO_REGISTER.add(() -> registerModel(0, "item"));
     }
