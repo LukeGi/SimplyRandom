@@ -59,38 +59,47 @@ public class RegistryHandler {
         );
     }
 
-    public static void onRegisterOreDict() {
-        OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dustCopper", COPPER_DUST.getItemStack());
-        OreDictionary.registerOre("dustLead", LEAD_DUST.getItemStack());
-        OreDictionary.registerOre("dustTin", TIN_DUST.getItemStack());
-        OreDictionary.registerOre("ingotCopper", COPPER_INGOT.getItemStack());
-        OreDictionary.registerOre("ingotLead", LEAD_INGOT.getItemStack());
-        OreDictionary.registerOre("ingotTin", TIN_INGOT.getItemStack());
-        OreDictionary.registerOre("blockCopper", COPPER_BLOCK.getItemStack());
-        OreDictionary.registerOre("blockLead", LEAD_BLOCK.getItemStack());
-        OreDictionary.registerOre("blockTin", TIN_BLOCK.getItemStack());
-    }
-
     @SubscribeEvent
     public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
         ResourceLocation rl = getRL("metalRecipes");
         event.getRegistry().registerAll(
+                // Blocks to Ingots
                 new ShapelessOreRecipe(rl, COPPER_INGOT.getItemStack(9), "blockCopper").setRegistryName(getRL("copper_block_to_ingot")),
                 new ShapelessOreRecipe(rl, LEAD_INGOT.getItemStack(9), "blockLead").setRegistryName(getRL("lead_block_to_ingot")),
                 new ShapelessOreRecipe(rl, TIN_INGOT.getItemStack(9), "blockTin").setRegistryName(getRL("tin_block_to_ingot")),
+                // Ingots to Nuggets
                 new ShapelessOreRecipe(rl, COPPER_NUGGET.getItemStack(9), "ingotCopper").setRegistryName(getRL("copper_ingot_to_nugget")),
                 new ShapelessOreRecipe(rl, LEAD_NUGGET.getItemStack(9), "ingotLead").setRegistryName(getRL("lead_ingot_to_nugget")),
                 new ShapelessOreRecipe(rl, TIN_NUGGET.getItemStack(9), "ingotTin").setRegistryName(getRL("tin_ingot_to_nugget")),
+                // Ingots to Blocks
                 new ShapelessOreRecipe(rl, COPPER_BLOCK.getItemStack(), getX(9, "ingotCopper")).setRegistryName(getRL("copper_ingot_to_block")),
                 new ShapelessOreRecipe(rl, LEAD_BLOCK.getItemStack(), getX(9, "ingotLead")).setRegistryName(getRL("lead_ingot_to_block")),
                 new ShapelessOreRecipe(rl, TIN_BLOCK.getItemStack(), getX(9, "ingotTin")).setRegistryName(getRL("tin_ingot_to_block")),
+                // Nugget to Ingots
                 new ShapelessOreRecipe(rl, COPPER_INGOT.getItemStack(), getX(9, "nuggetCopper")).setRegistryName(getRL("copper_nugget_to_ingot")),
                 new ShapelessOreRecipe(rl, LEAD_INGOT.getItemStack(), getX(9, "nuggetLead")).setRegistryName(getRL("copper_nugget_to_ingot")),
                 new ShapelessOreRecipe(rl, TIN_INGOT.getItemStack(), getX(9, "nuggetTin")).setRegistryName(getRL("copper_nugget_to_ingot"))
         );
+    }
+
+    public static void onRegisterOreDict() {
+        OreDictionary.registerOre("blockCopper", COPPER_BLOCK.getItemStack());
+        OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dustCopper", COPPER_DUST.getItemStack());
+        OreDictionary.registerOre("ingotCopper", COPPER_INGOT.getItemStack());
+        OreDictionary.registerOre("nuggetCopper", COPPER_NUGGET.getItemStack());
+
+        OreDictionary.registerOre("blockLead", LEAD_BLOCK.getItemStack());
+        OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dustLead", LEAD_DUST.getItemStack());
+        OreDictionary.registerOre("ingotLead", LEAD_INGOT.getItemStack());
+        OreDictionary.registerOre("nuggetLead", LEAD_NUGGET.getItemStack());
+
+        OreDictionary.registerOre("blockTin", TIN_BLOCK.getItemStack());
+        OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());
+        OreDictionary.registerOre("dustTin", TIN_DUST.getItemStack());
+        OreDictionary.registerOre("ingotTin", TIN_INGOT.getItemStack());
+        OreDictionary.registerOre("nuggetTin", TIN_NUGGET.getItemStack());
     }
 
     @SideOnly(Side.CLIENT)
