@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "simplyrandom:lead_dust"
+  },
+  "ingredients": [
+    {
+      "item": "#DIRTYDUSTLEAD"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

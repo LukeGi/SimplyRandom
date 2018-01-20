@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "simplyrandom:tin_dust"
+  },
+  "ingredients": [
+    {
+      "item": "#DIRTYDUSTTIN"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

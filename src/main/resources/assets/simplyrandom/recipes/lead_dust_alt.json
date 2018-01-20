@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "simplyrandom:lead_dust"
+  },
+  "ingredients": [
+    {
+      "item": "#DIRTYDUSTLEAD"
+    },
+    {
+      "nbt": "{Potion:\"minecraft:water\"}",
+      "item": "minecraft:potion",
+      "type": "minecraft:item_nbt"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

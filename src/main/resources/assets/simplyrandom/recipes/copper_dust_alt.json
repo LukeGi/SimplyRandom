@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "simplyrandom:copper_dust"
+  },
+  "ingredients": [
+    {
+      "item": "#DIRTYDUSTCOPPER"
+    },
+    {
+      "nbt": "{Potion:\"minecraft:water\"}",
+      "item": "minecraft:potion",
+      "type": "minecraft:item_nbt"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

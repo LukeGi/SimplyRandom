@@ -2,15 +2,12 @@ package bluemonster.simplyrandom.core;
 
 import bluemonster.simplyrandom.RegistryHandler;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 
 import static bluemonster.simplyrandom.ModInfo.MOD_ID;
 

@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,47 +30,56 @@ public class RegistryHandler {
     @SubscribeEvent
     public static void onRegisterBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
-                new Ore(Names.TIN, TIN_DIRTY_DUST, false),
-                new MetalBlock(Names.TIN),
+                // Copper
                 new Ore(Names.COPPER, COPPER_DIRTY_DUST, false),
                 new MetalBlock(Names.COPPER),
+                // Lead
                 new Ore(Names.LEAD, LEAD_DIRTY_DUST, true),
-                new MetalBlock(Names.LEAD)
+                new MetalBlock(Names.LEAD),
+                // Tin
+                new Ore(Names.TIN, TIN_DIRTY_DUST, false),
+                new MetalBlock(Names.TIN)
         );
     }
 
     @SubscribeEvent
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
-                new MetalBlockItem(TIN_BLOCK),
-                new DirtyDust(Names.TIN),
-                new Dust(Names.TIN),
-                new Ingot(Names.TIN),
-                new Nugget(Names.TIN),
+                // Copper
                 new MetalBlockItem(COPPER_BLOCK),
                 new DirtyDust(Names.COPPER),
                 new Dust(Names.COPPER),
                 new Ingot(Names.COPPER),
                 new Nugget(Names.COPPER),
+                // Lead
                 new MetalBlockItem(LEAD_BLOCK),
                 new DirtyDust(Names.LEAD),
                 new Dust(Names.LEAD),
                 new Ingot(Names.LEAD),
-                new Nugget(Names.LEAD)
+                new Nugget(Names.LEAD),
+                // Tin
+                new MetalBlockItem(TIN_BLOCK),
+                new DirtyDust(Names.TIN),
+                new Dust(Names.TIN),
+                new Ingot(Names.TIN),
+                new Nugget(Names.TIN)
         );
     }
 
     public static void onRegisterOreDict() {
+        // Copper
         OreDictionary.registerOre("blockCopper", COPPER_BLOCK.getItemStack());
         OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
         OreDictionary.registerOre("dustCopper", COPPER_DUST.getItemStack());
         OreDictionary.registerOre("ingotCopper", COPPER_INGOT.getItemStack());
         OreDictionary.registerOre("nuggetCopper", COPPER_NUGGET.getItemStack());
+        // Lead
         OreDictionary.registerOre("blockLead", LEAD_BLOCK.getItemStack());
         OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
         OreDictionary.registerOre("dustLead", LEAD_DUST.getItemStack());
         OreDictionary.registerOre("ingotLead", LEAD_INGOT.getItemStack());
         OreDictionary.registerOre("nuggetLead", LEAD_NUGGET.getItemStack());
+        // Tin
         OreDictionary.registerOre("blockTin", TIN_BLOCK.getItemStack());
         OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());
         OreDictionary.registerOre("dustTin", TIN_DUST.getItemStack());
@@ -81,19 +89,30 @@ public class RegistryHandler {
 
     @SubscribeEvent
     public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
+        // Block -> Ingot
         RecipeConverter.addShapelessRecipe(COPPER_INGOT.getItemStack(9), "blockCopper");
         RecipeConverter.addShapelessRecipe(LEAD_INGOT.getItemStack(9), "blockLead");
         RecipeConverter.addShapelessRecipe(TIN_INGOT.getItemStack(9), "blockTin");
-        RecipeConverter.addShapelessRecipe(COPPER_NUGGET.getItemStack(9), "ingotCopper");
-        RecipeConverter.addShapelessRecipe(LEAD_NUGGET.getItemStack(9), "ingotLead");
-        RecipeConverter.addShapelessRecipe(TIN_NUGGET.getItemStack(9), "ingotTin");
+        // Ingot -> Block
         RecipeConverter.addShapelessRecipe(COPPER_BLOCK.getItemStack(), getX(9, "ingotCopper"));
         RecipeConverter.addShapelessRecipe(LEAD_BLOCK.getItemStack(), getX(9, "ingotLead"));
         RecipeConverter.addShapelessRecipe(TIN_BLOCK.getItemStack(), getX(9, "ingotTin"));
+        // Ingot -> Nugget
+        RecipeConverter.addShapelessRecipe(COPPER_NUGGET.getItemStack(9), "ingotCopper");
+        RecipeConverter.addShapelessRecipe(LEAD_NUGGET.getItemStack(9), "ingotLead");
+        RecipeConverter.addShapelessRecipe(TIN_NUGGET.getItemStack(9), "ingotTin");
+        // Nugget -> Ingot
         RecipeConverter.addShapelessRecipe(COPPER_INGOT.getItemStack(), getX(9, "nuggetCopper"));
         RecipeConverter.addShapelessRecipe(LEAD_INGOT.getItemStack(), getX(9, "nuggetLead"));
         RecipeConverter.addShapelessRecipe(TIN_INGOT.getItemStack(), getX(9, "nuggetTin"));
+        // Dirty Dust -> Dust
         RecipeConverter.addShapelessRecipe(COPPER_DUST.getItemStack(), "dirtyDustCopper", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(LEAD_DUST.getItemStack(), "dirtyDustLead", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(TIN_DUST.getItemStack(), "dirtyDustTin", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(COPPER_DUST.getItemStack(), "dirtyDustCopper", Items.POTIONITEM.getDefaultInstance());
+        RecipeConverter.addShapelessRecipe(LEAD_DUST.getItemStack(), "dirtyDustLead", Items.POTIONITEM.getDefaultInstance());
+        RecipeConverter.addShapelessRecipe(TIN_DUST.getItemStack(), "dirtyDustTin", Items.POTIONITEM.getDefaultInstance());
+        // Group Ingredients
         RecipeConverter.generateConstants();
     }
 
