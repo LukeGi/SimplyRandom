@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "simplyrandom:tin_nugget",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#INGOTTIN"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

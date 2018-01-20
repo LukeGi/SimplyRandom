@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "simplyrandom:tin_ingot",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#BLOCKTIN"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

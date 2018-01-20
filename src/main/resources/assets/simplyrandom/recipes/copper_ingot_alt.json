@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "simplyrandom:copper_ingot"
+  },
+  "ingredients": [
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    },
+    {
+      "item": "#NUGGETCOPPER"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

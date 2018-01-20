@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "simplyrandom:copper_block"
+  },
+  "ingredients": [
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    },
+    {
+      "item": "#INGOTCOPPER"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

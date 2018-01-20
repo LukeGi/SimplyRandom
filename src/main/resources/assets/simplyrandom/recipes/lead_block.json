@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "simplyrandom:lead_block"
+  },
+  "ingredients": [
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    },
+    {
+      "item": "#INGOTLEAD"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

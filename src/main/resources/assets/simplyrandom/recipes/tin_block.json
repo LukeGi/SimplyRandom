@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "simplyrandom:tin_block"
+  },
+  "ingredients": [
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    },
+    {
+      "item": "#INGOTTIN"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

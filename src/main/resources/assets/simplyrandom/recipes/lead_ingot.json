@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "simplyrandom:lead_ingot",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#BLOCKLEAD"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

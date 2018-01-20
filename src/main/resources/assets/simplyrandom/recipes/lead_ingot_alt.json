@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "simplyrandom:lead_ingot"
+  },
+  "ingredients": [
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    },
+    {
+      "item": "#NUGGETLEAD"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}
