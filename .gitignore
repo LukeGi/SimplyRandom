@@ -2,7 +2,6 @@
 !/.gitignore
 !/.gitmodules
 !/update.json
-!/BuildCraftAPI
 !/src
 !/gradle
 !/gradlew
@@ -14,6 +13,7 @@
 !/build.properties
 !/build.bat
 !/build.sh
+!/setup.bat
 !/gradle.properties
 !/webresources
 .DS_Store

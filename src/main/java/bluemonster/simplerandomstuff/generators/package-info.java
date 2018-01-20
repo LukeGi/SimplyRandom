@@ -1,7 +1,0 @@
-@ParametersAreNonnullByDefault @MethodsReturnNonnullByDefault
-package bluemonster.simplerandomstuff.generators;
-
-import mcp.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-

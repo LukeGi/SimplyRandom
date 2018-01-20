@@ -1,0 +1,20 @@
+################ METALS ################
+itemGroup.simplyrandom:metals=Simply Random Metals
+tile.simplyrandom:copper_ore.name=Copper Ore
+tile.simplyrandom:copper_block.name=Copper Ore
+item.simplyrandom:copper_dirty_dust=Copper Dirty Dust
+item.simplyrandom:copper_dust=Copper Dust
+item.simplyrandom:copper_ingot=Copper Ingot
+item.simplyrandom:copper_nugget=Copper Nugget
+tile.simplyrandom:lead_ore.name=Lead Ore
+tile.simplyrandom:lead_block.name=Lead Ore
+item.simplyrandom:lead_dirty_dust=Lead Dirty Dust
+item.simplyrandom:lead_dust=Lead Dust
+item.simplyrandom:lead_ingot=Lead Ingot
+item.simplyrandom:lead_nugget=Lead Nugget
+tile.simplyrandom:tin_ore.name=Tin Ore
+tile.simplyrandom:tin_block.name=Tin Ore
+item.simplyrandom:tin_dirty_dust=Tin Dirty Dust
+item.simplyrandom:tin_dust=Tin Dust
+item.simplyrandom:tin_ingot=Tin Ingot
+item.simplyrandom:tin_nugget=Tin Nugget
