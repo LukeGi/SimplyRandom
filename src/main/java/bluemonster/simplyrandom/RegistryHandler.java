@@ -57,10 +57,9 @@ public class RegistryHandler {
                 new Ingot(Names.LEAD),
                 new Nugget(Names.LEAD)
         );
-        onRegisterOreDict();
     }
 
-    private static void onRegisterOreDict() {
+    public static void onRegisterOreDict() {
         OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
         OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
         OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());

@@ -2,12 +2,12 @@ package bluemonster.simplyrandom;
 
 import bluemonster.simplyrandom.proxy.IProxy;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.*;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import static bluemonster.simplyrandom.ModInfo.*;
-import static bluemonster.simplyrandom.RegistryHandler.Objects.*;
 
 @Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION)
 public class SimplyRandom {
@@ -17,4 +17,9 @@ public class SimplyRandom {
 
     @Instance(MOD_ID)
     public static SimplyRandom INSTANCE = null;
+
+    @EventHandler
+    public void onInit(FMLInitializationEvent event) {
+        RegistryHandler.onRegisterOreDict();
+    }
 }
