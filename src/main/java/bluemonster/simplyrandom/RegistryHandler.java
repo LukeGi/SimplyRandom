@@ -1,11 +1,14 @@
 package bluemonster.simplyrandom;
 
+import bluemonster.simplyrandom.core.ItemBlockBase;
 import bluemonster.simplyrandom.metals.*;
 import bluemonster.simplyrandom.util.RecipeConverter;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -46,19 +49,19 @@ public class RegistryHandler {
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
                 // Copper
-                new MetalBlockItem(COPPER_BLOCK),
+                new ItemBlockBase(COPPER_BLOCK),
                 new DirtyDust(Names.COPPER),
                 new Dust(Names.COPPER),
                 new Ingot(Names.COPPER),
                 new Nugget(Names.COPPER),
                 // Lead
-                new MetalBlockItem(LEAD_BLOCK),
+                new MetalItemBlock(LEAD_BLOCK),
                 new DirtyDust(Names.LEAD),
                 new Dust(Names.LEAD),
                 new Ingot(Names.LEAD),
                 new Nugget(Names.LEAD),
                 // Tin
-                new MetalBlockItem(TIN_BLOCK),
+                new MetalItemBlock(TIN_BLOCK),
                 new DirtyDust(Names.TIN),
                 new Dust(Names.TIN),
                 new Ingot(Names.TIN),
@@ -68,52 +71,72 @@ public class RegistryHandler {
 
     public static void onRegisterOreDict() {
         // Copper
-        OreDictionary.registerOre("blockCopper", COPPER_BLOCK.getItemStack());
-        OreDictionary.registerOre("dirtyDustCopper", COPPER_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dustCopper", COPPER_DUST.getItemStack());
-        OreDictionary.registerOre("ingotCopper", COPPER_INGOT.getItemStack());
-        OreDictionary.registerOre("nuggetCopper", COPPER_NUGGET.getItemStack());
+        OreDictionary.registerOre("blockCopper", getItemStack(COPPER_BLOCK));
+        OreDictionary.registerOre("dirtyDustCopper", getItemStack(COPPER_DIRTY_DUST));
+        OreDictionary.registerOre("dustCopper", getItemStack(COPPER_DUST));
+        OreDictionary.registerOre("ingotCopper", getItemStack(COPPER_INGOT));
+        OreDictionary.registerOre("nuggetCopper", getItemStack(COPPER_NUGGET));
         // Lead
-        OreDictionary.registerOre("blockLead", LEAD_BLOCK.getItemStack());
-        OreDictionary.registerOre("dirtyDustLead", LEAD_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dustLead", LEAD_DUST.getItemStack());
-        OreDictionary.registerOre("ingotLead", LEAD_INGOT.getItemStack());
-        OreDictionary.registerOre("nuggetLead", LEAD_NUGGET.getItemStack());
+        OreDictionary.registerOre("blockLead", getItemStack(LEAD_BLOCK));
+        OreDictionary.registerOre("dirtyDustLead", getItemStack(LEAD_DIRTY_DUST));
+        OreDictionary.registerOre("dustLead", getItemStack(LEAD_DUST));
+        OreDictionary.registerOre("ingotLead", getItemStack(LEAD_INGOT));
+        OreDictionary.registerOre("nuggetLead", getItemStack(LEAD_NUGGET));
         // Tin
-        OreDictionary.registerOre("blockTin", TIN_BLOCK.getItemStack());
-        OreDictionary.registerOre("dirtyDustTin", TIN_DIRTY_DUST.getItemStack());
-        OreDictionary.registerOre("dustTin", TIN_DUST.getItemStack());
-        OreDictionary.registerOre("ingotTin", TIN_INGOT.getItemStack());
-        OreDictionary.registerOre("nuggetTin", TIN_NUGGET.getItemStack());
+        OreDictionary.registerOre("blockTin", getItemStack(TIN_BLOCK));
+        OreDictionary.registerOre("dirtyDustTin", getItemStack(TIN_DIRTY_DUST));
+        OreDictionary.registerOre("dustTin", getItemStack(TIN_DUST));
+        OreDictionary.registerOre("ingotTin", getItemStack(TIN_INGOT));
+        OreDictionary.registerOre("nuggetTin", getItemStack(TIN_NUGGET));
+    }
+
+    public static ItemStack getItemStack(Block block) {
+        return getItemStack(block, 1);
+    }
+
+    public static ItemStack getItemStack(Item item) {
+        return getItemStack(item, 1);
+    }
+
+    public static ItemStack getItemStack(Block block, int count) {
+        return new ItemStack(block, count);
+    }
+
+    public static ItemStack getItemStack(Item item, int count) {
+        return new ItemStack(item, count);
     }
 
     @SubscribeEvent
     public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
         // Block -> Ingot
-        RecipeConverter.addShapelessRecipe(COPPER_INGOT.getItemStack(9), "blockCopper");
-        RecipeConverter.addShapelessRecipe(LEAD_INGOT.getItemStack(9), "blockLead");
-        RecipeConverter.addShapelessRecipe(TIN_INGOT.getItemStack(9), "blockTin");
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_INGOT, 9), "blockCopper");
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_INGOT, 9), "blockLead");
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_INGOT, 9), "blockTin");
         // Ingot -> Block
-        RecipeConverter.addShapelessRecipe(COPPER_BLOCK.getItemStack(), getX(9, "ingotCopper"));
-        RecipeConverter.addShapelessRecipe(LEAD_BLOCK.getItemStack(), getX(9, "ingotLead"));
-        RecipeConverter.addShapelessRecipe(TIN_BLOCK.getItemStack(), getX(9, "ingotTin"));
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_BLOCK), getX(9, "ingotCopper"));
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_BLOCK), getX(9, "ingotLead"));
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_BLOCK), getX(9, "ingotTin"));
         // Ingot -> Nugget
-        RecipeConverter.addShapelessRecipe(COPPER_NUGGET.getItemStack(9), "ingotCopper");
-        RecipeConverter.addShapelessRecipe(LEAD_NUGGET.getItemStack(9), "ingotLead");
-        RecipeConverter.addShapelessRecipe(TIN_NUGGET.getItemStack(9), "ingotTin");
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_NUGGET, 9), "ingotCopper");
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_NUGGET, 9), "ingotLead");
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_NUGGET, 9), "ingotTin");
         // Nugget -> Ingot
-        RecipeConverter.addShapelessRecipe(COPPER_INGOT.getItemStack(), getX(9, "nuggetCopper"));
-        RecipeConverter.addShapelessRecipe(LEAD_INGOT.getItemStack(), getX(9, "nuggetLead"));
-        RecipeConverter.addShapelessRecipe(TIN_INGOT.getItemStack(), getX(9, "nuggetTin"));
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_INGOT), getX(9, "nuggetCopper"));
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_INGOT), getX(9, "nuggetLead"));
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_INGOT), getX(9, "nuggetTin"));
         // Dirty Dust -> Dust
-        RecipeConverter.addShapelessRecipe(COPPER_DUST.getItemStack(), "dirtyDustCopper", Items.WATER_BUCKET);
-        RecipeConverter.addShapelessRecipe(LEAD_DUST.getItemStack(), "dirtyDustLead", Items.WATER_BUCKET);
-        RecipeConverter.addShapelessRecipe(TIN_DUST.getItemStack(), "dirtyDustTin", Items.WATER_BUCKET);
-        RecipeConverter.addShapelessRecipe(COPPER_DUST.getItemStack(), "dirtyDustCopper", Items.POTIONITEM.getDefaultInstance());
-        RecipeConverter.addShapelessRecipe(LEAD_DUST.getItemStack(), "dirtyDustLead", Items.POTIONITEM.getDefaultInstance());
-        RecipeConverter.addShapelessRecipe(TIN_DUST.getItemStack(), "dirtyDustTin", Items.POTIONITEM.getDefaultInstance());
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_DUST), "dirtyDustCopper", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_DUST), "dirtyDustLead", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_DUST), "dirtyDustTin", Items.WATER_BUCKET);
+        RecipeConverter.addShapelessRecipe(getItemStack(COPPER_DUST), "dirtyDustCopper", Items.POTIONITEM.getDefaultInstance());
+        RecipeConverter.addShapelessRecipe(getItemStack(LEAD_DUST), "dirtyDustLead", Items.POTIONITEM.getDefaultInstance());
+        RecipeConverter.addShapelessRecipe(getItemStack(TIN_DUST), "dirtyDustTin", Items.POTIONITEM.getDefaultInstance());
         // Group Ingredients
         RecipeConverter.generateConstants();
+    }
+
+    private static Object[] getX(int x, Object value) {
+        return Collections.nCopies(x, value).toArray();
     }
 
     @SideOnly(Side.CLIENT)
@@ -126,36 +149,32 @@ public class RegistryHandler {
         return new ResourceLocation(ModInfo.MOD_ID, location);
     }
 
-    private static Object[] getX(int x, Object value) {
-        return Collections.nCopies(x, value).toArray();
-    }
-
     @ObjectHolder(ModInfo.MOD_ID)
     public static class Objects {
 
-        public static final Ore TIN_ORE = null;
-        public static final MetalBlock TIN_BLOCK = null;
+        public static final Block TIN_ORE = Blocks.AIR;
+        public static final Block TIN_BLOCK = Blocks.AIR;
         @ObjectHolder("tin_block")
-        public static final MetalBlockItem TIN_BLOCK_ITEM = null;
-        public static final DirtyDust TIN_DIRTY_DUST = null;
-        public static final Dust TIN_DUST = null;
-        public static final Ingot TIN_INGOT = null;
-        public static final Nugget TIN_NUGGET = null;
-        public static final Ore COPPER_ORE = null;
-        public static final MetalBlock COPPER_BLOCK = null;
+        public static final Item TIN_BLOCK_ITEM = Items.AIR;
+        public static final Item TIN_DIRTY_DUST = Items.AIR;
+        public static final Item TIN_DUST = Items.AIR;
+        public static final Item TIN_INGOT = Items.AIR;
+        public static final Item TIN_NUGGET = Items.AIR;
+        public static final Block COPPER_ORE = Blocks.AIR;
+        public static final Block COPPER_BLOCK = Blocks.AIR;
         @ObjectHolder("copper_block")
-        public static final MetalBlockItem COPPER_BLOCK_ITEM = null;
-        public static final DirtyDust COPPER_DIRTY_DUST = null;
-        public static final Dust COPPER_DUST = null;
-        public static final Ingot COPPER_INGOT = null;
-        public static final Nugget COPPER_NUGGET = null;
-        public static final Ore LEAD_ORE = null;
-        public static final MetalBlock LEAD_BLOCK = null;
+        public static final Item COPPER_BLOCK_ITEM = Items.AIR;
+        public static final Item COPPER_DIRTY_DUST = Items.AIR;
+        public static final Item COPPER_DUST = Items.AIR;
+        public static final Item COPPER_INGOT = Items.AIR;
+        public static final Item COPPER_NUGGET = Items.AIR;
+        public static final Block LEAD_ORE = Blocks.AIR;
+        public static final Block LEAD_BLOCK = Blocks.AIR;
         @ObjectHolder("lead_block")
-        public static final MetalBlockItem LEAD_BLOCK_ITEM = null;
-        public static final DirtyDust LEAD_DIRTY_DUST = null;
-        public static final Dust LEAD_DUST = null;
-        public static final Ingot LEAD_INGOT = null;
-        public static final Nugget LEAD_NUGGET = null;
+        public static final Item LEAD_BLOCK_ITEM = Items.AIR;
+        public static final Item LEAD_DIRTY_DUST = Items.AIR;
+        public static final Item LEAD_DUST = Items.AIR;
+        public static final Item LEAD_INGOT = Items.AIR;
+        public static final Item LEAD_NUGGET = Items.AIR;
     }
 }

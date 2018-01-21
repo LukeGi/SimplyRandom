@@ -15,6 +15,6 @@ public class MetalsCT extends CreativeTabs {
 
     @Override
     public ItemStack getTabIconItem() {
-        return RegistryHandler.Objects.COPPER_NUGGET.getItemStack();
+        return RegistryHandler.getItemStack(RegistryHandler.Objects.COPPER_NUGGET);
     }
 }

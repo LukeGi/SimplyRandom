@@ -3,11 +3,8 @@ package bluemonster.simplyrandom.core;
 import bluemonster.simplyrandom.RegistryHandler;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-
-import javax.annotation.Nonnull;
 
 import static bluemonster.simplyrandom.ModInfo.MOD_ID;
 
@@ -32,15 +29,5 @@ public class ItemBase extends Item {
     public void registerModel(int meta, String variant) {
         assert getRegistryName() != null;
         ModelLoader.setCustomModelResourceLocation(this, meta, new ModelResourceLocation(getRegistryName(), "variant=" + variant));
-    }
-
-    @Nonnull
-    public ItemStack getItemStack() {
-        return getItemStack(1);
-    }
-
-    @Nonnull
-    public ItemStack getItemStack(int count) {
-        return new ItemStack(this, count);
     }
 }
