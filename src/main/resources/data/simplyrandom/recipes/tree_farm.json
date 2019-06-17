@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IDI",
+    "ACA",
+    "IAI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "A": {
+      "item": "minecraft:iron_axe"
+    }
+  },
+  "result": {
+    "item": "simplyrandom:tree_farm"
+  },
+  "conditions": [
+    {
+      "type": "simplyrandom:feature_enabled",
+      "feature_name": "simplyrandom:tree_farm"
+    }
+  ]
+}

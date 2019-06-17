@@ -1,0 +1,58 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplyrandom:cobblestone_maker"
+    ]
+  },
+  "criteria": {
+    "has_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:iron_pickaxe"
+          }
+        ]
+      }
+    },
+    "has_water": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:water_bucket"
+          }
+        ]
+      }
+    },
+    "has_lava": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:lava_bucket"
+          }
+        ]
+      }
+    },
+    "has_cobblestone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:cobblestone"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pickaxe",
+      "has_water",
+      "has_lava",
+      "has_cobblestone"
+    ]
+  ]
+}
