@@ -69,6 +69,8 @@ public class RenderHelper
         wr.pos(xmax, ymax, zmin).endVertex();
         wr.pos(xmin, ymax, zmin).endVertex();
 
+        wr.setTranslation(0, 0, 0);
+
         Tessellator.getInstance().draw();
     }
 
@@ -114,6 +116,8 @@ public class RenderHelper
         wr.pos(xmax, ymax, zmax).endVertex();
         wr.pos(xmax, ymin, zmax).endVertex();
         wr.pos(xmax, ymin, zmin).endVertex();
+
+        wr.setTranslation(0, 0, 0);
 
         Tessellator.getInstance().draw();
     }
@@ -166,6 +170,8 @@ public class RenderHelper
         wr.pos(xmax, ymax, zmax).endVertex();
         wr.pos(xmax, ymax, zmin).endVertex();
         wr.pos(xmin, ymax, zmin).endVertex();
+
+        wr.setTranslation(0, 0, 0);
 
         Tessellator.getInstance().draw();
     }

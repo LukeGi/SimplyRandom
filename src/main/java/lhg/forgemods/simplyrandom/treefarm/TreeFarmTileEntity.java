@@ -174,8 +174,14 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
     @Override
     public void read(CompoundNBT compound)
     {
-        currentState = State.valueOf(compound.getString("[SR]stateCurrent"));
-        workingState = State.valueOf(compound.getString("[SR]stateWorking"));
+        if (compound.contains("[SR]stateCurrent"))
+        {
+            currentState = State.valueOf(compound.getString("[SR]stateCurrent"));
+        }
+        if (compound.contains("[SR]stateWorking"))
+        {
+            workingState = State.valueOf(compound.getString("[SR]stateWorking"));
+        }
         lastIdleTime = compound.getLong("[SR]lastIdleTime");
         super.read(compound);
     }
@@ -184,7 +190,13 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
     public CompoundNBT write(CompoundNBT compound)
     {
         compound.putString("[SR]stateCurrent", currentState.name());
-        compound.putString("[SR]stateWorking", workingState.name());
+        if (workingState == State.BREAKING_LEAVES || workingState == State.BREAKING_LOGS)
+        {
+            compound.putString("[SR]stateWorking", currentState.name());
+        } else
+        {
+            compound.putString("[SR]stateWorking", workingState.name());
+        }
         compound.putLong("[SR]lastIdleTime", lastIdleTime);
         return super.write(compound);
     }
