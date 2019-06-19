@@ -30,48 +30,8 @@ minecraft {
 
 //    accessTransformer = file('src/main/resources/META-INF/simplyrandom_at.cfg')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     // Removed because of multi-mod project.
-//    runs {
-//        client {
-//            workingDirectory project.file('run')
-//
-//            // Recommended logging data for a userdev environment
-//            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-//            property 'forge.logging.markers', 'REGISTRIES'
-//
-//            // Recommended logging level for the console
-//            property 'forge.logging.console.level', 'debug'
-//
-//            ideaModule "${project.name}.main"
-//
-//            mods {
-//                simplyrandom {
-//                    source sourceSets.main
-//                }
-//            }
-//        }
-//
-//        server {
-//            workingDirectory project.file('run')
-//
-//            // Recommended logging data for a userdev environment
-//            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-//            property 'forge.logging.markers', 'REGISTRIES'
-//
-//            // Recommended logging level for the console
-//            property 'forge.logging.console.level', 'debug'
-//
-//            ideaModule "${project.name}.main"
-//
-//            mods {
-//                simplyrandom {
-//                    source sourceSets.main
-//                }
-//            }
-//        }
-//    }
+    runs {}
 }
 
 dependencies {

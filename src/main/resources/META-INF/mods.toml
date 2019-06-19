@@ -32,7 +32,7 @@ description='''
 Simple additions to the game, which were thought of randomly out of boredom.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.simplyrandom]] #optional
     # the modid ofTypes the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -44,7 +44,7 @@ Simple additions to the game, which were thought of randomly out of boredom.
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.simplyrandom]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.14.2]"

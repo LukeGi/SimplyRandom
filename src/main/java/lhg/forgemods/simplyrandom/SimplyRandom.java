@@ -4,7 +4,10 @@ import lhg.forgemods.simplyrandom.cobblemaker.CobblestoneMaker;
 import lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry;
 import lhg.forgemods.simplyrandom.core.FeatureEnabledCondition;
 import lhg.forgemods.simplyrandom.core.SRConfig;
+import lhg.forgemods.simplyrandom.data.SRBlockStateProvider;
+import lhg.forgemods.simplyrandom.data.SRBlockTagProvider;
 import lhg.forgemods.simplyrandom.render.BoxRenderManager;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,6 +52,18 @@ public class SimplyRandom
         DisableableFeatureRegistry.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
+    }
+
+    private void gatherData(final GatherDataEvent event)
+    {
+        DataGenerator gen = event.getGenerator();
+
+        if (event.includeServer())
+        {
+            gen.addProvider(new SRBlockStateProvider(gen));
+            gen.addProvider(new SRBlockTagProvider(gen));
+        }
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event)
