@@ -3,6 +3,7 @@ package lhg.forgemods.simplyrandom.miner;
 import lhg.forgemods.simplyrandom.SimplyRandom;
 import lhg.forgemods.simplyrandom.core.DisableableFeature;
 import lhg.forgemods.simplyrandom.core.ModObjects;
+import lhg.forgemods.simplyrandom.core.ResourceLocationHelper;
 import lhg.forgemods.simplyrandom.core.SRTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.Properties;
@@ -47,6 +48,6 @@ public class Miner extends DisableableFeature
     @Override
     public ResourceLocation name()
     {
-        return getOrCreateName(NAME);
+        return ResourceLocationHelper.getOrCreateName(NAME);
     }
 }

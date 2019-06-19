@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 
-import static lhg.forgemods.simplyrandom.core.DisableableFeature.cobblestoneMaker;
+import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.cobblestoneMaker;
 
 /**
  * Cobblestone Maker Tile Entitiy

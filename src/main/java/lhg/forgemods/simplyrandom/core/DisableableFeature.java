@@ -1,9 +1,5 @@
 package lhg.forgemods.simplyrandom.core;
 
-import com.google.common.collect.Maps;
-import lhg.forgemods.simplyrandom.cobblemaker.CobblestoneMaker;
-import lhg.forgemods.simplyrandom.miner.Miner;
-import lhg.forgemods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -14,11 +10,6 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This exists to make it easier to disable recipes based on config options.
@@ -26,23 +17,6 @@ import java.util.Map;
  */
 public abstract class DisableableFeature
 {
-    /**
-     * This is the storage place for all features
-     */
-    public static final Map<ResourceLocation, DisableableFeature> FEATURE_REGISTRY = Maps.newHashMap();
-    /* Features */
-    public static final CobblestoneMaker cobblestoneMaker = new CobblestoneMaker();
-    public static final TreeFarm treeFarm = new TreeFarm();
-    public static final Miner miner = new Miner();
-    /**
-     * LOGGER
-     */
-    private static final Logger LOGGER = LogManager.getLogger();
-    /**
-     * This is a ResourceLocation Cache for the mod, to attempt a decrease in memory usage
-     */
-    private static final HashMap<String, ResourceLocation> NAMES = new HashMap<>();
-
     protected BooleanValue enabled;
 
     /**
@@ -53,23 +27,7 @@ public abstract class DisableableFeature
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::onRegisterBlocks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::onRegisterItems);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::onRegisterTileEntityType);
-        FEATURE_REGISTRY.put(name(), this);
-    }
-
-    /**
-     * This method attempts to use the ResourceLocation cache if the parameter {@code name} has already
-     * been passed to it before.
-     *
-     * @param name usually the Path half of a resource location
-     * @return a valid ResourceLocation
-     */
-    protected static ResourceLocation getOrCreateName(String name)
-    {
-        if (!name.startsWith("simplyrandom:"))
-        {
-            name = "simplyrandom:" + name;
-        }
-        return NAMES.computeIfAbsent(name, ResourceLocation::new);
+        DisableableFeatureRegistry.FEATURE_REGISTRY.put(name(), this);
     }
 
     /**
@@ -81,31 +39,7 @@ public abstract class DisableableFeature
      */
     protected static <R extends IForgeRegistry<T>, T extends IForgeRegistryEntry<T>> void register(final R registry, String name, final T object)
     {
-        registry.register(object.setRegistryName(getOrCreateName(name)));
-    }
-
-    public static void init()
-    {
-        LOGGER.info("Features being registered");
-    }
-
-    /**
-     * Adds configs to the config spec for each feature
-     *
-     * @param spec server config spec
-     */
-    public static void constructConfigs(Builder spec)
-    {
-        for (DisableableFeature value : FEATURE_REGISTRY.values())
-        {
-            spec.push(value.name().getPath());
-            value.enabled = spec.comment("Set to false to disable this block.")
-                    .translation("simplyrandom.config.common.enabled")
-                    .worldRestart()
-                    .define("enabled", true);
-            value.constructConfig(spec);
-            spec.pop();
-        }
+        registry.register(object.setRegistryName(ResourceLocationHelper.getOrCreateName(name)));
     }
 
     /**

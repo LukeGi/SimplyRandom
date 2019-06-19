@@ -1,6 +1,6 @@
 package lhg.forgemods.simplyrandom;
 
-import lhg.forgemods.simplyrandom.core.DisableableFeature;
+import lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry;
 import lhg.forgemods.simplyrandom.core.FeatureEnabledCondition;
 import lhg.forgemods.simplyrandom.core.ModObjects;
 import lhg.forgemods.simplyrandom.core.SRConfig;
@@ -45,7 +45,7 @@ public class SimplyRandom
     public SimplyRandom()
     {
         ModLoadingContext.get().registerConfig(Type.SERVER, SRConfig.SERVER_SPEC);
-        DisableableFeature.init();
+        DisableableFeatureRegistry.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
     }

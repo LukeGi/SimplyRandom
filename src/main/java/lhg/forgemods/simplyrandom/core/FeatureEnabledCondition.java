@@ -14,7 +14,7 @@ public class FeatureEnabledCondition implements IConditionSerializer
     @Override
     public BooleanSupplier parse(JsonObject json)
     {
-        final DisableableFeature feature = DisableableFeature.FEATURE_REGISTRY.get(new ResourceLocation(json.get("feature_name").getAsString()));
+        final DisableableFeature feature = DisableableFeatureRegistry.FEATURE_REGISTRY.get(new ResourceLocation(json.get("feature_name").getAsString()));
         return () -> feature != null && feature.enabled();
     }
 }

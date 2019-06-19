@@ -41,7 +41,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
-import static lhg.forgemods.simplyrandom.core.DisableableFeature.treeFarm;
+import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.treeFarm;
 
 /**
  * Tree Farm Tile Entity

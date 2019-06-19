@@ -45,7 +45,7 @@ public class SRConfig
         public Server(final Builder spec)
         {
             spec.comment("Server/World specific configs.").push("server");
-            DisableableFeature.constructConfigs(spec);
+            DisableableFeatureRegistry.constructConfigs(spec);
             spec.pop();
         }
     }
