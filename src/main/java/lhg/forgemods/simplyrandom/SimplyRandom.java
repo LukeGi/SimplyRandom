@@ -1,8 +1,8 @@
 package lhg.forgemods.simplyrandom;
 
+import lhg.forgemods.simplyrandom.cobblemaker.CobblestoneMaker;
 import lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry;
 import lhg.forgemods.simplyrandom.core.FeatureEnabledCondition;
-import lhg.forgemods.simplyrandom.core.ModObjects;
 import lhg.forgemods.simplyrandom.core.SRConfig;
 import lhg.forgemods.simplyrandom.render.BoxRenderManager;
 import net.minecraft.item.ItemGroup;
@@ -31,7 +31,7 @@ public class SimplyRandom
         @Override
         public ItemStack createIcon()
         {
-            return new ItemStack(ModObjects.COBBLESTONE_MAKER_ITEM);
+            return new ItemStack(CobblestoneMaker.COBBLESTONE_MAKER_ITEM);
         }
     };
     /**

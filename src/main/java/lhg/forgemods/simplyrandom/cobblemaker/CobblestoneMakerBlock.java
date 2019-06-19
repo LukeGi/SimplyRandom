@@ -1,7 +1,6 @@
 package lhg.forgemods.simplyrandom.cobblemaker;
 
 import com.google.common.collect.ImmutableSet;
-import lhg.forgemods.simplyrandom.core.ModObjects;
 import lhg.forgemods.simplyrandom.core.SRBlock;
 import lhg.forgemods.simplyrandom.core.Tooltip;
 import lhg.forgemods.simplyrandom.core.Tooltip.Builder;
@@ -36,7 +35,7 @@ public class CobblestoneMakerBlock extends SRBlock
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return new CobblestoneMakerTileEntity(ModObjects.COBBLESTONE_MAKER_TILE);
+        return new CobblestoneMakerTileEntity(CobblestoneMaker.COBBLESTONE_MAKER_TILE);
     }
 
     @Override

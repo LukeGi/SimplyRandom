@@ -2,8 +2,8 @@ package lhg.forgemods.simplyrandom.treefarm;
 
 import lhg.forgemods.simplyrandom.SimplyRandom;
 import lhg.forgemods.simplyrandom.core.DisableableFeature;
-import lhg.forgemods.simplyrandom.core.ModObjects;
 import lhg.forgemods.simplyrandom.core.RLProvider;
+import lhg.forgemods.simplyrandom.core.SRBlock;
 import lhg.forgemods.simplyrandom.core.SRTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -14,12 +14,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraftforge.registries.ObjectHolder;
 
 /**
  * This is the Tree Farm feature
  */
 public class TreeFarm extends DisableableFeature
 {
+    @ObjectHolder("simplyrandom:tree_farm") public static final SRBlock TREE_FARM_BLOCK = null;
+    @ObjectHolder("simplyrandom:tree_farm") public static final BlockItem TREE_FARM_ITEM = null;
+    @ObjectHolder("simplyrandom:tree_farm") public static final SRTileEntityType<TreeFarmTileEntity> TREE_FARM_TILE = null;
     private static final String NAME = "tree_farm";
     public IntValue blockScanEnergy;
     public IntValue inventoryScanEnergy;
@@ -61,7 +65,7 @@ public class TreeFarm extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        Block blockIn = ModObjects.TREE_FARM_BLOCK;
+        Block blockIn = TREE_FARM_BLOCK;
         Properties builder = new Properties().group(SimplyRandom.itemGroup).maxStackSize(1);
         register(event.getRegistry(), NAME, new BlockItem(blockIn, builder));
     }
@@ -69,7 +73,7 @@ public class TreeFarm extends DisableableFeature
     @Override
     public void onRegisterTileEntityType(Register<TileEntityType<?>> event)
     {
-        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new TreeFarmTileEntity(ModObjects.TREE_FARM_TILE), ModObjects.TREE_FARM_BLOCK));
+        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new TreeFarmTileEntity(TREE_FARM_TILE), TREE_FARM_BLOCK));
     }
 
     @Override

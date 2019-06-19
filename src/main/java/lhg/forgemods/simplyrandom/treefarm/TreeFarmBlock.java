@@ -1,6 +1,5 @@
 package lhg.forgemods.simplyrandom.treefarm;
 
-import lhg.forgemods.simplyrandom.core.ModObjects;
 import lhg.forgemods.simplyrandom.core.SRBlock;
 import lhg.forgemods.simplyrandom.core.Tooltip;
 import lhg.forgemods.simplyrandom.core.Tooltip.Builder;
@@ -38,7 +37,7 @@ public class TreeFarmBlock extends SRBlock
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return new TreeFarmTileEntity(ModObjects.TREE_FARM_TILE);
+        return new TreeFarmTileEntity(TreeFarm.TREE_FARM_TILE);
     }
 
     @Override
