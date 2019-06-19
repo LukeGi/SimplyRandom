@@ -35,7 +35,7 @@ public class CobblestoneMakerBlock extends SRBlock
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return new CobblestoneMakerTileEntity(CobblestoneMaker.COBBLESTONE_MAKER_TILE);
+        return new CobblestoneMakerTileEntity(CobblestoneMaker.TILE_TYPE);
     }
 
     @Override

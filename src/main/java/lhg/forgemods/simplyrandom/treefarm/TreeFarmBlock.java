@@ -37,7 +37,7 @@ public class TreeFarmBlock extends SRBlock
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return new TreeFarmTileEntity(TreeFarm.TREE_FARM_TILE);
+        return new TreeFarmTileEntity(TreeFarm.TILE_TYPE);
     }
 
     @Override

@@ -17,9 +17,9 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public class Miner extends DisableableFeature
 {
-    @ObjectHolder("simplyrandom:miner") public static final SRBlock MINER_BLOCK = null;
-    @ObjectHolder("simplyrandom:miner") public static final BlockItem MINER_ITEM = null;
-    @ObjectHolder("simplyrandom:miner") public static final SRTileEntityType<MinerTileEntity> MINER_TILE = null;
+    @ObjectHolder("simplyrandom:miner") public static final SRBlock BLOCK = null;
+    @ObjectHolder("simplyrandom:miner") public static final BlockItem ITEM = null;
+    @ObjectHolder("simplyrandom:miner") public static final SRTileEntityType<MinerTileEntity> TILE_TYPE = null;
     private static final String NAME = "miner";
 
     @Override
@@ -37,13 +37,13 @@ public class Miner extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        register(event.getRegistry(), NAME, new BlockItem(MINER_BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
+        register(event.getRegistry(), NAME, new BlockItem(BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
     }
 
     @Override
     public void onRegisterTileEntityType(Register<TileEntityType<?>> event)
     {
-        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new MinerTileEntity(MINER_TILE), MINER_BLOCK));
+        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new MinerTileEntity(TILE_TYPE), BLOCK));
     }
 
     @Override

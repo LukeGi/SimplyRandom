@@ -19,9 +19,9 @@ import net.minecraftforge.registries.ObjectHolder;
  */
 public class TreeFarm extends DisableableFeature
 {
-    @ObjectHolder("simplyrandom:tree_farm") public static final SRBlock TREE_FARM_BLOCK = null;
-    @ObjectHolder("simplyrandom:tree_farm") public static final BlockItem TREE_FARM_ITEM = null;
-    @ObjectHolder("simplyrandom:tree_farm") public static final SRTileEntityType<TreeFarmTileEntity> TREE_FARM_TILE = null;
+    @ObjectHolder("simplyrandom:tree_farm") public static final SRBlock BLOCK = null;
+    @ObjectHolder("simplyrandom:tree_farm") public static final BlockItem ITEM = null;
+    @ObjectHolder("simplyrandom:tree_farm") public static final SRTileEntityType<TreeFarmTileEntity> TILE_TYPE = null;
     private static final String NAME = "tree_farm";
     public IntValue blockScanEnergy;
     public IntValue inventoryScanEnergy;
@@ -63,13 +63,13 @@ public class TreeFarm extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        register(event.getRegistry(), NAME, new BlockItem(TREE_FARM_BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
+        register(event.getRegistry(), NAME, new BlockItem(BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
     }
 
     @Override
     public void onRegisterTileEntityType(Register<TileEntityType<?>> event)
     {
-        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new TreeFarmTileEntity(TREE_FARM_TILE), TREE_FARM_BLOCK));
+        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new TreeFarmTileEntity(TILE_TYPE), BLOCK));
     }
 
     @Override

@@ -19,9 +19,9 @@ import net.minecraftforge.registries.ObjectHolder;
  */
 public class CobblestoneMaker extends DisableableFeature
 {
-    @ObjectHolder("simplyrandom:cobblestone_maker") public static final SRBlock COBBLESTONE_MAKER_BLOCK = null;
-    @ObjectHolder("simplyrandom:cobblestone_maker") public static final BlockItem COBBLESTONE_MAKER_ITEM = null;
-    @ObjectHolder("simplyrandom:cobblestone_maker") public static final SRTileEntityType<CobblestoneMakerTileEntity> COBBLESTONE_MAKER_TILE = null;
+    @ObjectHolder("simplyrandom:cobblestone_maker") public static final SRBlock BLOCK = null;
+    @ObjectHolder("simplyrandom:cobblestone_maker") public static final BlockItem ITEM = null;
+    @ObjectHolder("simplyrandom:cobblestone_maker") public static final SRTileEntityType<CobblestoneMakerTileEntity> TILE_TYPE = null;
     private static final String NAME = "cobblestone_maker";
     public IntValue energyPerCobble;
 
@@ -43,13 +43,13 @@ public class CobblestoneMaker extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        register(event.getRegistry(), NAME, new BlockItem(COBBLESTONE_MAKER_BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
+        register(event.getRegistry(), NAME, new BlockItem(BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
     }
 
     @Override
     public void onRegisterTileEntityType(Register<TileEntityType<?>> event)
     {
-        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new CobblestoneMakerTileEntity(COBBLESTONE_MAKER_TILE), COBBLESTONE_MAKER_BLOCK));
+        register(event.getRegistry(), NAME, new SRTileEntityType<>(() -> new CobblestoneMakerTileEntity(TILE_TYPE), BLOCK));
     }
 
     @Override

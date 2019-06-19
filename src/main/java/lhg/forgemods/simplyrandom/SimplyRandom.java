@@ -31,7 +31,7 @@ public class SimplyRandom
         @Override
         public ItemStack createIcon()
         {
-            return new ItemStack(CobblestoneMaker.COBBLESTONE_MAKER_ITEM);
+            return new ItemStack(CobblestoneMaker.ITEM);
         }
     };
     /**
