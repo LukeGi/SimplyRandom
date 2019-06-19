@@ -1,8 +1,6 @@
 package lhg.forgemods.simplyrandom.treefarm;
 
 import com.google.common.collect.Maps;
-import lhg.forgemods.simplyrandom.core.SRConfig;
-import lhg.forgemods.simplyrandom.core.SRConfig.TreeFarmConfig;
 import lhg.forgemods.simplyrandom.core.SRTileEntity;
 import lhg.forgemods.simplyrandom.render.BoxRender;
 import net.minecraft.block.Block;
@@ -43,12 +41,13 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
+import static lhg.forgemods.simplyrandom.core.DisableableFeature.treeFarm;
+
 /**
  * Tree Farm Tile Entity
  */
 public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> implements ITickableTileEntity
 {
-    public static final TreeFarmConfig TREE_FARM_CONFIG = SRConfig.SERVER.treeFarmConfig;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Direction[] EXTERNAL_INV_SIDES = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN};
     private ItemStackHandler inventory;
@@ -69,7 +68,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
     public TreeFarmTileEntity(TileEntityType<TreeFarmTileEntity> type)
     {
         super(type);
-        battery = new EnergyStorage(TREE_FARM_CONFIG.maxPower.get());
+        battery = new EnergyStorage(treeFarm.maxPower.get());
         inventory = new ItemStackHandler(9)
         {
             @Override
@@ -555,7 +554,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeBlockScanPower()
     {
-        return consumePower(TREE_FARM_CONFIG.blockScanEnergy.get());
+        return consumePower(treeFarm.blockScanEnergy.get());
     }
 
     /**
@@ -563,7 +562,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeInvScanPower()
     {
-        return consumePower(TREE_FARM_CONFIG.inventoryScanEnergy.get());
+        return consumePower(treeFarm.inventoryScanEnergy.get());
     }
 
     /**
@@ -571,7 +570,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeLogBreakPower()
     {
-        return consumePower(TREE_FARM_CONFIG.logBreakEnergy.get());
+        return consumePower(treeFarm.logBreakEnergy.get());
     }
 
     /**
@@ -579,7 +578,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeLeafBreakPower()
     {
-        return consumePower(TREE_FARM_CONFIG.leafBreakEnergy.get());
+        return consumePower(treeFarm.leafBreakEnergy.get());
     }
 
     /**

@@ -1,6 +1,5 @@
 package lhg.forgemods.simplyrandom.core;
 
-import lhg.forgemods.simplyrandom.treefarm.TreeFarmTileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;

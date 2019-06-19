@@ -1,22 +1,17 @@
 package lhg.forgemods.simplyrandom.cobblemaker;
 
-import lhg.forgemods.simplyrandom.core.SRConfig;
-import lhg.forgemods.simplyrandom.core.SRConfig.CobblestoneMakerConfig;
 import lhg.forgemods.simplyrandom.core.SRTileEntity;
-import lhg.forgemods.simplyrandom.treefarm.TreeFarmTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
+
+import static lhg.forgemods.simplyrandom.core.DisableableFeature.cobblestoneMaker;
 
 /**
  * Cobblestone Maker Tile Entitiy
  */
 public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTileEntity>
 {
-    /**
-     * Config Reference
-     */
-    private static final CobblestoneMakerConfig CONFIG = SRConfig.SERVER.cobblestoneMakerConfig;
     /**
      * Battery, sometimes is null
      */
@@ -32,7 +27,7 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
     public CobblestoneMakerTileEntity(TileEntityType<CobblestoneMakerTileEntity> type)
     {
         super(type);
-        if (CONFIG.energyPerCobble.get() > 0)
+        if (cobblestoneMaker.energyPerCobble.get() > 0)
         {
             battery = new EnergyStorage(32000);
         }
@@ -60,9 +55,9 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
     public int getCobbleCount()
     {
         markDirty();
-        if (CONFIG.energyPerCobble.get() > 0 && battery != null)
+        if (cobblestoneMaker.energyPerCobble.get() > 0 && battery != null)
         {
-            return Math.min(64, battery.getEnergyStored() / Math.min(CONFIG.energyPerCobble.get(), 1));
+            return Math.min(64, battery.getEnergyStored() / Math.min(cobblestoneMaker.energyPerCobble.get(), 1));
         }
         return 64;
     }
@@ -74,7 +69,7 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
      */
     public void consume(int energy)
     {
-        if (CONFIG.energyPerCobble.get() > 0 && battery != null)
+        if (cobblestoneMaker.energyPerCobble.get() > 0 && battery != null)
         {
             markDirty();
             battery.extractEnergy(energy, false);
