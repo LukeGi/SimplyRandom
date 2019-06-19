@@ -45,12 +45,14 @@ public class SRConfig
     {
         public final CobblestoneMakerConfig cobblestoneMakerConfig;
         public final TreeFarmConfig treeFarmConfig;
+        public final MinerConfig minerConfig;
 
         public Server(final Builder spec)
         {
             spec.comment("Server/World specific configs.").push("server");
             this.cobblestoneMakerConfig = new CobblestoneMakerConfig(spec);
             this.treeFarmConfig = new TreeFarmConfig(spec);
+            this.minerConfig = new MinerConfig(spec);
             spec.pop();
         }
     }
@@ -117,6 +119,24 @@ public class SRConfig
                     .translation("simplyrandom.config.cobblestone_maker.energyPerCobble")
                     .worldRestart()
                     .defineInRange("energyPerCobble", 0, 0, Integer.MAX_VALUE);
+            spec.pop();
+        }
+    }
+
+    /**
+     * This contains all the configs relating to the Miner feature
+     */
+    public static class MinerConfig
+    {
+        public final BooleanValue enabled;
+
+        public MinerConfig(final Builder spec)
+        {
+            spec.push("miner");
+            this.enabled = spec.comment("Set to false to disable this block.")
+                    .translation("simplyrandom.config.common.enabled")
+                    .worldRestart()
+                    .define("enabled", true);
             spec.pop();
         }
     }

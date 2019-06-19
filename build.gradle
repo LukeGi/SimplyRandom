@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.0.3-beta'
+version = '0.0.5-beta'
 group = 'lhg.forgemod.simplyrandom' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'simplyrandom'
 
@@ -32,45 +32,46 @@ minecraft {
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            ideaModule "${project.name}.main"
-
-            mods {
-                simplyrandom {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            ideaModule "${project.name}.main"
-
-            mods {
-                simplyrandom {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+    // Removed because of multi-mod project.
+//    runs {
+//        client {
+//            workingDirectory project.file('run')
+//
+//            // Recommended logging data for a userdev environment
+//            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            property 'forge.logging.markers', 'REGISTRIES'
+//
+//            // Recommended logging level for the console
+//            property 'forge.logging.console.level', 'debug'
+//
+//            ideaModule "${project.name}.main"
+//
+//            mods {
+//                simplyrandom {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//
+//        server {
+//            workingDirectory project.file('run')
+//
+//            // Recommended logging data for a userdev environment
+//            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            property 'forge.logging.markers', 'REGISTRIES'
+//
+//            // Recommended logging level for the console
+//            property 'forge.logging.console.level', 'debug'
+//
+//            ideaModule "${project.name}.main"
+//
+//            mods {
+//                simplyrandom {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//    }
 }
 
 dependencies {

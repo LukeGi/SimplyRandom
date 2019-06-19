@@ -2,6 +2,7 @@ package lhg.forgemods.simplyrandom.core;
 
 import com.google.common.collect.Maps;
 import lhg.forgemods.simplyrandom.cobblemaker.CobblestoneMaker;
+import lhg.forgemods.simplyrandom.miner.Miner;
 import lhg.forgemods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -41,6 +42,7 @@ public abstract class DisableableFeature
     {
         new CobblestoneMaker();
         new TreeFarm();
+        new Miner();
     }
 
     /**
