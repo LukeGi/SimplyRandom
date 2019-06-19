@@ -1,5 +1,6 @@
 package lhg.forgemods.simplyrandom.core;
 
+import lhg.forgemods.simplyrandom.treefarm.TreeFarmTileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -45,6 +46,7 @@ public abstract class SRTileEntity<T extends SRTileEntity<T>> extends TileEntity
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
     {
         populateCaps();
+        this.markDirty();
         if (ENERGY_CAPABILITY == cap && energyCapability.isPresent())
         {
             return energyCapability.cast();

@@ -70,7 +70,15 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
     {
         super(type);
         battery = new EnergyStorage(TREE_FARM_CONFIG.maxPower.get());
-        inventory = new ItemStackHandler(9);
+        inventory = new ItemStackHandler(9)
+        {
+            @Override
+            protected void onContentsChanged(int slot)
+            {
+                TreeFarmTileEntity.this.markDirty();
+                super.onContentsChanged(slot);
+            }
+        };
     }
 
     @Override
@@ -103,6 +111,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
         {
             treeScanner = new TreeScanner(pos.up(), this::isLog, this::isLeaf, this::isAir);
         }
+        this.markDirty();
         switch (currentState)
         {
             case IDLE:
@@ -192,7 +201,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
         compound.putString("[SR]stateCurrent", currentState.name());
         if (workingState == State.BREAKING_LEAVES || workingState == State.BREAKING_LOGS)
         {
-            compound.putString("[SR]stateWorking", currentState.name());
+            compound.putString("[SR]stateWorking", State.SCANNING.name());
         } else
         {
             compound.putString("[SR]stateWorking", workingState.name());
@@ -261,6 +270,10 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private void replant()
     {
+        if (!isAir(world, pos.up()))
+        {
+            switchTo(State.IDLE, true);
+        }
         LazyOptional<IItemHandler>[] toCheck = new LazyOptional[6];
         toCheck[0] = LazyOptional.of(() -> inventory);
         for (int i = 0; i < EXTERNAL_INV_SIDES.length; i++)
