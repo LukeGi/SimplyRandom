@@ -1,6 +1,5 @@
 package lhg.forgemods.simplyrandom.miner;
 
-import lhg.forgemods.simplyrandom.SimplyRandom;
 import lhg.forgemods.simplyrandom.core.DisableableFeature;
 import lhg.forgemods.simplyrandom.core.RLProvider;
 import lhg.forgemods.simplyrandom.core.SRBlock;
@@ -38,9 +37,7 @@ public class Miner extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        Block blockIn = MINER_BLOCK;
-        Item.Properties builder = new Item.Properties().group(SimplyRandom.itemGroup).maxStackSize(1);
-        register(event.getRegistry(), NAME, new BlockItem(blockIn, builder));
+        register(event.getRegistry(), NAME, new BlockItem(MINER_BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
     }
 
     @Override

@@ -1,7 +1,9 @@
 package lhg.forgemods.simplyrandom.core;
 
+import lhg.forgemods.simplyrandom.SimplyRandom;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.Properties;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
@@ -17,6 +19,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
  */
 public abstract class DisableableFeature
 {
+    protected static final Properties DEAFULT_ITEM_PROPS = new Properties().group(SimplyRandom.itemGroup);
     protected BooleanValue enabled;
 
     /**

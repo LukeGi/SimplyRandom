@@ -1,6 +1,5 @@
 package lhg.forgemods.simplyrandom.cobblemaker;
 
-import lhg.forgemods.simplyrandom.SimplyRandom;
 import lhg.forgemods.simplyrandom.core.DisableableFeature;
 import lhg.forgemods.simplyrandom.core.RLProvider;
 import lhg.forgemods.simplyrandom.core.SRBlock;
@@ -8,7 +7,6 @@ import lhg.forgemods.simplyrandom.core.SRTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.Properties;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
@@ -45,9 +43,7 @@ public class CobblestoneMaker extends DisableableFeature
     @Override
     public void onRegisterItems(Register<Item> event)
     {
-        Block blockIn = COBBLESTONE_MAKER_BLOCK;
-        Properties builder = new Properties().group(SimplyRandom.itemGroup).maxStackSize(1);
-        register(event.getRegistry(), NAME, new BlockItem(blockIn, builder));
+        register(event.getRegistry(), NAME, new BlockItem(COBBLESTONE_MAKER_BLOCK, DEAFULT_ITEM_PROPS.maxStackSize(1)));
     }
 
     @Override
