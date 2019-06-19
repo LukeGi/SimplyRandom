@@ -39,7 +39,7 @@ public abstract class DisableableFeature
      */
     protected static <R extends IForgeRegistry<T>, T extends IForgeRegistryEntry<T>> void register(final R registry, String name, final T object)
     {
-        registry.register(object.setRegistryName(ResourceLocationHelper.getOrCreateName(name)));
+        registry.register(object.setRegistryName(RLProvider.get(name)));
     }
 
     /**

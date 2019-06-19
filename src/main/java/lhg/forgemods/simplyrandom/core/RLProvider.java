@@ -2,16 +2,16 @@ package lhg.forgemods.simplyrandom.core;
 
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
+import java.util.WeakHashMap;
 
-public final class ResourceLocationHelper
+public final class RLProvider
 {
     /**
      * This is a ResourceLocation Cache for the mod, to attempt a decrease in memory usage
      */
-    private static final HashMap<String, ResourceLocation> NAMES = new HashMap<>();
+    private static final WeakHashMap<String, ResourceLocation> NAMES = new WeakHashMap<>();
 
-    private ResourceLocationHelper()
+    private RLProvider()
     {
     }
 
@@ -22,7 +22,7 @@ public final class ResourceLocationHelper
      * @param name usually the Path half of a resource location
      * @return a valid ResourceLocation
      */
-    public static ResourceLocation getOrCreateName(String name)
+    public static ResourceLocation get(String name)
     {
         if (!name.startsWith("simplyrandom:"))
         {
