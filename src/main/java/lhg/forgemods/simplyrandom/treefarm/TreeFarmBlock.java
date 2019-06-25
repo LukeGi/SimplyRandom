@@ -57,10 +57,10 @@ public class TreeFarmBlock extends SRBlock
             // Do this to prevent the vanilla Huge Trees from overriding this block when they grow
             if (aboveState.isReplaceable(new DirectionalPlaceContext((World) world, up, Direction.DOWN, ItemStack.EMPTY, Direction.DOWN)))
             { // This is a thorough check which should catch all saplings
-                return BlockTags.SAPLINGS.contains(plant.getBlock()) || plant.getBlock() instanceof SaplingBlock;
+                return BlockTags.SAPLINGS.func_199685_a_(plant.getBlock()) || plant.getBlock() instanceof SaplingBlock;
             } else
             { // This prevents an above sapling uprooting when it is updated
-                return BlockTags.SAPLINGS.contains(aboveState.getBlock());
+                return BlockTags.SAPLINGS.func_199685_a_(aboveState.getBlock());
             }
 
         }

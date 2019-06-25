@@ -41,7 +41,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
-import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.treeFarm;
+import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.TREE_FARM;
 
 /**
  * Tree Farm Tile Entity
@@ -68,7 +68,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
     public TreeFarmTileEntity(TileEntityType<TreeFarmTileEntity> type)
     {
         super(type);
-        battery = new EnergyStorage(treeFarm.maxPower.get());
+        battery = new EnergyStorage(TREE_FARM.maxPower.get());
         inventory = new ItemStackHandler(9)
         {
             @Override
@@ -409,15 +409,9 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
             }
         }
         final BlockState airState = Blocks.AIR.getDefaultState();
-        Stack<BlockPos> copy = new Stack<>();
-        copy.addAll(broken);
         while (!broken.empty())
         {
             world.setBlockState(broken.pop(), airState);
-        }
-        while (!copy.empty())
-        {
-            world.getChunkProvider().getLightManager().checkBlock(copy.pop());
         }
         return false;
     }
@@ -512,7 +506,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean isLog(IBlockReader world, BlockPos pos)
     {
-        return BlockTags.LOGS.contains(world.getBlockState(pos).getBlock());
+        return BlockTags.LOGS.func_199685_a_(world.getBlockState(pos).getBlock());
     }
 
     /**
@@ -522,7 +516,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean isLeaf(IBlockReader world, BlockPos pos)
     {
-        return BlockTags.LEAVES.contains(world.getBlockState(pos).getBlock());
+        return BlockTags.LEAVES.func_199685_a_(world.getBlockState(pos).getBlock());
     }
 
     /**
@@ -554,7 +548,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeBlockScanPower()
     {
-        return consumePower(treeFarm.blockScanEnergy.get());
+        return consumePower(TREE_FARM.blockScanEnergy.get());
     }
 
     /**
@@ -562,7 +556,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeInvScanPower()
     {
-        return consumePower(treeFarm.inventoryScanEnergy.get());
+        return consumePower(TREE_FARM.inventoryScanEnergy.get());
     }
 
     /**
@@ -570,7 +564,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeLogBreakPower()
     {
-        return consumePower(treeFarm.logBreakEnergy.get());
+        return consumePower(TREE_FARM.logBreakEnergy.get());
     }
 
     /**
@@ -578,7 +572,7 @@ public class TreeFarmTileEntity extends SRTileEntity<TreeFarmTileEntity> impleme
      */
     private boolean consumeLeafBreakPower()
     {
-        return consumePower(treeFarm.leafBreakEnergy.get());
+        return consumePower(TREE_FARM.leafBreakEnergy.get());
     }
 
     /**

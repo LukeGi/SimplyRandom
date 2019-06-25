@@ -29,21 +29,21 @@ public class SRBlockStateProvider implements IDataProvider
     private static final Gson GSON = (new GsonBuilder()).disableHtmlEscaping().setPrettyPrinting().create();
     private static final Function<Entry<IProperty<?>, Comparable<?>>, String> MAP_ENTRY_TO_STRING = new Function<Entry<IProperty<?>, Comparable<?>>, String>()
     {
-        public String apply(@Nullable Entry<IProperty<?>, Comparable<?>> prop)
+        public String apply(@Nullable Entry<IProperty<?>, Comparable<?>> p_apply_1_)
         {
-            if (prop == null)
+            if (p_apply_1_ == null)
             {
                 return "<NULL>";
             } else
             {
-                IProperty<?> key = prop.getKey();
-                return key.getName() + "=" + this.getPropertyName(key, prop.getValue());
+                IProperty<?> iproperty = p_apply_1_.getKey();
+                return iproperty.getName() + "=" + this.getPropertyName(iproperty, p_apply_1_.getValue());
             }
         }
 
         private <T extends Comparable<T>> String getPropertyName(IProperty<T> property, Comparable<?> entry)
         {
-            return property.getName((T) entry);
+            return property.func_177702_a((T) entry);
         }
     };
 
@@ -67,6 +67,7 @@ public class SRBlockStateProvider implements IDataProvider
             }
 
             Path path = makePath(id);
+            if (Files.exists(path)) continue;
             JsonObject blockstate = new JsonObject();
             JsonObject variants = new JsonObject();
             for (BlockState state : block.getStateContainer().getValidStates())

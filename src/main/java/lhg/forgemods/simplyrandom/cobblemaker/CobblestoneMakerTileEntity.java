@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 
-import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.cobblestoneMaker;
+import static lhg.forgemods.simplyrandom.core.DisableableFeatureRegistry.COBBLESTONE_MAKER;
 
 /**
  * Cobblestone Maker Tile Entitiy
@@ -27,7 +27,7 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
     public CobblestoneMakerTileEntity(TileEntityType<CobblestoneMakerTileEntity> type)
     {
         super(type);
-        if (cobblestoneMaker.energyPerCobble.get() > 0)
+        if (COBBLESTONE_MAKER.energyPerCobble.get() > 0)
         {
             battery = new EnergyStorage(32000);
         }
@@ -55,9 +55,9 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
     public int getCobbleCount()
     {
         markDirty();
-        if (cobblestoneMaker.energyPerCobble.get() > 0 && battery != null)
+        if (COBBLESTONE_MAKER.energyPerCobble.get() > 0 && battery != null)
         {
-            return Math.min(64, battery.getEnergyStored() / Math.min(cobblestoneMaker.energyPerCobble.get(), 1));
+            return Math.min(64, battery.getEnergyStored() / Math.min(COBBLESTONE_MAKER.energyPerCobble.get(), 1));
         }
         return 64;
     }
@@ -69,7 +69,7 @@ public class CobblestoneMakerTileEntity extends SRTileEntity<CobblestoneMakerTil
      */
     public void consume(int energy)
     {
-        if (cobblestoneMaker.energyPerCobble.get() > 0 && battery != null)
+        if (COBBLESTONE_MAKER.energyPerCobble.get() > 0 && battery != null)
         {
             markDirty();
             battery.extractEnergy(energy, false);

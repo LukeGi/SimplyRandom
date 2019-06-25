@@ -3,6 +3,7 @@ package lhg.forgemods.simplyrandom.core;
 import com.google.common.collect.Maps;
 import lhg.forgemods.simplyrandom.cobblemaker.CobblestoneMaker;
 import lhg.forgemods.simplyrandom.miner.Miner;
+import lhg.forgemods.simplyrandom.netherportal.NetherPortal;
 import lhg.forgemods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
@@ -18,9 +19,9 @@ public class DisableableFeatureRegistry
      */
     public static final Map<ResourceLocation, DisableableFeature> FEATURE_REGISTRY = Maps.newHashMap();
     /* Features */
-    public static final CobblestoneMaker cobblestoneMaker = new CobblestoneMaker();
-    public static final TreeFarm treeFarm = new TreeFarm();
-    public static final Miner miner = new Miner();
+    public static final CobblestoneMaker COBBLESTONE_MAKER = new CobblestoneMaker();
+    public static final TreeFarm TREE_FARM = new TreeFarm();
+    public static final Miner MINER = new Miner();
     /**
      * LOGGER
      */

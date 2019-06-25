@@ -7,7 +7,7 @@ import java.util.WeakHashMap;
 public final class RLProvider
 {
     /**
-     * This is a ResourceLocation Cache for the mod, to attempt a decrease in memory usage
+     * This is a ResourceLocation CapabilityCache for the mod, to attempt a decrease in memory usage
      */
     private static final WeakHashMap<String, ResourceLocation> NAMES = new WeakHashMap<>();
 

@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.LazyOptional;
@@ -21,9 +22,9 @@ import javax.annotation.Nullable;
 public abstract class SRTileEntity<T extends SRTileEntity<T>> extends TileEntity
 {
     @CapabilityInject(IItemHandler.class)
-    private static Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = null;
+    protected static Capability<IItemHandler> ITEM_HANDLER = null;
     @CapabilityInject(IEnergyStorage.class)
-    private static Capability<IEnergyStorage> ENERGY_CAPABILITY = null;
+    protected static Capability<IEnergyStorage> ENERGY = null;
     protected LazyOptional<IEnergyStorage> energyCapability = LazyOptional.empty();
     protected LazyOptional<IItemHandler> itemCapability = LazyOptional.empty();
 
@@ -46,10 +47,10 @@ public abstract class SRTileEntity<T extends SRTileEntity<T>> extends TileEntity
     {
         populateCaps();
         this.markDirty();
-        if (ENERGY_CAPABILITY == cap && energyCapability.isPresent())
+        if (ENERGY == cap && energyCapability.isPresent())
         {
             return energyCapability.cast();
-        } else if (ITEM_HANDLER_CAPABILITY == cap && itemCapability.isPresent())
+        } else if (ITEM_HANDLER == cap && itemCapability.isPresent())
         {
             return itemCapability.cast();
         } else
@@ -62,8 +63,8 @@ public abstract class SRTileEntity<T extends SRTileEntity<T>> extends TileEntity
     public void read(CompoundNBT compound)
     {
         populateCaps();
-        energyCapability.ifPresent(cap -> ENERGY_CAPABILITY.readNBT(cap, null, compound.get("[SR]energy")));
-        itemCapability.ifPresent(cap -> ITEM_HANDLER_CAPABILITY.readNBT(cap, null, compound.get("[SR]items")));
+        energyCapability.ifPresent(cap -> ENERGY.readNBT(cap, null, compound.get("[SR]energy")));
+        itemCapability.ifPresent(cap -> ITEM_HANDLER.readNBT(cap, null, compound.get("[SR]items")));
         super.read(compound);
     }
 
@@ -71,8 +72,8 @@ public abstract class SRTileEntity<T extends SRTileEntity<T>> extends TileEntity
     public CompoundNBT write(CompoundNBT compound)
     {
         populateCaps();
-        energyCapability.ifPresent(cap -> compound.put("[SR]energy", ENERGY_CAPABILITY.writeNBT(cap, null)));
-        itemCapability.ifPresent(cap -> compound.put("[SR]items", ITEM_HANDLER_CAPABILITY.writeNBT(cap, null)));
+        energyCapability.ifPresent(cap -> compound.put("[SR]energy", ENERGY.writeNBT(cap, null)));
+        itemCapability.ifPresent(cap -> compound.put("[SR]items", ITEM_HANDLER.writeNBT(cap, null)));
         return super.write(compound);
     }
 
