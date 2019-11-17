@@ -1,36 +1,25 @@
-# This is an example mods.toml file. It contains the data relating to the loading mods.
-# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
-# The overall format is standard TOML format, v0.5.0.
-# Note that there are a couple ofTypes TOML lists in this file.
-# Find more information on toml format here:  https://github.com/toml-lang/toml
-# The name ofTypes the mod loader type to load - for regular FML @Mod mods it should be javafml
-modLoader="javafml" #mandatory
-# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[26,)"
-#issueTrackerURL="http://my.issue.tracker/"
+modLoader="javafml"
+loaderVersion="[28,)"
+#issueTrackerURL=""
 [[mods]]
-modId="simplyrandom"
-version="${file.jarVersion}"
-displayName="Simply Random"
-#updateJSONURL="http://myurl.me/"
-#displayURL="http://example.com/"
-#logoFile="examplemod.png"
-#credits="Thanks for this example mod goes to Java"
-authors="LuHeGi"
-description='''
-Simple additions to the game, which were thought of randomly out of boredom.
-'''
-
-[[dependencies.simplyrandom]]
+    modId="simplyrandom"
+    version="${file.jarVersion}"
+    displayName="Simply Random"
+#    updateJSONURL=""
+#    displayURL=""
+    logoFile=""
+    credits=""
+    authors="LuHeGi"
+    description='''Simple little mod filled with simple little things. :)'''
+[[dependencies.lgcore]]
     modId="forge"
     mandatory=true
-    versionRange="[27.0.2,)"
+    versionRange="[28.1.79,)"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.simplyrandom]]
+[[dependencies.lgcore]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.3]"
+    versionRange="[1.14.4]"
     ordering="NONE"
     side="BOTH"

@@ -9,29 +9,28 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
+
+apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-version = '0.0.5-beta'
-group = 'lhg.forgemod.simplyrandom' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'simplyrandom'
+version = VERSION
+group = "${AUTHOR}.${MODID}"
+archivesBaseName = MODID
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: "${MAPPINGS_CHANNEL}", version: "${MAPPINGS_VERSION}-${MC_VERSION}"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: MCP_CHANNEL, version: MCP_MAPPINGS
 
-//    accessTransformer = file('src/main/resources/META-INF/simplyrandom_at.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP' //
+            property 'forge.logging.console.level', 'info'
+            property 'forge.logging.noansi', 'false'
             ideaModule "${project.name}.main"
 
             mods {
@@ -44,8 +43,9 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP' //
             property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.noansi', 'false'
 
             ideaModule "${project.name}.main"
 
@@ -59,49 +59,67 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            environment 'target', 'fmldevdata'
+            //property 'forge.logging.markers', 'SCAN' //,REGISTRIES,REGISTRYDUMP
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.noansi', 'false'
 
             ideaModule "${project.name}.main"
 
-            source sourceSets.main
-            args '--mod', 'simplyrandom', '--all', '--output', rootProject.file('src/generated/resources/')
+            args '--mod', 'simplyrandom', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
+
+            mods {
+                simplyrandom {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
 
+//repositories {
+//    maven { url 'https://squiddev.cc/maven/' }
+//}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${MC_VERSION}-${FORGE_VERSION}"
+
+//    implementation("org.squiddev:cc-tweaked-${MC_VERSION}:${CCT_VERSION}")
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "simplyrandom",
-                "Specification-Vendor"    : "luhegi",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "luhegi",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "FMLAT"                   : 'simplyrandom_at.cfg'
+            "Specification-Title": MODID,
+            "Specification-Vendor": AUTHOR,
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": VERSION,
+            "Implementation-Vendor": AUTHOR,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
+task sourcesJar(type: Jar) {
+    classifier = "sources"
+    from sourceSets.main.allJava
 }
+
+task deobfJar(type: Jar) {
+    classifier = "deobf"
+    from sourceSets.main.output
+}
+
+artifacts {
+    archives deobfJar
+    archives sourcesJar
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact deobfJar
+            artifact sourcesJar
         }
     }
     repositories {
