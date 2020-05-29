@@ -1,4 +1,4 @@
 {
   "block.simplyrandom.cobblestone_generator": "Cobblestone Generator",
-  "block.simplyrandom.tree_farm": "Tree Farm"
+  "block.simplyrandom.cobblestone_generator.tooltip": "Creates cobblestone as fast as you can extract it, so long as it's conditions are met."
 }

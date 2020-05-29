@@ -1,25 +1,26 @@
 modLoader="javafml"
-loaderVersion="[28,)"
-#issueTrackerURL=""
+loaderVersion="[31,)"
+
 [[mods]]
     modId="simplyrandom"
     version="${file.jarVersion}"
     displayName="Simply Random"
-#    updateJSONURL=""
-#    displayURL=""
-    logoFile=""
-    credits=""
+    credits="Myself for the newfound motivation"
     authors="LuHeGi"
-    description='''Simple little mod filled with simple little things. :)'''
-[[dependencies.lgcore]]
+    description="""
+    A mod comprised of random things that I've created for fun.
+    """
+
+[[dependencies.simplyrandom]]
     modId="forge"
     mandatory=true
-    versionRange="[28.1.79,)"
-    ordering="NONE"
+    versionRange="[31.2,)"
+    order="NONE"
     side="BOTH"
-[[dependencies.lgcore]]
+
+[[dependencies.simplyrandom]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
