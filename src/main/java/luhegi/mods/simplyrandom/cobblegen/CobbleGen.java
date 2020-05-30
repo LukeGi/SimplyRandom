@@ -42,7 +42,7 @@ public class CobbleGen extends SetupManager {
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
         // TODO: Create ItemGroup
-        ITEM = register(registry, new CobbleGenItem(BLOCK, ItemGroup.MISC));
+        ITEM = register(registry, new CobbleGenItem(BLOCK));
     }
 
     @Override
@@ -74,6 +74,7 @@ public class CobbleGen extends SetupManager {
     @Override
     protected void addServerConfigs(ForgeConfigSpec.Builder spec) {
         useEnergy = spec.comment("Whether the cobblegen should use energy. the following values will be ignored if this is false.")
+                .worldRestart()
                 .define("use_energy", true);
         energyPerCobble = spec.comment("The amount of energy it takes to create a single piece of cobble.")
                 .defineInRange("energy_per_cobble", 0, 0, Integer.MAX_VALUE);

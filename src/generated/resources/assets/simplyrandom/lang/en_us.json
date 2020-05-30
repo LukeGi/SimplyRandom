@@ -1,4 +1,6 @@
 {
   "block.simplyrandom.cobblestone_generator": "Cobblestone Generator",
-  "block.simplyrandom.cobblestone_generator.tooltip": "Creates cobblestone as fast as you can extract it, so long as it's conditions are met."
+  "block.simplyrandom.cobblestone_generator.tooltip": "Creates cobblestone as fast as you can extract it, so long as it's conditions are met.",
+  "block.simplyrandom.tree_farm": "Tree Farm",
+  "block.simplyrandom.tree_farm.tooltip": "Uses a pocket dimension to collect and harvest trees at the cost of power."
 }

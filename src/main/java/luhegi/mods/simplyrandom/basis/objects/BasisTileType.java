@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntityType;
 import java.util.function.Supplier;
 
 public class BasisTileType<T extends TileEntity> extends TileEntityType<T> {
-    public BasisTileType(Supplier<? extends T> factoryIn, Block... validBlocks) {
+    public BasisTileType(Supplier<T> factoryIn, Block... validBlocks) {
         super(factoryIn, Sets.newHashSet(validBlocks), null);
     }
 }

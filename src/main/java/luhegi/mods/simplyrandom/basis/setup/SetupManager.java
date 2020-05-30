@@ -57,15 +57,15 @@ public abstract class SetupManager implements ISetupManager {
     protected abstract void addClientConfigs(ForgeConfigSpec.Builder spec);
     protected abstract void addServerConfigs(ForgeConfigSpec.Builder spec);
 
-    public static BasisBlockProvider getBlockData() {
+    protected static BasisBlockProvider getBlockData() {
         return BasisBlockProvider.INSTANCE;
     }
 
-    public static BasisItemProvider getItemData() {
+    protected static BasisItemProvider getItemData() {
         return BasisItemProvider.INSTANCE;
     }
 
-    public static BasisLangProvider getEnUsData() {
+    protected static BasisLangProvider getEnUsData() {
         return BasisLangProvider.EN_US;
     }
 }

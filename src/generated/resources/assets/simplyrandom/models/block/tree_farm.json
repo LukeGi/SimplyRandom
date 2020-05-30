@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "simplyrandom:block/tree_farm_side",
+    "bottom": "simplyrandom:block/tree_farm_base",
+    "top": "simplyrandom:block/tree_farm_top"
+  }
+}

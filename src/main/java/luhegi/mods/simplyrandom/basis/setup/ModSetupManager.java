@@ -6,6 +6,7 @@ import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
 import luhegi.mods.simplyrandom.cobblegen.CobbleGen;
+import luhegi.mods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
@@ -33,6 +34,7 @@ public class ModSetupManager implements ISetupManager {
     public void onConstruct() {
         // Construct each feature
         features.add(CobbleGen.INSTANCE);
+        features.add(TreeFarm.INSTANCE);
         features.forEach(ISetupManager::onConstruct);
         // Setup the config
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BasisConfig.clientSpec);
