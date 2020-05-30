@@ -1,17 +1,24 @@
 package luhegi.mods.simplyrandom.cobblegen;
 
+import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
+import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
 import luhegi.mods.simplyrandom.basis.objects.BasisTileType;
 import luhegi.mods.simplyrandom.basis.setup.SetupManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.function.Consumer;
 
 public class CobbleGen extends SetupManager {
     public static final CobbleGen INSTANCE = new CobbleGen();
@@ -64,6 +71,22 @@ public class CobbleGen extends SetupManager {
     protected void generateEnUsLangData(BasisLangProvider provider) {
         provider.add(BLOCK, getName());
         provider.addTooltip(BLOCK, "Creates cobblestone as fast as you can extract it, so long as it's conditions are met.");
+    }
+
+    @Override
+    protected void generateRecipeData(BasisRecipeProvider provider, Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shapedRecipe(BLOCK, 1)
+                .patternLine("PPP")
+                .patternLine("LCW")
+                .patternLine("PPP")
+                .key('P', Items.IRON_PICKAXE)
+                .key('L', Items.LAVA_BUCKET)
+                .key('W', Items.WATER_BUCKET)
+                .key('C', Items.COBBLESTONE)
+                .setGroup(SimplyRandom.ID + ":" + getID())
+                .addCriterion("has_cobblestone", provider.hasItem(Items.COBBLESTONE))
+                .addCriterion("has_iron_pickaxe", provider.hasItem(Items.IRON_PICKAXE))
+                .build(consumer);
     }
 
     @Override

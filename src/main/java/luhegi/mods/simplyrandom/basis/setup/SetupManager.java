@@ -4,10 +4,14 @@ import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
+import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import java.util.function.Consumer;
 
 public abstract class SetupManager implements ISetupManager {
     private ResourceLocation resLoc;
@@ -35,6 +39,7 @@ public abstract class SetupManager implements ISetupManager {
         getBlockData().addCallback(this::generateBlockData);
         getItemData().addCallback(this::generateItemData);
         getEnUsData().addCallback(this::generateEnUsLangData);
+        getRecipeData().addCallback(this::generateRecipeData);
     }
 
     @Override
@@ -54,6 +59,7 @@ public abstract class SetupManager implements ISetupManager {
     protected abstract void generateBlockData(BasisBlockProvider provider);
     protected abstract void generateItemData(BasisItemProvider provider);
     protected abstract void generateEnUsLangData(BasisLangProvider provider);
+    protected abstract void generateRecipeData(BasisRecipeProvider provider, Consumer<IFinishedRecipe> consumer);
     protected abstract void addClientConfigs(ForgeConfigSpec.Builder spec);
     protected abstract void addServerConfigs(ForgeConfigSpec.Builder spec);
 
@@ -67,5 +73,9 @@ public abstract class SetupManager implements ISetupManager {
 
     protected static BasisLangProvider getEnUsData() {
         return BasisLangProvider.EN_US;
+    }
+
+    private BasisRecipeProvider getRecipeData() {
+        return BasisRecipeProvider.INSTANCE;
     }
 }

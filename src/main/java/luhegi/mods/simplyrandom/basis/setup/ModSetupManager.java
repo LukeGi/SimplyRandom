@@ -5,6 +5,7 @@ import luhegi.mods.simplyrandom.basis.config.BasisConfig;
 import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
+import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
 import luhegi.mods.simplyrandom.cobblegen.CobbleGen;
 import luhegi.mods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.block.Block;
@@ -85,9 +86,11 @@ public class ModSetupManager implements ISetupManager {
     @Override
     public void generateData() {
         features.forEach(ISetupManager::generateData);
+        BasisLangProvider.EN_US.add("itemGroup.simplyrandom", "Simply Random Tab");
         generator.addProvider(BasisBlockProvider.INSTANCE);
         generator.addProvider(BasisItemProvider.INSTANCE);
         generator.addProvider(BasisLangProvider.EN_US);
+        generator.addProvider(BasisRecipeProvider.INSTANCE);
     }
 
     @Override

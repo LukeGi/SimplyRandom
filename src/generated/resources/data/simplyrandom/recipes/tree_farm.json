@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "simplyrandom:tree_farm",
+  "pattern": [
+    "IDI",
+    "AOA",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "A": {
+      "item": "minecraft:iron_axe"
+    }
+  },
+  "result": {
+    "item": "simplyrandom:tree_farm"
+  }
+}

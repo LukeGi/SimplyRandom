@@ -1,16 +1,25 @@
 package luhegi.mods.simplyrandom.treefarm;
 
+import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
+import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
 import luhegi.mods.simplyrandom.basis.objects.BasisTileType;
 import luhegi.mods.simplyrandom.basis.setup.SetupManager;
+import luhegi.mods.simplyrandom.cobblegen.CobbleGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.function.Consumer;
 
 public class TreeFarm extends SetupManager {
     public static final TreeFarm INSTANCE = new TreeFarm();
@@ -71,6 +80,22 @@ public class TreeFarm extends SetupManager {
     protected void generateEnUsLangData(BasisLangProvider provider) {
         provider.add(BLOCK, getName());
         provider.addTooltip(BLOCK, "Uses a pocket dimension to collect and harvest trees at the cost of power.");
+    }
+
+    @Override
+    protected void generateRecipeData(BasisRecipeProvider provider, Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shapedRecipe(BLOCK, 1)
+                .patternLine("IDI")
+                .patternLine("AOA")
+                .patternLine("III")
+                .key('I', Tags.Items.INGOTS_IRON)
+                .key('D', Items.DIRT)
+                .key('O', Items.OBSERVER)
+                .key('A', Items.IRON_AXE)
+                .setGroup(SimplyRandom.ID + ":" + getID())
+                .addCriterion("has_observer", provider.hasItem(Items.OBSERVER))
+                .addCriterion("has_iron_axe", provider.hasItem(Items.IRON_AXE))
+                .build(consumer);
     }
 
     @Override

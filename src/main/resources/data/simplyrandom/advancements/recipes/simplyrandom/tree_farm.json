@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplyrandom:tree_farm"
+    ]
+  },
+  "criteria": {
+    "has_observer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:observer"
+          }
+        ]
+      }
+    },
+    "has_iron_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:iron_axe"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplyrandom:tree_farm"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_observer",
+      "has_iron_axe",
+      "has_the_recipe"
+    ]
+  ]
+}
