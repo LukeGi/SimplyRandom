@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "simplyrandom:solar_generator",
+  "pattern": [
+    "LGL",
+    "IDI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "D": {
+      "item": "minecraft:daylight_detector"
+    },
+    "L": {
+      "tag": "forge:storage_blocks/lapis"
+    },
+    "G": {
+      "tag": "forge:glass"
+    }
+  },
+  "result": {
+    "item": "simplyrandom:solar_generator"
+  }
+}

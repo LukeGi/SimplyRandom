@@ -1,12 +1,15 @@
 package luhegi.mods.simplyrandom.basis.tile;
 
 import luhegi.mods.simplyrandom.SimplyRandom;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.function.Predicate;
 
 public class BasisEnergyStorage extends EnergyStorage implements ICap<IEnergyStorage> {
     public static final String NBT_KEY_ENERGY = SimplyRandom.ID + ":energy";
@@ -59,5 +62,9 @@ public class BasisEnergyStorage extends EnergyStorage implements ICap<IEnergySto
 
     public boolean isEmpty() {
         return energy <= 0;
+    }
+
+    public void add(int amount) {
+        energy += amount;
     }
 }

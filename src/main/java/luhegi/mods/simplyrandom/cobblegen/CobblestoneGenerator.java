@@ -6,13 +6,13 @@ import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
 import luhegi.mods.simplyrandom.basis.objects.BasisTileType;
+import luhegi.mods.simplyrandom.basis.setup.Setup;
 import luhegi.mods.simplyrandom.basis.setup.SetupManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -20,8 +20,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
 
-public class CobbleGen extends SetupManager {
-    public static final CobbleGen INSTANCE = new CobbleGen();
+@Setup
+public class CobblestoneGenerator extends SetupManager {
+    public static final CobblestoneGenerator INSTANCE = new CobblestoneGenerator();
     public CobbleGenBlock BLOCK = null;
     public CobbleGenItem ITEM = null;
     public BasisTileType<CobbleGenTile> TILE_TYPE = null;
@@ -48,7 +49,6 @@ public class CobbleGen extends SetupManager {
 
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
-        // TODO: Create ItemGroup
         ITEM = register(registry, new CobbleGenItem(BLOCK));
     }
 
@@ -71,6 +71,8 @@ public class CobbleGen extends SetupManager {
     protected void generateEnUsLangData(BasisLangProvider provider) {
         provider.add(BLOCK, getName());
         provider.addTooltip(BLOCK, "Creates cobblestone as fast as you can extract it, so long as it's conditions are met.");
+        provider.add(BLOCK.getTranslationKey() + "tooltip.requirement", "Requires {0} energy per cobblestone.");
+        provider.add(BLOCK.getTranslationKey() + "tooltip.norequirement", "Requires no energy.");
     }
 
     @Override
@@ -100,9 +102,9 @@ public class CobbleGen extends SetupManager {
                 .worldRestart()
                 .define("use_energy", true);
         energyPerCobble = spec.comment("The amount of energy it takes to create a single piece of cobble.")
-                .defineInRange("energy_per_cobble", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("energy_per_cobble", 1, 1, Integer.MAX_VALUE);
         maxEnergyStored = spec.comment("The maximum size of the machine's energy buffer.")
-                .defineInRange("max_energy", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("max_energy", 1, 1, Integer.MAX_VALUE);
     }
 
     @Override

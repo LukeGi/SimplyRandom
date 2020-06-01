@@ -61,8 +61,8 @@ public class CobbleGenEnergyInventory implements IItemHandlerModifiable, IEnergy
     }
 
     private void generateCobble(int amount) {
-        if (CobbleGen.getUseEnergy()) {
-            energy -= CobbleGen.getEnergyPerCobble();
+        if (CobblestoneGenerator.getUseEnergy()) {
+            energy -= CobblestoneGenerator.getEnergyPerCobble();
         }
         changeCallback.accept(amount);
     }
@@ -83,8 +83,8 @@ public class CobbleGenEnergyInventory implements IItemHandlerModifiable, IEnergy
     }
 
     public int getCobbleLeft() {
-        return CobbleGen.getUseEnergy() ?
-                (getEnergyStored() / CobbleGen.getEnergyPerCobble()) :
+        return CobblestoneGenerator.getUseEnergy() ?
+                (getEnergyStored() / CobblestoneGenerator.getEnergyPerCobble()) :
                 -1;
     }
 
@@ -110,7 +110,7 @@ public class CobbleGenEnergyInventory implements IItemHandlerModifiable, IEnergy
 
     @Override
     public int getMaxEnergyStored() {
-        return CobbleGen.getMaxEnergyStorage();
+        return CobblestoneGenerator.getMaxEnergyStorage();
     }
 
     @Override

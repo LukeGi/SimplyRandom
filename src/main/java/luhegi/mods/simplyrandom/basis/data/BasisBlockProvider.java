@@ -2,7 +2,10 @@ package luhegi.mods.simplyrandom.basis.data;
 
 import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.setup.ModSetupManager;
+import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -26,6 +29,14 @@ public class BasisBlockProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         registerCallbacks.parallelStream().forEach(callback -> callback.accept(this));
         registerCallbacks.clear();
+    }
+
+    public ModelFile.ExistingModelFile getBlockModel(Block block) {
+        return models().getExistingFile(modLoc("block/" + block.getRegistryName().getPath()));
+    }
+
+    public ResourceLocation tex(String id, String ext) {
+        return modLoc("block/" + id + "_" + ext);
     }
 
     @Nonnull

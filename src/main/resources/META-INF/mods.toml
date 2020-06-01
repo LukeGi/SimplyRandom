@@ -1,11 +1,13 @@
 modLoader="javafml"
 loaderVersion="[31,)"
+issueTrackerURL="https://github.com/LukeGi/SimplyRandom/issues"
 
 [[mods]]
     modId="simplyrandom"
     version="${file.jarVersion}"
     displayName="Simply Random"
     credits="Myself for the newfound motivation"
+    logoFile="logo.png"
     authors="LuHeGi"
     description="""
     A mod comprised of random things that I've created for fun.

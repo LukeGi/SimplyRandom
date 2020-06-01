@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "group": "simplyrandom:tree_farm",
   "pattern": [
-    "IDI",
-    "AOA",
-    "III"
+    "ADA",
+    "SOS",
+    "AIA"
   ],
   "key": {
     "I": {
@@ -18,6 +18,9 @@
     },
     "A": {
       "item": "minecraft:iron_axe"
+    },
+    "S": {
+      "tag": "minecraft:saplings"
     }
   },
   "result": {

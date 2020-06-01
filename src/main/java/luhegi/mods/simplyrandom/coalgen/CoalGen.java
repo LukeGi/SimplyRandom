@@ -1,4 +1,4 @@
-package luhegi.mods.simplyrandom.treefarm;
+package luhegi.mods.simplyrandom.coalgen;
 
 import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
@@ -14,7 +14,6 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.Tags;
@@ -22,80 +21,76 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
 
+//TODO: make block orientable
 @Setup
-public class TreeFarm extends SetupManager {
-    public static final TreeFarm INSTANCE = new TreeFarm();
+public class CoalGen extends SetupManager {
+    public static final CoalGen INSTANCE = new CoalGen();
 
-    public TreeFarmBlock BLOCK;
-    public TreeFarmItem ITEM;
-    public BasisTileType<TreeFarmTile> TILE_TYPE;
+    public CoalGenBlock block;
+    public CoalGenItem item;
+    public BasisTileType<CoalGenTile> tileType;
 
-    private ForgeConfigSpec.BooleanValue useEnergy;
     private ForgeConfigSpec.IntValue maxStorage;
-    private ForgeConfigSpec.IntValue energyPerWork;
-
-    public static int getEnergyPerWork() {
-        return getUseEnergy() ? INSTANCE.energyPerWork.get() : 0;
-    }
+    private ForgeConfigSpec.IntValue energyPerTick;
 
     public static int getMaxStorage() {
-        return getUseEnergy() ? INSTANCE.maxStorage.get() : 0;
+        return INSTANCE.maxStorage.get();
     }
 
-    public static boolean getUseEnergy() {
-        return INSTANCE.useEnergy.get();
+    public static int getEnergyPerTick() {
+        return INSTANCE.energyPerTick.get();
     }
 
     @Override
     public void registerBlocks(IForgeRegistry<Block> registry) {
-        BLOCK = register(registry, new TreeFarmBlock(Block.Properties.from(Blocks.FURNACE).lightValue(0)));
+        block = register(registry, new CoalGenBlock(Block.Properties.from(Blocks.FURNACE)));
     }
 
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
-        ITEM = register(registry, new TreeFarmItem(BLOCK));
+        item = register(registry, new CoalGenItem(block));
     }
 
     @Override
     public void registerTileType(IForgeRegistry<TileEntityType<?>> registry) {
-        TILE_TYPE = register(registry, new BasisTileType<>(TreeFarmTile::new, BLOCK));
+        tileType = register(registry, new BasisTileType<>(CoalGenTile::new, block));
     }
 
     @Override
     protected void generateBlockData(BasisBlockProvider provider) {
-        provider.simpleBlock(BLOCK, provider.models().cubeBottomTop(
+        provider.horizontalBlock(block, provider.models().orientable(
                 getID(),
                 provider.tex(getID(), "side"),
-                provider.tex(getID(), "base"),
+                provider.tex(getID(), "front"),
                 provider.tex(getID(), "top")
         ));
     }
 
     @Override
     protected void generateItemData(BasisItemProvider provider) {
-        provider.getBuilder(getID()).parent(provider.getBlockModel(BLOCK));
+        provider.getBuilder(getID()).parent(provider.getBlockModel(block));
     }
 
     @Override
     protected void generateEnUsLangData(BasisLangProvider provider) {
-        provider.add(BLOCK, getName());
-        provider.addTooltip(BLOCK, "Uses a pocket dimension to collect and harvest trees at the cost of power.");
+        provider.add(block, getName());
+        provider.addTooltip(block, "This will make power when you fill it with some coal or other furnace-accepted fuels.");
     }
 
     @Override
     protected void generateRecipeData(BasisRecipeProvider provider, Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shapedRecipe(BLOCK, 1)
-                .patternLine("ADA")
-                .patternLine("SOS")
-                .patternLine("AIA")
+        ShapedRecipeBuilder.shapedRecipe(block, 1)
+                .patternLine("ITI")
+                .patternLine("CFC")
+                .patternLine("I&I")
                 .key('I', Tags.Items.INGOTS_IRON)
-                .key('D', Items.DIRT)
-                .key('O', Items.OBSERVER)
-                .key('A', Items.IRON_AXE)
-                .key('S', ItemTags.SAPLINGS)
+                .key('T', Items.IRON_TRAPDOOR)
+                .key('C', Items.COAL_BLOCK)
+                .key('F', Items.FURNACE)
+                .key('&', Items.FLINT_AND_STEEL)
                 .setGroup(SimplyRandom.ID + ":" + getID())
-                .addCriterion("has_observer", provider.hasItem(Items.OBSERVER))
-                .addCriterion("has_iron_axe", provider.hasItem(Items.IRON_AXE))
+                .addCriterion("has_flint_and_steel",  provider.hasItem(Items.FLINT_AND_STEEL))
+                .addCriterion("has_furnace", provider.hasItem(Items.FURNACE))
                 .build(consumer);
     }
 
@@ -106,22 +101,19 @@ public class TreeFarm extends SetupManager {
 
     @Override
     protected void addServerConfigs(ForgeConfigSpec.Builder spec) {
-        useEnergy = spec.comment("Whether the tree farm uses energy. Set to false and the rest of these values will be ignored")
-                .worldRestart()
-                .define("use_energy", false);
-        maxStorage = spec.comment("The maximum storage that the tree farm can hold at once.")
+        maxStorage = spec.comment("The largest amount of energy that the coal generator can hold")
                 .defineInRange("max_storage", 1_000_000, 0, Integer.MAX_VALUE);
-        energyPerWork = spec.comment("The amount of energy the tree farm consumer per unit of work done (relates to block hardness).")
-                .defineInRange("energy_per_work", 100, 0, Integer.MAX_VALUE);
+        energyPerTick = spec.comment("The amount of energy produced per tick. Fuels last for the same amount of tips as they do in a furnace.")
+                .defineInRange("energy_per_tick", 10, 0, Integer.MAX_VALUE);
     }
 
     @Override
     public String getID() {
-        return "tree_farm";
+        return "coal_generator";
     }
 
     @Override
     public String getName() {
-        return "Tree Farm";
+        return "Coal Generator";
     }
 }

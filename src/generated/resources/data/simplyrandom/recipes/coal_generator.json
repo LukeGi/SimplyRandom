@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "simplyrandom:coal_generator",
+  "pattern": [
+    "ITI",
+    "CFC",
+    "I\u0026I"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "T": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "C": {
+      "item": "minecraft:coal_block"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "\u0026": {
+      "item": "minecraft:flint_and_steel"
+    }
+  },
+  "result": {
+    "item": "simplyrandom:coal_generator"
+  }
+}

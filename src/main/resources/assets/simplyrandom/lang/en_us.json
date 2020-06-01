@@ -1,6 +1,13 @@
 {
+  "block.simplyrandom.coal_generator": "Coal Generator",
+  "block.simplyrandom.coal_generator.tooltip": "This will make power when you fill it with some coal or other furnace-accepted fuels.",
   "block.simplyrandom.cobblestone_generator": "Cobblestone Generator",
   "block.simplyrandom.cobblestone_generator.tooltip": "Creates cobblestone as fast as you can extract it, so long as it's conditions are met.",
+  "block.simplyrandom.cobblestone_generatortooltip.norequirement": "Requires no energy.",
+  "block.simplyrandom.cobblestone_generatortooltip.requirement": "Requires {0} energy per cobblestone.",
+  "block.simplyrandom.solar_generator": "Solar Generator",
+  "block.simplyrandom.solar_generator.tooltip": "Generates energy when it can see the sun.",
+  "block.simplyrandom.solar_generator.tooltip.generates": "Generates: {0} energy per tick",
   "block.simplyrandom.tree_farm": "Tree Farm",
   "block.simplyrandom.tree_farm.tooltip": "Uses a pocket dimension to collect and harvest trees at the cost of power.",
   "itemGroup.simplyrandom": "Simply Random Tab"

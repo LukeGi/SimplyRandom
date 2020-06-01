@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "simplyrandom:block/solar_generator"
+    },
+    "powered=true": {
+      "model": "simplyrandom:block/solar_generator_active"
+    }
+  }
+}

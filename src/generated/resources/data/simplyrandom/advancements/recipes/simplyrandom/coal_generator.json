@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplyrandom:coal_generator"
+    ]
+  },
+  "criteria": {
+    "has_flint_and_steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:flint_and_steel"
+          }
+        ]
+      }
+    },
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplyrandom:coal_generator"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flint_and_steel",
+      "has_furnace",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -10,9 +10,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class BasisItemHandler extends ItemStackHandler implements ICap<IItemHandler> {
     public static final String NBT_KEY_INVENTORY = SimplyRandom.ID + ":inventory";
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> this);
+    private List<SlotFilter> filters = new ArrayList<>();
 
     public BasisItemHandler() {
     }
@@ -48,5 +54,29 @@ public class BasisItemHandler extends ItemStackHandler implements ICap<IItemHand
     @Override
     public void load(CompoundNBT nbt) {
         deserializeNBT(nbt.getCompound(NBT_KEY_INVENTORY));
+    }
+
+    @Override
+    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        return filters.stream().filter(slotFilter -> slotFilter.slot == slot)
+                .allMatch(slotFilter -> slotFilter.validityTest.test(stack))
+                && super.isItemValid(slot, stack);
+    }
+
+    public BasisItemHandler withSlotCheck(SlotFilter filter) {
+        filters.add(filter);
+        return this;
+    }
+
+    public static class SlotFilter {
+        private final int slot;
+        private final Predicate<ItemStack> validityTest;
+
+        public SlotFilter(int slot, Predicate<ItemStack> validityTest) {
+            this.slot = slot;
+            this.validityTest = validityTest;
+        }
+
+
     }
 }

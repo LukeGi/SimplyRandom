@@ -1,10 +1,19 @@
 package luhegi.mods.simplyrandom.basis.config;
 
+import luhegi.mods.simplyrandom.SimplyRandom;
 import luhegi.mods.simplyrandom.basis.setup.ModSetupManager;
+import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static net.minecraftforge.fml.loading.LogMarkers.FORGEMOD;
 
 public class BasisConfig {
+    private static final Logger LOGGER = LogManager.getLogger(BasisConfig.class);
 
     public static class Client {
         public Client(ForgeConfigSpec.Builder spec) {
@@ -35,5 +44,13 @@ public class BasisConfig {
         final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
         serverSpec = specPair.getRight();
         SERVER = specPair.getLeft();
+    }
+
+    public static void onLoad(final ModConfig.Loading configEvent) {
+        LOGGER.debug(SimplyRandom.LOG_MARKER, "Loaded Simply Random's config file {}", configEvent.getConfig().getFileName());
+    }
+
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
+        LOGGER.debug(SimplyRandom.LOG_MARKER, "Simply Random's config just got changed on the file system!");
     }
 }

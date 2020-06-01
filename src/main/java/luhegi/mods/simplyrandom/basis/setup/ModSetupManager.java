@@ -6,8 +6,6 @@ import luhegi.mods.simplyrandom.basis.data.BasisBlockProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisItemProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisLangProvider;
 import luhegi.mods.simplyrandom.basis.data.BasisRecipeProvider;
-import luhegi.mods.simplyrandom.cobblegen.CobbleGen;
-import luhegi.mods.simplyrandom.treefarm.TreeFarm;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
@@ -16,16 +14,25 @@ import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forgespi.language.ModFileScanData;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.Type;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.Set;
 
 public class ModSetupManager implements ISetupManager {
+    private static final Logger LOGGER = LogManager.getLogger(ModSetupManager.class);
+    private static final Type SETUP_TYPE = Type.getType(Setup.class);
     public static final ModSetupManager INSTANCE = new ModSetupManager();
     private final HashSet<ISetupManager> features = new HashSet<>();
     public DataGenerator generator;
@@ -34,8 +41,24 @@ public class ModSetupManager implements ISetupManager {
     @Override
     public void onConstruct() {
         // Construct each feature
-        features.add(CobbleGen.INSTANCE);
-        features.add(TreeFarm.INSTANCE);
+        long start = System.nanoTime();
+        ModList.get().getAllScanData().stream()
+                .map(ModFileScanData::getAnnotations)
+                .flatMap(Set::stream)
+                .filter(annotationData -> SETUP_TYPE.equals(annotationData.getAnnotationType()))
+                .forEach(annotationData -> {
+                    try {
+                        Class<?> setupClass = Class.forName(annotationData.getClassType().getClassName());
+                        if (ISetupManager.class.isAssignableFrom(setupClass)) {
+                            Field instanceField = setupClass.getDeclaredField("INSTANCE");
+                            ISetupManager manager = (ISetupManager) instanceField.get(null);
+                            features.add(manager);
+                        }
+                    } catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException e) {
+                        LOGGER.error(SimplyRandom.LOG_MARKER, "Error occured when locating Setup classes", e);
+                    }
+                });
+        LOGGER.info(SimplyRandom.LOG_MARKER, "Took {} ms to find {} features", (System.nanoTime() - start) / 1e6D, features.size());
         features.forEach(ISetupManager::onConstruct);
         // Setup the config
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BasisConfig.clientSpec);
@@ -51,16 +74,18 @@ public class ModSetupManager implements ISetupManager {
             this.existingFileHelper = event.getExistingFileHelper();
             this.generateData();
         });
+        modBus.addListener(BasisConfig::onLoad);
+        modBus.addListener(BasisConfig::onFileChange);
     }
 
     @Override
     public void onClientConfig(final ForgeConfigSpec.Builder spec) {
-        features.forEach(features -> features.onClientConfig(spec));
+        features.forEach(manager -> manager.onClientConfig(spec));
     }
 
     @Override
     public void onServerConfig(final ForgeConfigSpec.Builder spec) {
-        features.forEach(features -> features.onServerConfig(spec));
+        features.forEach(manager -> manager.onServerConfig(spec));
     }
 
     @Override
